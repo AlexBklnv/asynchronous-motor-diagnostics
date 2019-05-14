@@ -7,8 +7,6 @@
 
 /*
 	TODO List
-	Смена усиления
-	
 	Рассчет токов как основных характеристик сравнения
 	Промежуточное сравнение и сравнение итоговыых значений пока просто вывод значений
 
@@ -69,16 +67,16 @@ float EEMEM eeprom_amperage_mult_ac = 1;
 #define MW_SETUP_STOP MW_SETUP_IMPEDANCE_AC					// last setup mode for swiping
 
 // Showing characteristics
-#define MW_SHOW_IMPEDANCE_CRITICLE_ERRORS 11				// showing if AB winding has critical impedance error
-#define MW_SHOW_IMPEDANCE_ERRORS 12							// showing all windings impedance errors
-#define MW_SHOW_IMPEDANCE_WINDING_CHARS_AB 13				// showing AB winding characteristics
-#define MW_SHOW_IMPEDANCE_WINDING_CHARS_BC 14				// showing BC winding characteristics
-#define MW_SHOW_IMPEDANCE_WINDING_CHARS_AC 15				// showing AC winding characteristics
+#define MW_SHOW_IMPEDANCE_CRITICLE_ERRORS 13				// showing if AB winding has critical impedance error
+#define MW_SHOW_IMPEDANCE_ERRORS 14							// showing all windings impedance errors
+#define MW_SHOW_IMPEDANCE_WINDING_CHARS_AB 15				// showing AB winding characteristics
+#define MW_SHOW_IMPEDANCE_WINDING_CHARS_BC 16				// showing BC winding characteristics
+#define MW_SHOW_IMPEDANCE_WINDING_CHARS_AC 17				// showing AC winding characteristics
 
 #define MW_SHOWING_START MW_SHOW_IMPEDANCE_CRITICLE_ERRORS	// first showing mode for swiping
 #define MW_SHOWING_STOP MW_SHOW_IMPEDANCE_WINDING_CHARS_AC 	// last showing mode for swiping
 
-#define MW_CONTROLL_MEASUREMENT	16
+#define MW_CONTROLL_MEASUREMENT	18
 
 #define IC_ERROR_CRITICAL 85
 
@@ -103,7 +101,7 @@ Adafruit_ADS1115 adsAmperage(0x49);
 struct Ads1115 {
 	byte currentAmperageGain = 0;
 	byte currentVoltageGain = 0;
-	float gainStep[6] = [0.1875, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125];
+	float gainStep[6] = {0.1875, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125};
 	float voltageStep = 0.1875 / 1000.0;
 	float amperageStep = 0.1875 / 1000.0;
 };
@@ -245,8 +243,8 @@ void setup() {
 	
 	if (eeprom_read_byte(&eeprom_first_start) != 102) {
 		eeprom_update_byte(&eeprom_connection_type, CONNECTION_TYPE_STAR);
-		eeprom_update_float(&eeprom_gain_amperage, 0);
-		eeprom_update_float(&eeprom_gain_voltage, 0);
+		eeprom_update_byte(&eeprom_gain_amperage, 0);
+		eeprom_update_byte(&eeprom_gain_voltage, 0);
 		eeprom_update_float(&eeprom_impedance_ab, 0);
 		eeprom_update_float(&eeprom_impedance_bc, 0);
 		eeprom_update_float(&eeprom_impedance_ac, 0);
@@ -287,7 +285,7 @@ void setup() {
 	modeWork.prev = modeWork.current;
 	initAvgVars();
 	Serial.println("Completed!");
-	Serial.println("Stand by...")
+	Serial.println("Stand by...");
 	displayStaticAsMode();
 	displayAsMode();
 }
@@ -442,7 +440,7 @@ bool isErrorsAsymmetric(float* _impedance) {
 
 void showGainInfo() {
 	lcdClearCell(0, 1, 16);
-	switch(setDigit.value) {
+	switch((int)setDigit.value) {
 		case 0:
 			lcd.print(F("6.144 0.1875"));
 			break;
@@ -897,12 +895,12 @@ void saveSettings() {
 		case MW_SETUP_GAIN_AMPERAGE:
 			ads.currentAmperageGain = setDigit.value;
 			initAdsAmperageGain();
-			eeprom_update_float(&eeprom_gain_amperage, ads.currentAmperageGain);
+			eeprom_update_byte(&eeprom_gain_amperage, ads.currentAmperageGain);
 			break;
 		case MW_SETUP_GAIN_VOLTAGE:
 			ads.currentVoltageGain = setDigit.value;
 			initAdsVoltageGain();
-			eeprom_update_float(&eeprom_gain_voltage, ads.currentVoltageGain);
+			eeprom_update_byte(&eeprom_gain_voltage, ads.currentVoltageGain);
 			break;
 		case MW_SETUP_IMPEDANCE_AB:
 			impedance.real[0] = setDigit.value;
@@ -954,33 +952,33 @@ void saveSettings() {
 void setAdsGainByIndex(Adafruit_ADS1115* _ads, byte _index) {
 	switch(_index) {
 		case 0:
-		adsVoltage.setGain(GAIN_TWOTHIRDS);
-		break;
+			adsVoltage.setGain(GAIN_TWOTHIRDS);
+			break;
 		case 1:
-		adsVoltage.setGain(GAIN_ONE);
-		break;
+			adsVoltage.setGain(GAIN_ONE);
+			break;
 		case 2:
-		adsVoltage.setGain(GAIN_TWO);
-		break;
+			adsVoltage.setGain(GAIN_TWO);
+			break;
 		case 3:
-		adsVoltage.setGain(GAIN_FOUR);
-		break;
+			adsVoltage.setGain(GAIN_FOUR);
+			break;
 		case 4:
-		adsVoltage.setGain(GAIN_EIGHT);
-		break;
+			adsVoltage.setGain(GAIN_EIGHT);
+			break;
 		case 5:
-		adsVoltage.setGain(GAIN_SIXTEEN);
-		break;
+			adsVoltage.setGain(GAIN_SIXTEEN);
+			break;
 	}
 }
 
 
 void initAdsVoltageGain() {
-	setAdsGainByIndex(adsVoltage, ads.currentVoltageGain);
+	setAdsGainByIndex(&adsVoltage, ads.currentVoltageGain);
 	ads.voltageStep = ads.gainStep[ads.currentVoltageGain] / 1000.0;
 }
 
 void initAdsAmperageGain() {
-	setAdsGainByIndex(adsAmperage, ads.currentAmperageGain);
+	setAdsGainByIndex(&adsAmperage, ads.currentAmperageGain);
 	ads.amperageStep = ads.gainStep[ads.currentAmperageGain] / 1000.0;
 }
