@@ -33,6 +33,8 @@
 
 byte EEMEM eeprom_first_start = 0;
 byte EEMEM eeprom_connection_type = CONNECTION_TYPE_STAR; 
+byte EEMEM eeprom_gain_amperage = 0;
+byte EEMEM eeprom_gain_voltage = 0;
 float EEMEM eeprom_impedance_ab = 0;
 float EEMEM eeprom_impedance_bc = 0;
 float EEMEM eeprom_impedance_ac = 0;
@@ -51,18 +53,20 @@ float EEMEM eeprom_amperage_mult_ac = 1;
 // Settings setup
 #define MW_NEED_SETUP 0										// first start
 #define MW_SETUP_CONNECTION_TYPE 1							// setting winding connection type
-#define MW_SETUP_IMPEDANCE_AB 2								// setting impedance value for AB winding 
-#define MW_SETUP_IMPEDANCE_BC 3								// setting impedance value for BC winding 
-#define MW_SETUP_IMPEDANCE_AC 4								// setting impedance value for AC winding 
-#define MW_SETUP_MULT_VOLTAGE_AB 5							// setting voltage multiplier value for AB winding
-#define MW_SETUP_MULT_VOLTAGE_BC 6							// setting voltage multiplier value for BC winding
-#define MW_SETUP_MULT_VOLTAGE_AC 7							// setting voltage multiplier value for AC winding
-#define MW_SETUP_MULT_AMPERAGE_AB 8							// setting amperage multiplier value for AB winding
-#define MW_SETUP_MULT_AMPERAGE_BC 9							// setting amperage multiplier value for BC winding
-#define MW_SETUP_MULT_AMPERAGE_AC 10						// setting amperage multiplier value for AC winding
+#define MW_SETUP_GAIN_AMPERAGE 2							// setting winding connection type
+#define MW_SETUP_GAIN_VOLTAGE 3								// setting winding connection type
+#define MW_SETUP_MULT_VOLTAGE_AB 4							// setting voltage multiplier value for AB winding
+#define MW_SETUP_MULT_VOLTAGE_BC 5							// setting voltage multiplier value for BC winding
+#define MW_SETUP_MULT_VOLTAGE_AC 6							// setting voltage multiplier value for AC winding
+#define MW_SETUP_MULT_AMPERAGE_AB 7							// setting amperage multiplier value for AB winding
+#define MW_SETUP_MULT_AMPERAGE_BC 8							// setting amperage multiplier value for BC winding
+#define MW_SETUP_MULT_AMPERAGE_AC 9							// setting amperage multiplier value for AC winding
+#define MW_SETUP_IMPEDANCE_AB 10							// setting impedance value for AB winding 
+#define MW_SETUP_IMPEDANCE_BC 11							// setting impedance value for BC winding 
+#define MW_SETUP_IMPEDANCE_AC 12							// setting impedance value for AC winding 
 
 #define MW_SETUP_START MW_SETUP_CONNECTION_TYPE				// first setup mode for swiping
-#define MW_SETUP_STOP MW_SETUP_MULT_AMPERAGE_AC				// last setup mode for swiping
+#define MW_SETUP_STOP MW_SETUP_IMPEDANCE_AC					// last setup mode for swiping
 
 // Showing characteristics
 #define MW_SHOW_IMPEDANCE_CRITICLE_ERRORS 11				// showing if AB winding has critical impedance error
@@ -92,11 +96,14 @@ float EEMEM eeprom_amperage_mult_ac = 1;
 	------------------------------------------------------
 */
 
+
 Adafruit_ADS1115 adsVoltage(0x48);
 Adafruit_ADS1115 adsAmperage(0x49);
 
 struct Ads1115 {
-	//GAIN_TWOTHIRDS 0.1875
+	byte currentAmperageGain = 0;
+	byte currentVoltageGain = 0;
+	float gainStep[6] = [0.1875, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125];
 	float voltageStep = 0.1875 / 1000.0;
 	float amperageStep = 0.1875 / 1000.0;
 };
@@ -206,8 +213,14 @@ void checkIsReadyToWork();
 void initImpedanceCriticalValue();
 void initAvgVars();
 void lcdPrinRoundedCurErrorLevel(byte _num);
+void setAdsGainByIndex(Adafruit_ADS1115*, byte);
+void initAdsVoltageGain();
+void initAdsAmperageGain();
 
 void setup() {
+	Serial.begin(9600);
+	Serial.println("Initialization...");
+	
 	adsVoltage.setGain(GAIN_TWOTHIRDS);
 	adsVoltage.begin();
 	
@@ -230,8 +243,10 @@ void setup() {
 	button2Callback.setClickTicks(200);
 	button2Callback.setPressTicks(1000);
 	
-	if (eeprom_read_byte(&eeprom_first_start) != 101) {
+	if (eeprom_read_byte(&eeprom_first_start) != 102) {
 		eeprom_update_byte(&eeprom_connection_type, CONNECTION_TYPE_STAR);
+		eeprom_update_float(&eeprom_gain_amperage, 0);
+		eeprom_update_float(&eeprom_gain_voltage, 0);
 		eeprom_update_float(&eeprom_impedance_ab, 0);
 		eeprom_update_float(&eeprom_impedance_bc, 0);
 		eeprom_update_float(&eeprom_impedance_ac, 0);
@@ -241,9 +256,11 @@ void setup() {
 		eeprom_update_float(&eeprom_amperage_mult_ab, 0);
 		eeprom_update_float(&eeprom_amperage_mult_bc, 0);
 		eeprom_update_float(&eeprom_amperage_mult_ac, 0);
-		eeprom_update_byte(&eeprom_first_start, 101);
+		eeprom_update_byte(&eeprom_first_start, 102);
 	}
 	
+	ads.currentAmperageGain = eeprom_read_byte(&eeprom_gain_amperage);
+	ads.currentVoltageGain = eeprom_read_byte(&eeprom_gain_voltage);
 	settings.connectionType = eeprom_read_byte(&eeprom_connection_type);
 	impedance.real[0] = eeprom_read_float(&eeprom_impedance_ab);
 	impedance.real[1] = eeprom_read_float(&eeprom_impedance_bc);
@@ -254,6 +271,9 @@ void setup() {
 	multiplier.amperage[0] = eeprom_read_float(&eeprom_amperage_mult_ab);
 	multiplier.amperage[1] = eeprom_read_float(&eeprom_amperage_mult_bc);
 	multiplier.amperage[2] = eeprom_read_float(&eeprom_amperage_mult_ac);
+	
+	initAdsVoltageGain();
+	initAdsAmperageGain();
 	
 	settings.criticleError = settings.connectionType == CONNECTION_TYPE_STAR? 2.5f: 5.0f;
 	initImpedanceCriticalValue();
@@ -266,6 +286,8 @@ void setup() {
 	
 	modeWork.prev = modeWork.current;
 	initAvgVars();
+	Serial.println("Completed!");
+	Serial.println("Stand by...")
 	displayStaticAsMode();
 	displayAsMode();
 }
@@ -290,6 +312,7 @@ void checkIsReadyToWork() {
 		modeWork.current = MW_CONTROLL_MEASUREMENT;
 	} else {
 		modeWork.current = MW_NEED_SETUP;
+		Serial.println("Need setup params");
 	}
 }
 
@@ -417,6 +440,29 @@ bool isErrorsAsymmetric(float* _impedance) {
 	return false;
 }
 
+void showGainInfo() {
+	lcdClearCell(0, 1, 16);
+	switch(setDigit.value) {
+		case 0:
+			lcd.print(F("6.144 0.1875"));
+			break;
+		case 1:
+			lcd.print(F("4.096 0.125"));
+			break;
+		case 2:
+			lcd.print(F("1.024 0.0625"));
+			break;
+		case 3:
+			lcd.print(F("0.512 0.03125"));
+			break;
+		case 4:
+			lcd.print(F("0.512 0.015625"));
+			break;
+		case 5:
+			lcd.print(F("0.256 0.0078125"));
+			break;
+	}
+}
 
 void displayAsMode() {
 	if (modeWork.current != modeWork.prev) {
@@ -437,6 +483,10 @@ void displayAsMode() {
 			} else {
 				lcd.print(F("Triangle"));
 			}
+			break;
+		case MW_SETUP_GAIN_AMPERAGE:
+		case MW_SETUP_GAIN_VOLTAGE:
+			showGainInfo();
 			break;
 		case MW_SETUP_IMPEDANCE_AB:
 		case MW_SETUP_IMPEDANCE_BC:
@@ -504,6 +554,12 @@ void displayStaticAsMode() {
 		case MW_SETUP_CONNECTION_TYPE:
 			lcd.print(F("Connection type"));
 		break;
+		case MW_SETUP_GAIN_AMPERAGE:
+			lcd.print(F("A gain maxV/step"));
+			break;
+		case MW_SETUP_GAIN_VOLTAGE:
+			lcd.print(F("V gain maxV/step"));
+			break;
 		case MW_SETUP_IMPEDANCE_AB:
 			lcd.print(F("R1 AB"));
 			break;
@@ -638,6 +694,8 @@ void button1Click() {
 		lcdUpdateScreen = true;
 		if (modeWork.current == MW_SETUP_CONNECTION_TYPE) {
 			setDigit.value = setDigit.value == CONNECTION_TYPE_STAR? CONNECTION_TYPE_TRIANGLE: CONNECTION_TYPE_STAR;
+		} else if (modeWork.current >= MW_SETUP_GAIN_AMPERAGE && modeWork.current <= MW_SETUP_GAIN_VOLTAGE) {
+			setDigit.value = setDigit.value == 5? 0: setDigit.value + 1;
 		} else {
 			setDigit.value = setDigit.value + setDigit.curMultiplier;
 			if (setDigit.value >= 1000) {
@@ -673,7 +731,9 @@ void button2Click() {
 		lcdUpdateScreen = true;
 		if (modeWork.current == MW_SETUP_CONNECTION_TYPE) {
 			setDigit.value = setDigit.value == CONNECTION_TYPE_STAR? CONNECTION_TYPE_TRIANGLE: CONNECTION_TYPE_STAR; 
-		} else {
+		} else if (modeWork.current >= MW_SETUP_GAIN_AMPERAGE && modeWork.current <= MW_SETUP_GAIN_VOLTAGE) {
+			setDigit.value = setDigit.value == 0? 5: setDigit.value - 1;
+		}else {
 			setDigit.value = setDigit.value - setDigit.curMultiplier;
 			if (setDigit.value < 0) {
 				setDigit.value = 999.999f;
@@ -757,6 +817,12 @@ void setEditValue() {
 		case MW_SETUP_CONNECTION_TYPE:
 			setDigit.value = settings.connectionType;
 			break;
+		case MW_SETUP_GAIN_AMPERAGE:
+			setDigit.value = ads.currentAmperageGain;
+			break;
+		case MW_SETUP_GAIN_VOLTAGE:
+			setDigit.value = ads.currentVoltageGain;
+			break;			
 		case MW_SETUP_IMPEDANCE_AB:
 			setDigit.value = impedance.real[0];
 			break;
@@ -796,6 +862,16 @@ void saveSettings() {
 			settings.criticleError = settings.connectionType == CONNECTION_TYPE_STAR? 2.5f: 5.0f;
 			initImpedanceCriticalValue();
 			eeprom_update_byte(&eeprom_connection_type, settings.connectionType);
+			break;
+		case MW_SETUP_GAIN_AMPERAGE:
+			ads.currentAmperageGain = setDigit.value;
+			initAdsAmperageGain();
+			eeprom_update_float(&eeprom_gain_amperage, ads.currentAmperageGain);
+			break;
+		case MW_SETUP_GAIN_VOLTAGE:
+			ads.currentVoltageGain = setDigit.value;
+			initAdsVoltageGain();
+			eeprom_update_float(&eeprom_gain_voltage, ads.currentVoltageGain);
 			break;
 		case MW_SETUP_IMPEDANCE_AB:
 			impedance.real[0] = setDigit.value;
@@ -842,4 +918,38 @@ void saveSettings() {
 	if (modeWork.current >= MW_SETUP_MULT_VOLTAGE_AB && modeWork.current <= MW_SETUP_MULT_AMPERAGE_AC) {
 		initMultiplierCoef();
 	}
+}
+
+void setAdsGainByIndex(Adafruit_ADS1115* _ads, byte _index) {
+	switch(_index) {
+		case 0:
+		adsVoltage.setGain(GAIN_TWOTHIRDS);
+		break;
+		case 1:
+		adsVoltage.setGain(GAIN_ONE);
+		break;
+		case 2:
+		adsVoltage.setGain(GAIN_TWO);
+		break;
+		case 3:
+		adsVoltage.setGain(GAIN_FOUR);
+		break;
+		case 4:
+		adsVoltage.setGain(GAIN_EIGHT);
+		break;
+		case 5:
+		adsVoltage.setGain(GAIN_SIXTEEN);
+		break;
+	}
+}
+
+
+void initAdsVoltageGain() {
+	setAdsGainByIndex(adsVoltage, ads.currentVoltageGain);
+	ads.voltageStep = ads.gainStep[ads.currentVoltageGain] / 1000.0;
+}
+
+void initAdsAmperageGain() {
+	setAdsGainByIndex(adsAmperage, ads.currentAmperageGain);
+	ads.amperageStep = ads.gainStep[ads.currentAmperageGain] / 1000.0;
 }
