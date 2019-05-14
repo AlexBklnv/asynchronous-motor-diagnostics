@@ -689,6 +689,32 @@ void lcdClearCell(byte col, byte row, byte rowLength) {
 }
 
 
+float getCurrentWindingImpedanceValue() {
+	byte _windingIndex = 0;
+	float _voltage = 0;
+	float _amperage = 0;
+	
+	switch(modeWork.current){
+		case MW_SETUP_IMPEDANCE_AB:
+		_windingIndex = 0;
+		break;
+		case MW_SETUP_IMPEDANCE_BC:
+		_windingIndex = 1;
+		break;
+		case MW_SETUP_IMPEDANCE_AC:
+		_windingIndex = 2;
+		break;
+	}
+
+	_voltage = adsVoltage.readADC_SingleEnded(_windingIndex);
+	_amperage = adsAmperage.readADC_SingleEnded(_windingIndex);
+
+	_voltage *= ads.voltageStep;
+	_amperage *= ads.amperageStep;
+	
+	return _amperage == 0? 0: _voltage / _amperage * multiplier.coef[_windingIndex];
+}
+
 void button1Click() {
 	if (modeWork.current >= MW_SETUP_START && modeWork.current <= MW_SETUP_STOP) {
 		lcdUpdateScreen = true;
@@ -754,11 +780,16 @@ void button2Click() {
 	}
 }
 
-
 void button1LongPressStart() {
-	if (modeWork.current >= MW_SETUP_START && modeWork.current <= MW_SETUP_STOP) {
+	if (modeWork.current >= MW_SETUP_MULT_VOLTAGE_AB && modeWork.current <= MW_SETUP_MULT_AMPERAGE_AC) {
 		// выбор множителя x1x10x100x0.1x0.01x0.001
 		setDigit.curMultiplier = setDigit.curMultiplier >= 100.0f? 0.001f: setDigit.curMultiplier * 10.0f;
+		lcdUpdateScreen = true;
+		return;
+	}
+	
+	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
+		setDigit.value = getCurrentWindingImpedanceValue();
 		lcdUpdateScreen = true;
 		return;
 	}
