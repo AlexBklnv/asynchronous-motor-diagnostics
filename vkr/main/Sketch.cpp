@@ -67,11 +67,14 @@ float EEMEM eeprom_amperage_mult_ac = 1;
 #define MW_SETUP_STOP MW_SETUP_IMPEDANCE_AC					// last setup mode for swiping
 
 // Showing characteristics
-#define MW_SHOW_IMPEDANCE_CRITICLE_ERRORS 13				// showing if AB winding has critical impedance error
-#define MW_SHOW_IMPEDANCE_ERRORS 14							// showing all windings impedance errors
-#define MW_SHOW_IMPEDANCE_WINDING_CHARS_AB 15				// showing AB winding characteristics
-#define MW_SHOW_IMPEDANCE_WINDING_CHARS_BC 16				// showing BC winding characteristics
-#define MW_SHOW_IMPEDANCE_WINDING_CHARS_AC 17				// showing AC winding characteristics
+#define MW_SHOW_IMPEDANCE_CRITICLE_ERRORS 13				// showing counters of windings critical errors { amperage error counter AB | amperage error counter BC | amperage error counter AC }
+#define MW_SHOW_IMPEDANCE_ERRORS 14							// showing all windings amperage errors { amperage error AB | amperage error BC | amperage error AC }
+#define MW_SHOW_IMPEDANCE_AMPERAGE_AB 15					// showing AB winding amperage { measured | perfect}
+#define MW_SHOW_IMPEDANCE_AMPERAGE_BC 16					// showing BC winding amperage { measured | perfect}
+#define MW_SHOW_IMPEDANCE_AMPERAGE_AC 17					// showing AC winding amperage { measured | perfect}
+#define MW_SHOW_IMPEDANCE_WINDING_CHARS_AB 18				// showing AB winding characteristics { voltage | amperage error | avg measured amperage }
+#define MW_SHOW_IMPEDANCE_WINDING_CHARS_BC 19				// showing BC winding characteristics { voltage | amperage error | avg measured amperage }
+#define MW_SHOW_IMPEDANCE_WINDING_CHARS_AC 20				// showing AC winding characteristics { voltage | amperage error | avg measured amperage }
 
 #define MW_SHOWING_START MW_SHOW_IMPEDANCE_CRITICLE_ERRORS	// first showing mode for swiping
 #define MW_SHOWING_STOP MW_SHOW_IMPEDANCE_WINDING_CHARS_AC 	// last showing mode for swiping
@@ -106,34 +109,26 @@ struct Ads1115 {
 	float amperageStep = 0.1875 / 1000.0;
 };
 
-struct MeasuredParams {
+struct AdsChars {
 	float voltage[3] = {0, 0, 0};
-	float amperage[3] = {0, 0, 0};
+	float measuredAmperage[3] = {0, 0, 0};
+	float perfectAmperage[3] = {0, 0, 0};
+		
 	float sumVoltage[3] = {0, 0, 0};
-	float sumAmperage[3] = {0, 0, 0};
+	float sumMeasuredAmperage[3] = {0, 0, 0};
 	byte measurementsCount = 50;
 	byte currentMeasurement = 1;
 };	
-
-struct Impedance {
-	float real[3] = {0, 0, 0};
-	float measured[3] = {0, 0, 0};
-	float criticalValue[3] = {0, 0, 0};
-	float sumMeasured[3] = {0, 0, 0};
-};
-
-struct CharMultiplier {
-	float voltage[3] = {1, 1, 1};
-	float amperage[3] = {1, 1, 1};	
-	float coef[3] = {1, 1, 1};
-};
 
 struct Settings {
 	bool isReadyToWork = false;
 	bool connectionType = CONNECTION_TYPE_STAR;
 	float criticleError = 2.5;
+	float impedance[3] = {0, 0, 0};
 	// true - settings | false - characteristics
 	bool isSetupMode;
+	float voltage[3] = {1, 1, 1};
+	float amperage[3] = {1, 1, 1};
 };
 
 struct Error {
@@ -175,54 +170,54 @@ struct ModeWork {
 */
 OneButton button1Callback(BUTTON_1, false);
 OneButton button2Callback(BUTTON_2, false);
-MeasuredParams measuredParams;
-Impedance impedance;
+AdsChars adsChars;
 Settings settings;
 Ads1115 ads;
 Error icError;
 SetDigit setDigit;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 ModeWork modeWork;
-CharMultiplier multiplier;
 
 bool lcdUpdateScreen = false;
 	
+void initAvgVars();
 void getAdsParams();
-void fillComparedAmperage();	
-void calculateRealAdsParams();
+void saveSettings();
+void button2Click();
+void button1Click();
+void setEditValue();
 void processAsMode();
 void displayAsMode();
 void taskMeasurement();
-void button1Click();
-void button1LongPressStart();
-void button2Click();
-void button2LongPressStart();
-void saveSettings();
-void showWindingChars();
-bool isErrorsAsymmetric(float*);
-float getICLevel(float, byte);
-void lcdClearCell(byte col, byte row, byte rowLength);
-void lcdPrintCriticalLvl(byte _num);
-void showWindingCharsValues(byte _num);
-void displayStaticAsMode();
-void setEditValue();
+void showStaticAmperage();
 void initMultiplierCoef();
 void checkIsReadyToWork();
+void initAdsVoltageGain();
+void displayStaticAsMode();
+void initAdsAmperageGain();
+void fillComparedAmperage();
+void button1LongPressStart();
+void button2LongPressStart();
+void showStaticWindingChars();
+float getICLevel(float, byte);
+void calculateRealAdsParams();
+bool isErrorsAsymmetric(float*);
 void initImpedanceCriticalValue();
-void initAvgVars();
+void lcdPrintCriticalLvl(byte _num);
+void showWindingCharsValues(byte _num);
 void lcdPrinRoundedCurErrorLevel(byte _num);
 void setAdsGainByIndex(Adafruit_ADS1115*, byte);
-void initAdsVoltageGain();
-void initAdsAmperageGain();
+void lcdClearCell(byte col, byte row, byte rowLength);
+
 
 void setup() {
 	Serial.begin(9600);
 	Serial.println("Initialization...");
 	
 	adsVoltage.setGain(GAIN_TWOTHIRDS);
-	adsVoltage.begin();
-	
 	adsAmperage.setGain(GAIN_TWOTHIRDS);
+	
+	adsVoltage.begin();
 	adsAmperage.begin();
 	
 	lcd.init();
@@ -260,15 +255,15 @@ void setup() {
 	ads.currentAmperageGain = eeprom_read_byte(&eeprom_gain_amperage);
 	ads.currentVoltageGain = eeprom_read_byte(&eeprom_gain_voltage);
 	settings.connectionType = eeprom_read_byte(&eeprom_connection_type);
-	impedance.real[0] = eeprom_read_float(&eeprom_impedance_ab);
-	impedance.real[1] = eeprom_read_float(&eeprom_impedance_bc);
-	impedance.real[2] = eeprom_read_float(&eeprom_impedance_ac);
-	multiplier.voltage[0] = eeprom_read_float(&eeprom_voltage_mult_ab);
-	multiplier.voltage[1] = eeprom_read_float(&eeprom_voltage_mult_bc);
-	multiplier.voltage[2] = eeprom_read_float(&eeprom_voltage_mult_ac);
-	multiplier.amperage[0] = eeprom_read_float(&eeprom_amperage_mult_ab);
-	multiplier.amperage[1] = eeprom_read_float(&eeprom_amperage_mult_bc);
-	multiplier.amperage[2] = eeprom_read_float(&eeprom_amperage_mult_ac);
+	settings.impedance[0] = eeprom_read_float(&eeprom_impedance_ab);
+	settings.impedance[1] = eeprom_read_float(&eeprom_impedance_bc);
+	settings.impedance[2] = eeprom_read_float(&eeprom_impedance_ac);
+	settings.multiplierVoltage[0] = eeprom_read_float(&eeprom_voltage_mult_ab);
+	settings.multiplierVoltage[1] = eeprom_read_float(&eeprom_voltage_mult_bc);
+	settings.multiplierVoltage[2] = eeprom_read_float(&eeprom_voltage_mult_ac);
+	settings.multiplierAmperage[0] = eeprom_read_float(&eeprom_amperage_mult_ab);
+	settings.multiplierAmperage[1] = eeprom_read_float(&eeprom_amperage_mult_bc);
+	settings.multiplierAmperage[2] = eeprom_read_float(&eeprom_amperage_mult_ac);
 	
 	initAdsVoltageGain();
 	initAdsAmperageGain();
@@ -289,17 +284,17 @@ void setup() {
 	displayStaticAsMode();
 	displayAsMode();
 }
-
+/*
 void initImpedanceCriticalValue() {
 	for (byte i = 0; i < 3; i++) {
-		impedance.criticalValue[i] = impedance.real[i] / 100.0f * settings.criticleError;
+		impedance.criticalValue[i] = settings.impedance[i] / 100.0f * settings.criticleError;
 	}
-}
+}*/
 
 void checkIsReadyToWork() {
 	bool isReadyToWork = true;
 	for(byte i = 0; i < 3; i++) {
-		if (impedance.real[i] == 0 || multiplier.coef[i] == 0) {
+		if (settings.impedance[i] == 0 || settings.multiplierAmperage[i] == 0 || settings.multiplierVoltage[i] == 0) {
 			isReadyToWork = false;
 			break;
 		}
@@ -320,22 +315,22 @@ void loop() {
 	displayAsMode();
 	if(settings.isReadyToWork == MM_WORK) {
 		getAdsParams();
-		if (measuredParams.currentMeasurement < measuredParams.measurementsCount) {
-			measuredParams.currentMeasurement++;
+		if (adsChars.currentMeasurement < adsChars.measurementsCount) {
+			adsChars.currentMeasurement++;
 		} else {
 			lcdUpdateScreen = true;
 			for (byte i = 0; i < 3; i++) {
-				measuredParams.voltage[i] = measuredParams.sumVoltage[i] / measuredParams.measurementsCount * multiplier.voltage[i];
-				measuredParams.amperage[i] = measuredParams.sumAmperage[i] / measuredParams.measurementsCount * multiplier.amperage[i];
-				impedance.measured[i] = impedance.sumMeasured[i] / measuredParams.measurementsCount;
-				icError.curLvl[i] = getICLevel(impedance.measured[i], i);
+				adsChars.voltage[i] = adsChars.sumVoltage[i] / adsChars.measurementsCount * settings.multiplierVoltage[i];
+				adsChars.measuredAmperage[i] = adsChars.sumMeasuredAmperage[i] / adsChars.measurementsCount * settings.multiplierAmperage[i];
+			/*	impedance.measured[i] = impedance.sumMeasured[i] / adsChars.measurementsCount;
+				icError.curLvl[i] = getICLevel(impedance.measured[i], i);*/
 			}
 			initAvgVars();
 			
 			bool isHasIC = false;
 			for (byte i = 0; i < 3; i++) {
 				if (icError.curLvl[i] > 100 - settings.connectionType) {
-					icError.hasAsymmetry = isErrorsAsymmetric(impedance.measured);
+				//	icError.hasAsymmetry = isErrorsAsymmetric(impedance.measured);
 					isHasIC = true;
 					break;
 				}
@@ -356,7 +351,6 @@ void loop() {
  * Получение параметров с АЦП
  */
 void getAdsParams() {
-	float measuredImpedance[3] = {0, 0, 0};
 	float measuredVoltage[3] = {0, 0, 0};
 	float measuredAmperage[3] = {0, 0, 0};
 	
@@ -368,11 +362,11 @@ void getAdsParams() {
 		measuredVoltage[i] *= ads.voltageStep;
 		measuredAmperage[i] *= ads.amperageStep;
 		
-		measuredImpedance[i] = measuredVoltage[i] / measuredAmperage[i] * multiplier.coef[i];
+		//measuredImpedance[i] = measuredVoltage[i] / measuredAmperage[i] * multiplier.coef[i];
 		
-		measuredParams.sumVoltage[i] += measuredVoltage[i];
-		measuredParams.sumAmperage[i] += measuredAmperage[i];
-		impedance.sumMeasured[i] += measuredImpedance[i];
+		adsChars.sumVoltage[i] += measuredVoltage[i];
+		adsChars.sumMeasuredAmperage[i] += measuredAmperage[i];
+	//	impedance.sumMeasured[i] += measuredImpedance[i];
 	}
 	
 	for (byte i = 0; i < 3; i++) {
@@ -386,25 +380,25 @@ void getAdsParams() {
 
 void initAvgVars() {
 	for (byte i = 0; i < 3; i++) {
-		measuredParams.sumVoltage[i] = 0;
-		measuredParams.sumAmperage[i] = 0;
-		impedance.sumMeasured[i] = 0;
+		adsChars.sumVoltage[i] = 0;
+		adsChars.sumMeasuredAmperage[i] = 0;
+	//	impedance.sumMeasured[i] = 0;
 	}
-	measuredParams.currentMeasurement = 1;
+	adsChars.currentMeasurement = 1;
 }
 
 float getICLevel(float value, byte _num) {
-	if (impedance.real[_num] >= value) {
+	if (settings.impedance[_num] >= value) {
 		return 0;
 	}
 	
-	return abs(value - impedance.real[_num]) * 100.0 / impedance.criticalValue[_num];
+	return abs(value - settings.impedance[_num]) * 100.0 / impedance.criticalValue[_num];
 }
 
 
 void initMultiplierCoef() {
 	for(byte i = 0; i < 3; i++) {
-		multiplier.coef[i] = multiplier.voltage[i] == 0? 0: multiplier.voltage[i] / multiplier.amperage[i];
+		multiplier.coef[i] = settings.multiplierVoltage[i] == 0? 0: settings.multiplierVoltage[i] / settings.multiplierAmperage[i];
 	}
 }
 
@@ -413,7 +407,7 @@ bool isErrorsAsymmetric(float* _impedance) {
 	float avgImpedance = 0;
 	byte sign = 100;
 	for(byte i = 0; i < 3; i++) {
-		divImpedance[i] = _impedance[i] - impedance.real[i];
+		divImpedance[i] = _impedance[i] - settings.impedance[i];
 		if (divImpedance[i] > 0) {
 			sign++;
 		} else {
@@ -517,6 +511,15 @@ void displayAsMode() {
 			lcdClearCell(3, 1, 5);
 			lcdPrinRoundedCurErrorLevel(2);
 			break;
+		case MW_SHOW_IMPEDANCE_AMPERAGE_AB:
+			showWindingCharsValues(0);
+			break;
+		case MW_SHOW_IMPEDANCE_AMPERAGE_BC:
+			showWindingCharsValues(1);
+			break;
+		case MW_SHOW_IMPEDANCE_AMPERAGE_AC:
+			showWindingCharsValues(2);
+			break;
 		case MW_SHOW_IMPEDANCE_WINDING_CHARS_AB:
 			showWindingCharsValues(0);
 			break;
@@ -528,6 +531,7 @@ void displayAsMode() {
 			break;
 	}
 }
+
 void lcdPrinRoundedCurErrorLevel(byte _num) {
 	if (icError.curLvl[_num] < 1000) {
 		lcd.print(round(icError.curLvl[_num]));
@@ -603,17 +607,29 @@ void displayStaticAsMode() {
 			lcd.setCursor(14, 1);
 			lcd.print(F("e%"));
 			break;
+		case MW_SHOW_IMPEDANCE_AMPERAGE_AB:
+			lcd.print(F("AB"));
+			showStaticAmperage();
+			break;
+		case MW_SHOW_IMPEDANCE_AMPERAGE_BC:
+			lcd.print(F("BC"));
+			showStaticAmperage();
+			break;
+		case MW_SHOW_IMPEDANCE_AMPERAGE_AC:
+			lcd.print(F("AC"));
+			showStaticAmperage();
+			break;
 		case MW_SHOW_IMPEDANCE_WINDING_CHARS_AB:
 			lcd.print(F("AB"));
-			showWindingChars();
+			showStaticWindingChars();
 			break;
 		case MW_SHOW_IMPEDANCE_WINDING_CHARS_BC:
 			lcd.print(F("BC"));
-			showWindingChars();
+			showStaticWindingChars();
 			break;
 		case MW_SHOW_IMPEDANCE_WINDING_CHARS_AC:
 			lcd.print(F("AC"));
-			showWindingChars();
+			showStaticWindingChars();
 			break;
 		case MW_CONTROLL_MEASUREMENT:
 			lcd.print(F("Measurement"));
@@ -631,49 +647,48 @@ void displayStaticAsMode() {
 
 void showWindingCharsValues(byte _num) {
 	lcdClearCell(6, 0, 10);
-	lcd.print(icError.curLvl[_num]);
-	lcd.print(F("%"));
-
-	lcdClearCell(2, 1, 6);
 	byte roundedSign = 2;
-	if (measuredParams.voltage[_num] < 100) {
-		roundedSign = 2;
-	} else if (measuredParams.voltage[_num] < 1000) {
-		roundedSign = 1;
+	if (adsChars.measuredAmperage[_num] < 100) {
+		roundedSign = 8;
+	} else if (adsChars.voltage[_num] < 1000) {
+		roundedSign = 7;
 	} else {
-		roundedSign = 0;
+		roundedSign = 4;
 	}
+	lcd.print(adsChars.voltage[_num], roundedSign);
 	
-	if (roundedSign > 0) {
-		lcd.print(measuredParams.voltage[_num], roundedSign);
-	} else {
-		lcd.print(999);
-		lcd.print(F("+"));
-	}
 	
-	lcdClearCell(10, 1, 6);
-	if (measuredParams.amperage[_num] < 100) {
+	lcdClearCell(0, 1, 8);
+	if (adsChars.measuredAmperage[_num] < 100) {
 		roundedSign = 2;
-	} else if (measuredParams.amperage[_num] < 1000) {
+	} else if (adsChars.measuredAmperage[_num] < 1000) {
 		roundedSign = 1;
 	} else {
 		roundedSign = 0;
 	}
 	if (roundedSign > 0) {
-		lcd.print(measuredParams.amperage[_num], roundedSign);
+		lcd.print(adsChars.measuredAmperage[_num], roundedSign);
 	} else {
 		lcd.print(999);
 		lcd.print(F("+"));
 	}
 }
 
-void showWindingChars() {
+void showStaticAmperage() {
 	lcd.setCursor(4, 0);
-	lcd.print(F("R="));
+	lcd.print(F("P"));
+	lcd.setCursor(0, 1);
+	lcd.print(F("M"));
+}
+
+// CR measured|perfect
+void showStaticWindingChars() {
+	lcd.setCursor(4, 0);
+	lcd.print(F("I="));
 	lcd.setCursor(0, 1);
 	lcd.print(F("V="));
 	lcd.setCursor(8, 1);
-	lcd.print(F("A="));
+	lcd.print(F("E="));
 }
 
 //
@@ -853,31 +868,31 @@ void setEditValue() {
 			setDigit.value = ads.currentVoltageGain;
 			break;			
 		case MW_SETUP_IMPEDANCE_AB:
-			setDigit.value = impedance.real[0];
+			setDigit.value = settings.impedance[0];
 			break;
 		case MW_SETUP_IMPEDANCE_BC:
-			setDigit.value = impedance.real[1];
+			setDigit.value = settings.impedance[1];
 			break;
 		case MW_SETUP_IMPEDANCE_AC:
-			setDigit.value = impedance.real[2];
+			setDigit.value = settings.impedance[2];
 			break;
 		case MW_SETUP_MULT_VOLTAGE_AB:
-			setDigit.value = multiplier.voltage[0];
+			setDigit.value = settings.multiplierVoltage[0];
 			break;
 		case MW_SETUP_MULT_VOLTAGE_BC:
-			setDigit.value = multiplier.voltage[1];
+			setDigit.value = settings.multiplierVoltage[1];
 			break;
 		case MW_SETUP_MULT_VOLTAGE_AC:
-			setDigit.value = multiplier.voltage[2];
+			setDigit.value = settings.multiplierVoltage[2];
 			break;
 		case MW_SETUP_MULT_AMPERAGE_AB:
-			setDigit.value = multiplier.amperage[0];
+			setDigit.value = settings.multiplierAmperage[0];
 			break;
 		case MW_SETUP_MULT_AMPERAGE_BC:
-			setDigit.value = multiplier.amperage[1];
+			setDigit.value = settings.multiplierAmperage[1];
 			break;
 		case MW_SETUP_MULT_AMPERAGE_AC:
-			setDigit.value = multiplier.amperage[2];
+			setDigit.value = settings.multiplierAmperage[2];
 			break;
 	}
 	setDigit.curMultiplier = 1.0f;
@@ -903,40 +918,40 @@ void saveSettings() {
 			eeprom_update_byte(&eeprom_gain_voltage, ads.currentVoltageGain);
 			break;
 		case MW_SETUP_IMPEDANCE_AB:
-			impedance.real[0] = setDigit.value;
-			eeprom_update_float(&eeprom_impedance_ab, impedance.real[0]);
+			settings.impedance[0] = setDigit.value;
+			eeprom_update_float(&eeprom_impedance_ab, settings.impedance[0]);
 			break;
 		case MW_SETUP_IMPEDANCE_BC:
-			impedance.real[1] = setDigit.value;
-			eeprom_update_float(&eeprom_impedance_bc, impedance.real[1]);
+			settings.impedance[1] = setDigit.value;
+			eeprom_update_float(&eeprom_impedance_bc, settings.impedance[1]);
 			break;
 		case MW_SETUP_IMPEDANCE_AC:
-			impedance.real[2] = setDigit.value;
-			eeprom_update_float(&eeprom_impedance_ac, impedance.real[2]);
+			settings.impedance[2] = setDigit.value;
+			eeprom_update_float(&eeprom_impedance_ac, settings.impedance[2]);
 			break;
 		case MW_SETUP_MULT_VOLTAGE_AB:
-			multiplier.voltage[0] = setDigit.value;
-			eeprom_update_float(&eeprom_voltage_mult_ab, multiplier.voltage[0]);
+			settings.multiplierVoltage[0] = setDigit.value;
+			eeprom_update_float(&eeprom_voltage_mult_ab, settings.multiplierVoltage[0]);
 			break;
 		case MW_SETUP_MULT_VOLTAGE_BC:
-			multiplier.voltage[1] = setDigit.value;
-			eeprom_update_float(&eeprom_voltage_mult_bc, multiplier.voltage[1]);
+			settings.multiplierVoltage[1] = setDigit.value;
+			eeprom_update_float(&eeprom_voltage_mult_bc, settings.multiplierVoltage[1]);
 			break;
 		case MW_SETUP_MULT_VOLTAGE_AC:
-			multiplier.voltage[2] = setDigit.value;
-			eeprom_update_float(&eeprom_voltage_mult_ac, multiplier.voltage[2]);
+			settings.multiplierVoltage[2] = setDigit.value;
+			eeprom_update_float(&eeprom_voltage_mult_ac, settings.multiplierVoltage[2]);
 			break;
 		case MW_SETUP_MULT_AMPERAGE_AB:
-			multiplier.amperage[0] = setDigit.value;
-			eeprom_update_float(&eeprom_amperage_mult_ab, multiplier.amperage[0]);
+			settings.multiplierAmperage[0] = setDigit.value;
+			eeprom_update_float(&eeprom_amperage_mult_ab, settings.multiplierAmperage[0]);
 			break;
 		case MW_SETUP_MULT_AMPERAGE_BC:
-			multiplier.amperage[1] = setDigit.value;
-			eeprom_update_float(&eeprom_amperage_mult_bc, multiplier.amperage[1]);
+			settings.multiplierAmperage[1] = setDigit.value;
+			eeprom_update_float(&eeprom_amperage_mult_bc, settings.multiplierAmperage[1]);
 			break;
 		case MW_SETUP_MULT_AMPERAGE_AC:
-			multiplier.amperage[2] = setDigit.value;
-			eeprom_update_float(&eeprom_amperage_mult_ac, multiplier.amperage[2]);
+			settings.multiplierAmperage[2] = setDigit.value;
+			eeprom_update_float(&eeprom_amperage_mult_ac, settings.multiplierAmperage[2]);
 			break;
 	}
 	
