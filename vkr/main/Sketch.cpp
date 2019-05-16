@@ -13,7 +13,7 @@
 	Вывод информации 
 	экран степеней отклоенения
 	экран по фазе - токи расчетные измеренные и напряжения
-		
+		tgtgyh
 */
 
 /*
@@ -88,7 +88,7 @@ float EEMEM eeprom_amperage_mult_ac = 1;
 
 #define MW_CONTROLL_MEASUREMENT	21
 
-#define IC_ERROR_CRITICAL 85
+#define IC_ERROR_CRITICAL 20
 
 
 /*	
@@ -186,6 +186,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 ModeWork modeWork;
 
 bool lcdUpdateScreen = false;
+unsigned long serialUpdateStamp = 0;
 	
 void initAvgVars();
 void getAdsParams();
@@ -207,10 +208,9 @@ void fillComparedAmperage();
 void button1LongPressStart();
 void button2LongPressStart();
 void showStaticWindingChars();
-float getICLevel(float, byte);
+float getICLevelByWinding(float, byte);
 void calculateRealAdsParams();
-bool isErrorsAsymmetric(float*);
-void initImpedanceCriticalValue();
+bool isFullErrorExists(float*,float*);
 void lcdPrintCriticalLvl(byte _num);
 void showWindingCharsValues(byte _num);
 void lcdPrinRoundedCurErrorLevel(byte _num);
@@ -220,7 +220,7 @@ void lcdClearCell(byte col, byte row, byte rowLength);
 
 void setup() {
 	Serial.begin(9600);
-	Serial.println("Initialization...");
+	Serial.println(F("Initialization..."));
 	
 	adsVoltage.setGain(GAIN_TWOTHIRDS);
 	adsAmperage.setGain(GAIN_TWOTHIRDS);
@@ -231,20 +231,23 @@ void setup() {
 	lcd.init();
 	lcd.backlight();
 	lcd.clear();
+	Serial.println(F("LCD inited!"));
 	
 	button1Callback.attachClick(button1Click);
 	button1Callback.attachLongPressStart(button1LongPressStart);
 	button1Callback.setDebounceTicks(30);
 	button1Callback.setClickTicks(200);
 	button1Callback.setPressTicks(1000);
+	Serial.println(F("Button 1 inited!"));
 	
 	button2Callback.attachClick(button2Click);
 	button2Callback.attachLongPressStart(button2LongPressStart);
 	button2Callback.setDebounceTicks(30);
 	button2Callback.setClickTicks(200);
 	button2Callback.setPressTicks(1000);
+	Serial.println(F("Button 2 inited!"));
 	
-	if (eeprom_read_byte(&eeprom_first_start) != 102) {
+	if (eeprom_read_byte(&eeprom_first_start) != 103) {
 		eeprom_update_byte(&eeprom_connection_type, CONNECTION_TYPE_STAR);
 		eeprom_update_byte(&eeprom_gain_amperage, 0);
 		eeprom_update_byte(&eeprom_gain_voltage, 0);
@@ -257,7 +260,8 @@ void setup() {
 		eeprom_update_float(&eeprom_amperage_mult_ab, 0);
 		eeprom_update_float(&eeprom_amperage_mult_bc, 0);
 		eeprom_update_float(&eeprom_amperage_mult_ac, 0);
-		eeprom_update_byte(&eeprom_first_start, 102);
+		eeprom_update_byte(&eeprom_first_start, 103);
+		Serial.println(F("EEPROM first start writed!"));
 	}
 	
 	settings.currentAmperageGain = eeprom_read_byte(&eeprom_gain_amperage);
@@ -272,14 +276,25 @@ void setup() {
 	settings.multiplierAmperage[0] = eeprom_read_float(&eeprom_amperage_mult_ab);
 	settings.multiplierAmperage[1] = eeprom_read_float(&eeprom_amperage_mult_bc);
 	settings.multiplierAmperage[2] = eeprom_read_float(&eeprom_amperage_mult_ac);
+	Serial.println(F("EEPROM values:"));
+	Serial.print(F("gain_amperage: ")); Serial.println(settings.currentAmperageGain);
+	Serial.print(F("gain_voltage: ")); Serial.println(settings.currentVoltageGain);
+	Serial.print(F("connection_type: ")); Serial.println(settings.connectionType);
+	Serial.print(F("impedance_ab: ")); Serial.println(settings.impedance[0], 10);
+	Serial.print(F("impedance_bc: ")); Serial.println(settings.impedance[1], 10);
+	Serial.print(F("impedance_ac: ")); Serial.println(settings.impedance[2], 10);
+	Serial.print(F("voltage_mult_ab: ")); Serial.println(settings.multiplierVoltage[0], 3);
+	Serial.print(F("voltage_mult_bc: ")); Serial.println(settings.multiplierVoltage[1], 3);
+	Serial.print(F("voltage_mult_ac: ")); Serial.println(settings.multiplierVoltage[2], 3);
+	Serial.print(F("amperage_mult_ab: ")); Serial.println(settings.multiplierAmperage[0], 3);
+	Serial.print(F("amperage_mult_bc: ")); Serial.println(settings.multiplierAmperage[1], 3);
+	Serial.print(F("amperage_mult_ac: ")); Serial.println(settings.multiplierAmperage[2], 3);
 	
 	initAdsVoltageGain();
 	initAdsAmperageGain();
 	
 	settings.criticleError = settings.connectionType == CONNECTION_TYPE_STAR? 2.5f: 5.0f;
-//	initImpedanceCriticalValue();
-	
-//	initMultiplierCoef();
+
 	checkIsReadyToWork();
 	
 	pinMode(BEEPER, OUTPUT);
@@ -287,17 +302,12 @@ void setup() {
 	
 	modeWork.prev = modeWork.current;
 	initAvgVars();
-	Serial.println("Completed!");
-	Serial.println("Stand by...");
+	Serial.println(F("Completed!"));
+	Serial.println(F("Stand by..."));
 	displayStaticAsMode();
 	displayAsMode();
 }
-/*
-void initImpedanceCriticalValue() {
-	for (byte i = 0; i < 3; i++) {
-		impedance.criticalValue[i] = settings.impedance[i] / 100.0f * settings.criticleError;
-	}
-}*/
+
 
 void checkIsReadyToWork() {
 	bool isReadyToWork = true;
@@ -313,7 +323,7 @@ void checkIsReadyToWork() {
 		modeWork.current = MW_CONTROLL_MEASUREMENT;
 	} else {
 		modeWork.current = MW_NEED_SETUP;
-		Serial.println("Need setup params");
+		Serial.println(F("Need setup params"));
 	}
 }
 
@@ -327,18 +337,33 @@ void loop() {
 			adsChars.currentMeasurement++;
 		} else {
 			lcdUpdateScreen = true;
+			bool canSerial = millis() - serialUpdateStamp > 1000? true: false;
 			for (byte i = 0; i < 3; i++) {
-				adsChars.voltage[i] = adsChars.sumVoltage[i] / adsChars.measurementsCount * settings.multiplierVoltage[i];
-				adsChars.measuredAmperage[i] = adsChars.sumMeasuredAmperage[i] / adsChars.measurementsCount * settings.multiplierAmperage[i];
-			/*	impedance.measured[i] = impedance.sumMeasured[i] / adsChars.measurementsCount;
-				icError.curLvl[i] = getICLevel(impedance.measured[i], i);*/
+				adsChars.voltage[i] = adsChars.sumVoltage[i] / adsChars.measurementsCount * ads.voltageStep * settings.multiplierVoltage[i];
+				adsChars.measuredAmperage[i] = adsChars.sumMeasuredAmperage[i] / adsChars.measurementsCount * ads.amperageStep * settings.multiplierAmperage[i];
+				adsChars.perfectAmperage[i] = adsChars.voltage[i] / settings.impedance[i];
+				icError.curLvl[i] = getICLevelByWinding(adsChars.measuredAmperage[i], i);
+				if (canSerial) {
+					Serial.print(F("Winding |")); Serial.print((i + 1)); Serial.println(F("|"));
+					Serial.print(F("measured voltage = "));  Serial.println(adsChars.voltage[i], 10);
+					Serial.print(F("measured amperage = "));  Serial.println(adsChars.measuredAmperage[i], 10);
+					Serial.print(F("perfect amperage = ")); Serial.println(adsChars.perfectAmperage[i], 10);
+					Serial.print(F("error = ")); Serial.println(icError.curLvl[i]);
+					if (i != 2) {
+						Serial.println(F("---"));
+					}
+				}
+			}
+			if (canSerial) {
+				Serial.println(F("---end---"));
+				serialUpdateStamp = millis();
 			}
 			initAvgVars();
 			
 			bool isHasIC = false;
 			for (byte i = 0; i < 3; i++) {
 				if (icError.curLvl[i] > 100 - settings.connectionType) {
-				//	icError.hasAsymmetry = isErrorsAsymmetric(impedance.measured);
+					icError.hasAsymmetry = isFullErrorExists(adsChars.measuredAmperage, adsChars.voltage);
 					isHasIC = true;
 					break;
 				}
@@ -347,6 +372,8 @@ void loop() {
 				isHasIC = false;
 			} else {
 				settings.isReadyToWork = MM_STOP;
+				
+				Serial.println(F("WARNING!!! Measurement Stoped IC EXISTS!"));
 				modeWork.current = MW_SHOW_ERRORS_COUNTERS;
 				digitalWrite(BEEPER, HIGH);
 				icError.hasIC = true;
@@ -368,23 +395,22 @@ void getAdsParams() {
 		measuredAmperage[i] = adsAmperage.readADC_SingleEnded(i);
 	}
 	for (byte i = 0; i < 3; i++) {
-		measuredVoltage[i] *= ads.voltageStep * settings.multiplierAmperage;
-		measuredAmperage[i] *= ads.amperageStep * settings.multiplierVoltage;
-		
-		perfectAmperage[i] = measuredVoltage[i] / settings.impedance[i];
-		
 		adsChars.sumVoltage[i] += measuredVoltage[i];
 		adsChars.sumMeasuredAmperage[i] += measuredAmperage[i];
+		measuredVoltage[i] *= ads.voltageStep * settings.multiplierAmperage[i];
+		measuredAmperage[i] *= ads.amperageStep * settings.multiplierVoltage[i];
 	}
 	
 	for (byte i = 0; i < 3; i++) {
-		if (isErrorsAsymmetric(perfectAmperage)) {
-			if (getICLevel(measuredImpedance[i], i) >= IC_ERROR_CRITICAL && icError.criticalLvlCount[i] < 1000) {
+		if (isFullErrorExists(measuredAmperage, measuredVoltage)) {
+			if (getICLevelByWinding(measuredAmperage[i], i) >= IC_ERROR_CRITICAL && icError.criticalLvlCount[i] < 1000) {
 				icError.criticalLvlCount[i]++;
 			}
 		}
 	}
 }
+
+
 
 void initAvgVars() {
 	for (byte i = 0; i < 3; i++) {
@@ -394,80 +420,40 @@ void initAvgVars() {
 	adsChars.currentMeasurement = 1;
 }
 
-float getICLevel(float value, byte _num) {
-	if (settings.impedance[_num] >= value) {
+float getICLevelByWinding(float _amperage, byte _num) {
+	if (adsChars.perfectAmperage[_num] >= _amperage) {
 		return 0;
 	}
-	
-	return abs(value - settings.impedance[_num]) * 100.0 /*/ impedance.criticalValue[_num]*/;
+	return abs(_amperage - adsChars.perfectAmperage[_num]) * 100.0 / (adsChars.perfectAmperage[_num] * 0.20);
 }
 
 /*
  * Проверка наличия отклоеннеия.
  * Ошибка проверяется только при положительных разностях
 */
-bool isErrorsAsymmetric(float* _amperage) {
-	float _impedance[3] = {0, 0, 0};
-	float avgImpedance = 0;
+bool isFullErrorExists(float* _amperage, float* _voltage) {
+	float divAmperage[3] = {0, 0, 0};
 	byte sign = 100;
 	
-	
 	for(byte i = 0; i < 3; i++) {
-		divImpedance[i] = _impedance[i] - settings.impedance[i];
-		if (divImpedance[i] > 0) {
+		adsChars.perfectAmperage[i] = _voltage[i] / settings.impedance[i];
+		divAmperage[i] = adsChars.perfectAmperage[i] - _amperage[i];
+		if (divAmperage[i] > 0) {
 			sign++;
 		} else {
 			sign--;
 		}
-		avgImpedance += divImpedance[i];
 	}
+
 	if (sign == -97) {
 		return false;
 	}
-	avgImpedance /= 3;
-	
-	// всего допустимая погрешность 5 процентов вверх и вниз
-	float lowBound = avgImpedance * 0.05;
-	float highBound = avgImpedance + lowBound;
-	lowBound = avgImpedance - lowBound;
-	for (byte i = 0; i < 3; i++) {
-		if (!(divImpedance[i] >= lowBound && divImpedance[i] <= highBound)) {
-			return true;
-		}
-	}
-	return false;
+	float _error = abs(divAmperage[0] - divAmperage[1]) + abs(divAmperage[1] - divAmperage[2]) + abs(divAmperage[2] - divAmperage[0]);
+
+	// пока дадим 20% допуска отклонения общей величины
+	return !(_error <= _error * 1.20);
 }
-/*
-bool isErrorsAsymmetric(float* _impedance) {
-	float divImpedance[3] = {0, 0, 0};
-	float avgImpedance = 0;
-	byte sign = 100;
-	for(byte i = 0; i < 3; i++) {
-		divImpedance[i] = _impedance[i] - settings.impedance[i];
-		if (divImpedance[i] > 0) {
-			sign++;
-		} else {
-			sign--;
-		}
-		avgImpedance += divImpedance[i];
-	}
-	if (sign == -97) {
-		return false;
-	}
-	avgImpedance /= 3;
-	
-	// всего допустимая погрешность 5 процентов вверх и вниз
-	float lowBound = avgImpedance * 0.05;
-	float highBound = avgImpedance + lowBound;
-	lowBound = avgImpedance - lowBound;
-	for (byte i = 0; i < 3; i++) {
-		if (!(divImpedance[i] >= lowBound && divImpedance[i] <= highBound)) {
-			return true;
-		}
-	}
-	return false;
-}
-*/
+
 void showGainInfo() {
 	lcdClearCell(0, 1, 16);
 	switch((int)setDigit.value) {
@@ -478,10 +464,10 @@ void showGainInfo() {
 			lcd.print(F("4.096 0.125"));
 			break;
 		case 2:
-			lcd.print(F("1.024 0.0625"));
+			lcd.print(F("2.048 0.0625"));
 			break;
 		case 3:
-			lcd.print(F("0.512 0.03125"));
+			lcd.print(F("1.024 0.03125"));
 			break;
 		case 4:
 			lcd.print(F("0.512 0.015625"));
@@ -792,13 +778,16 @@ float getCurrentWindingImpedanceValue() {
 	_voltage = adsVoltage.readADC_SingleEnded(_windingIndex);
 	_amperage = adsAmperage.readADC_SingleEnded(_windingIndex);
 
-	_voltage *= ads.voltageStep;
-	_amperage *= ads.amperageStep;
+	_voltage *= ads.voltageStep * settings.multiplierVoltage[_windingIndex];
+	_amperage *= ads.amperageStep * settings.multiplierAmperage[_windingIndex];;
 	
-	return _amperage == 0? 0: _voltage / _amperage /** multiplier.coef[_windingIndex]*/;
+	return _amperage == 0? 0: _voltage / _amperage;
 }
 
 void button1Click() {
+	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
+		return;
+	}
 	if (modeWork.current >= MW_SETUP_START && modeWork.current <= MW_SETUP_STOP) {
 		lcdUpdateScreen = true;
 		if (modeWork.current == MW_SETUP_CONNECTION_TYPE) {
@@ -822,12 +811,19 @@ void button1Click() {
 	if (modeWork.current == MW_CONTROLL_MEASUREMENT) {
 		modeWork.current = MW_SHOWING_START;
 		settings.isReadyToWork = MM_WORK;
+		
+		Serial.println(F("**Measurement Started!"));
 		initAvgVars();
 		return;
 	}
 }
 
 void button2Click() {
+	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
+		setDigit.value = 0;
+		lcdUpdateScreen = true;
+		return;
+	}
 	if (modeWork.current == MW_NEED_SETUP) {
 		lcdUpdateScreen = true;
 		modeWork.current = MW_SETUP_START;
@@ -910,7 +906,6 @@ void button2LongPressStart() {
 	if (settings.isSetupMode) {
 		if (modeWork.current == MW_SETUP_STOP) {
 			saveSettings();
-//			initMultiplierCoef();
 			checkIsReadyToWork();
 		} else {
 			saveSettings();
@@ -918,6 +913,7 @@ void button2LongPressStart() {
 			setEditValue();
 		}
 	} else {
+		Serial.println(F("**Measurement Stoped!"));
 		settings.isReadyToWork = MM_STOP;
 		modeWork.current = MW_SETUP_START;
 		setEditValue();
@@ -974,7 +970,6 @@ void saveSettings() {
 		case MW_SETUP_CONNECTION_TYPE:
 			settings.connectionType = setDigit.value;
 			settings.criticleError = settings.connectionType == CONNECTION_TYPE_STAR? 2.5f: 5.0f;
-//			initImpedanceCriticalValue();
 			eeprom_update_byte(&eeprom_connection_type, settings.connectionType);
 			break;
 		case MW_SETUP_GAIN_AMPERAGE:
@@ -1025,34 +1020,27 @@ void saveSettings() {
 			break;
 	}
 	
-	if (modeWork.current == MW_SETUP_CONNECTION_TYPE || (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC)) {
-//		initImpedanceCriticalValue();
-	}
-
-	if (modeWork.current >= MW_SETUP_MULT_VOLTAGE_AB && modeWork.current <= MW_SETUP_MULT_AMPERAGE_AC) {
-//		initMultiplierCoef();
-	}
 }
 
 void setAdsGainByIndex(Adafruit_ADS1115* _ads, byte _index) {
 	switch(_index) {
-		case 0:
-			adsVoltage.setGain(GAIN_TWOTHIRDS);
-			break;
 		case 1:
-			adsVoltage.setGain(GAIN_ONE);
+			_ads->setGain(GAIN_ONE);
 			break;
 		case 2:
-			adsVoltage.setGain(GAIN_TWO);
+			_ads->setGain(GAIN_TWO);
 			break;
 		case 3:
-			adsVoltage.setGain(GAIN_FOUR);
+			_ads->setGain(GAIN_FOUR);
 			break;
 		case 4:
-			adsVoltage.setGain(GAIN_EIGHT);
+			_ads->setGain(GAIN_EIGHT);
 			break;
 		case 5:
-			adsVoltage.setGain(GAIN_SIXTEEN);
+			_ads->setGain(GAIN_SIXTEEN);
+			break;
+		default:
+			_ads->setGain(GAIN_TWOTHIRDS);
 			break;
 	}
 }
