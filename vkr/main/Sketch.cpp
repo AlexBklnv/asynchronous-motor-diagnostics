@@ -6,17 +6,6 @@
 #include <OneButton.h>	
 
 /*
-	TODO List
-	Рассчет токов как основных характеристик сравнения
-	Промежуточное сравнение и сравнение итоговыых значений пока просто вывод значений
-
-	Вывод информации 
-	экран степеней отклоенения
-	экран по фазе - токи расчетные измеренные и напряжения
-		tgtgyh
-*/
-
-/*
 	Закон Ома по фасту
 	I = V / R
 	U = V * R
@@ -29,69 +18,69 @@
 	1 = BC
 	2 = AC													
 ************************************************************************/
-#define BUTTON_1 A0
-#define BUTTON_2 A1
-#define BEEPER A2
+#define BUTTON_1 A0						// Алиас пина кнопки 1
+#define BUTTON_2 A1						// Алиас пина кнопки 2
+#define BEEPER A2						// Алиас пина пищалки
 
-#define CONNECTION_TYPE_STAR 0
-#define CONNECTION_TYPE_TRIANGLE 1
+#define CONNECTION_TYPE_STAR 0			// Идентификатор подключения по типу звезда
+#define CONNECTION_TYPE_TRIANGLE 1		// Идентификатор подключения по типу треугольник
 
-byte EEMEM eeprom_first_start = 0;
-byte EEMEM eeprom_connection_type = CONNECTION_TYPE_STAR; 
-byte EEMEM eeprom_gain_amperage = 0;
-byte EEMEM eeprom_gain_voltage = 0;
-float EEMEM eeprom_impedance_ab = 0;
-float EEMEM eeprom_impedance_bc = 0;
-float EEMEM eeprom_impedance_ac = 0;
-float EEMEM eeprom_voltage_mult_ab = 1;
-float EEMEM eeprom_voltage_mult_bc = 1;
-float EEMEM eeprom_voltage_mult_ac = 1;
-float EEMEM eeprom_amperage_mult_ab = 1;
-float EEMEM eeprom_amperage_mult_bc = 1;
-float EEMEM eeprom_amperage_mult_ac = 1;
+byte EEMEM eeprom_first_start = 0;							// AVRdude не заливает eeprom, потому идентификатор первого запуска для инициализации значений
+byte EEMEM eeprom_connection_type = CONNECTION_TYPE_STAR;	// Тип подключени
+byte EEMEM eeprom_gain_amperage = 0;						// Индекс усиления ацп по току
+byte EEMEM eeprom_gain_voltage = 0;							// Индекс усиления ацп по напряжению
+float EEMEM eeprom_impedance_ab = 0;						// Значение сопротивления обмотки AB
+float EEMEM eeprom_impedance_bc = 0;						// Значение сопротивления обмотки BC
+float EEMEM eeprom_impedance_ac = 0;						// Значение сопротивления обмотки AC
+float EEMEM eeprom_voltage_mult_ab = 1;						// Значение множителя по напряжению для обмотки AB
+float EEMEM eeprom_voltage_mult_bc = 1;						// Значение множителя по напряжению для обмотки BC					
+float EEMEM eeprom_voltage_mult_ac = 1;						// Значение множителя по напряжению для обмотки AC	
+float EEMEM eeprom_amperage_mult_ab = 1;					// Значение множителя по току для обмотки AB				
+float EEMEM eeprom_amperage_mult_bc = 1;					// Значение множителя по току для обмотки AB
+float EEMEM eeprom_amperage_mult_ac = 1;					// Значение множителя по току для обмотки AB
 
-// Measurement mode
-#define MM_STOP false	// stop measurement
-#define MM_WORK true	// do measurement
+#define MM_STOP false	// Алиас режима ожидания
+#define MM_WORK true	// Алиас режима измерения
 
-// Mode work
-// Settings setup
-#define MW_NEED_SETUP 0										// first start
-#define MW_SETUP_CONNECTION_TYPE 1							// setting winding connection type
-#define MW_SETUP_GAIN_AMPERAGE 2							// setting winding connection type
-#define MW_SETUP_GAIN_VOLTAGE 3								// setting winding connection type
-#define MW_SETUP_MULT_VOLTAGE_AB 4							// setting voltage multiplier value for AB winding
-#define MW_SETUP_MULT_VOLTAGE_BC 5							// setting voltage multiplier value for BC winding
-#define MW_SETUP_MULT_VOLTAGE_AC 6							// setting voltage multiplier value for AC winding
-#define MW_SETUP_MULT_AMPERAGE_AB 7							// setting amperage multiplier value for AB winding
-#define MW_SETUP_MULT_AMPERAGE_BC 8							// setting amperage multiplier value for BC winding
-#define MW_SETUP_MULT_AMPERAGE_AC 9							// setting amperage multiplier value for AC winding
-#define MW_SETUP_IMPEDANCE_AB 10							// setting impedance value for AB winding 
-#define MW_SETUP_IMPEDANCE_BC 11							// setting impedance value for BC winding 
-#define MW_SETUP_IMPEDANCE_AC 12							// setting impedance value for AC winding 
+// Режимы работы
+// Режим настроек
+#define MW_NEED_SETUP 0										// Первый запуск
+#define MW_SETUP_CONNECTION_TYPE 1							// Установка типа соединения обмоток
+#define MW_SETUP_GAIN_VOLTAGE 2								// Установка степени усиления АЦП по напряжению
+#define MW_SETUP_GAIN_AMPERAGE 3							// Установка степени усиления АЦП по току
+#define MW_SETUP_MULT_VOLTAGE_AB 4							// Установка значения множителя напряжения для обмотки AB
+#define MW_SETUP_MULT_VOLTAGE_BC 5							// Установка значения множителя напряжения для обмотки BC
+#define MW_SETUP_MULT_VOLTAGE_AC 6							// Установка значения множителя напряжения для обмотки AC
+#define MW_SETUP_MULT_AMPERAGE_AB 7							// Установка значения множителя тока для обмотки AB
+#define MW_SETUP_MULT_AMPERAGE_BC 8							// Установка значения множителя тока для обмотки BC
+#define MW_SETUP_MULT_AMPERAGE_AC 9							// Установка значения множителя тока для обмотки AC
+#define MW_SETUP_IMPEDANCE_AB 10							// Установка значения сопротивления для обмотки AB
+#define MW_SETUP_IMPEDANCE_BC 11							// Установка значения сопротивления для обмотки BC  
+#define MW_SETUP_IMPEDANCE_AC 12							// Установка значения сопротивления для обмотки AC 
 
-#define MW_SETUP_START MW_SETUP_CONNECTION_TYPE				// first setup mode for swiping
-#define MW_SETUP_STOP MW_SETUP_IMPEDANCE_AC					// last setup mode for swiping
+#define MW_SETUP_START MW_SETUP_CONNECTION_TYPE				// Алиас для стартового пункта меню настроек
+#define MW_SETUP_STOP MW_SETUP_IMPEDANCE_AC					// Алиас для последнего пункта меню настроек
 
 // Showing characteristics
-#define MW_SHOW_ERRORS_COUNTERS 13				// showing counters of windings critical errors { amperage error counter AB | amperage error counter BC | amperage error counter AC }
-#define MW_SHOW_ERRORS 14							// showing all windings amperage errors { amperage error AB | amperage error BC | amperage error AC }
-#define MW_SHOW_AMPERAGE_AB 15					// showing AB winding amperage { measured | perfect}
-#define MW_SHOW_AMPERAGE_BC 16					// showing BC winding amperage { measured | perfect}
-#define MW_SHOW_AMPERAGE_AC 17					// showing AC winding amperage { measured | perfect}
-#define MW_SHOW_WINDING_CHARS_AB 18				// showing AB winding characteristics { voltage | amperage error | avg measured amperage }
-#define MW_SHOW_WINDING_CHARS_BC 19				// showing BC winding characteristics { voltage | amperage error | avg measured amperage }
-#define MW_SHOW_WINDING_CHARS_AC 20				// showing AC winding characteristics { voltage | amperage error | avg measured amperage }
+#define MW_SHOW_ERRORS_COUNTERS 13				// Отображения количества выхода за предел критического значениия { счетчик ошибок по току AB | счетчик ошибок по току BC | счетчик ошибок по току AC }
+#define MW_SHOW_ERRORS 14						// Оторажения в процентах степени отклоенения текущего тока от иделаьного { ошибка по току AB | ошибка по току BC | ошибка по току AC }
+#define MW_SHOW_AMPERAGE_AB 15					// Отображение силы тока обмотки AB { M - измеренный | P - идеальный}
+#define MW_SHOW_AMPERAGE_BC 16					// Отображение силы тока обмотки  BC { M - измеренный | P - идеальный}
+#define MW_SHOW_AMPERAGE_AC 17					// Отображение силы тока обмотки  AC { M - измеренный | P - идеальный}
+#define MW_SHOW_WINDING_CHARS_AB 18				// Отображение характеристик обмотки AB { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
+#define MW_SHOW_WINDING_CHARS_BC 19				// Отображение характеристик обмотки BC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
+#define MW_SHOW_WINDING_CHARS_AC 20				// Отображение характеристик обмотки AC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
 
-#define MW_SHOWING_START MW_SHOW_ERRORS_COUNTERS	// first showing mode for swiping
-#define MW_SHOWING_STOP MW_SHOW_WINDING_CHARS_AC 	// last showing mode for swiping
+#define MW_SHOWING_START MW_SHOW_ERRORS_COUNTERS	// Алиас для стартового пункта отображения данных
+#define MW_SHOWING_STOP MW_SHOW_WINDING_CHARS_AC 	// Алиас для последнего пункта отображения данных
 
-#define MW_CONTROLL_MEASUREMENT	21
+#define MW_CONTROLL_MEASUREMENT	21					// Дополнительный пункт меню, выбор о старте измерений
 
-#define IC_ERROR_CRITICAL 20
+#define IC_ERROR_CRITICAL 20					// Процент на которое допустимо отклоенение силы тока
 
 
 /*	
+	Таблица усиления АЦП
 	------------------------------------------------------
 	|   Mode name	 | Gain | +/- Voltage | mV per 1 bit |		
 	------------------------------------------------------
@@ -104,27 +93,54 @@ float EEMEM eeprom_amperage_mult_ac = 1;
 	------------------------------------------------------
 */
 
-
-Adafruit_ADS1115 adsVoltage(0x48);
+// Объекты работы с АЦП модулями
+Adafruit_ADS1115 adsVoltage(0x48);			
 Adafruit_ADS1115 adsAmperage(0x49);
 
+/*
+	Сборка связанная с вычислением релаьного значения сигнала с АЦП за бит
+	gainStep - поиндексно вынесены цены за бит для выборки в настроках
+	voltageStep - множитель по напрядению 
+	amperageStep - множитель по току
+*/
 struct Ads1115 {
 	float gainStep[6] = {0.1875, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125};
 	float voltageStep = 0.1875 / 1000.0;
 	float amperageStep = 0.1875 / 1000.0;
 };
 
+/*
+	Характеристики снятые с АЦП
+	voltage - значение напряжения за measurementsCount количества измерений
+	measuredAmperage - значение силы тока за measurementsCount количества измерений
+	perfectAmperage - идеальное значения силы тока, вычисляемое перед использованием
+	sumVoltage - сюда заливаем для усреднения значения напряжений
+	sumMeasuredAmperage - сюда заливаем для усреднения значения силы тока
+	measurementsCount - количество измерений перед усреднением
+	currentMeasurement - номер текущего измерения
+*/
 struct AdsChars {
 	float voltage[3] = {0, 0, 0};
 	float measuredAmperage[3] = {0, 0, 0};
 	float perfectAmperage[3] = {0, 0, 0};
-		
 	float sumVoltage[3] = {0, 0, 0};
 	float sumMeasuredAmperage[3] = {0, 0, 0};
 	byte measurementsCount = 50;
 	byte currentMeasurement = 1;
 };	
 
+/*
+	Настройки
+	isReadyToWork - флаг, готовность к работе комплекса
+	connectionType - тип подключения
+	criticleError - остаток от сравнения по сопротивлениям, сейчас не используется
+	impedance - значение сопротивлений
+	isSetupMode - флаг, нахождение в режиме настроек
+	currentAmperageGain - индекс усиления АЦП по току
+	currentVoltageGain - индекс усиления АЦП по напряжению
+	multiplierVoltage - множитель по напряжению для вычисления реального значения
+	multiplierAmperage - множитель по току для вычисления реального значения
+*/
 struct Settings {
 	bool isReadyToWork = false;
 	bool connectionType = CONNECTION_TYPE_STAR;
@@ -138,20 +154,35 @@ struct Settings {
 	float multiplierAmperage[3] = {1, 1, 1};
 };
 
+/*
+	Структура отклоения релаьного от иделаьного значения 
+	curLvl - Уровень ошибки текущий за определенное количество измерений
+	criticalLvlCount - Количество выходов за пределы допуска
+	hasAsymmetry - флаг, наличие асиметрии 
+	hasIC - флаг, наличие межвиткового замыкания
+*/
 struct Error {
-	// Уровень ошибки текущий за определенное количество измерений
 	float curLvl[3] = {0, 0, 0};
-	// Счетчик превышение нормы. Пока привязан как выше нормы но не на конкретное значение
 	unsigned long criticalLvlCount[3] = {0, 0, 0};
 	bool hasAsymmetry = false;
 	bool hasIC = false;
 };
 
+/*
+	Вспомогательная структура для настроек
+	value - текуцщее изменяемое значение
+	curMultiplier - для установки множителей, ценаза клик кнопки x0.001-x100.0
+*/
 struct SetDigit {
 	float value;
 	float curMultiplier;
 };
 
+/*
+	Режим работы
+	current - текущий
+	prev - предыдущий
+*/
 struct ModeWork {
 	byte current;
 	byte prev;
@@ -185,8 +216,8 @@ SetDigit setDigit;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 ModeWork modeWork;
 
-bool lcdUpdateScreen = false;
-unsigned long serialUpdateStamp = 0;
+bool lcdUpdateScreen = false;						// Флаг, необходимость обновить экран
+unsigned long serialUpdateStamp = 0;				// Пора ли отправлять данные в Serial порт
 	
 void initAvgVars();
 void getAdsParams();
@@ -222,22 +253,23 @@ void setup() {
 	Serial.begin(9600);
 	Serial.println(F("Initialization..."));
 	
+	// Инициализация АЦП
 	adsVoltage.setGain(GAIN_TWOTHIRDS);
-	adsAmperage.setGain(GAIN_TWOTHIRDS);
-	
 	adsVoltage.begin();
+	adsAmperage.setGain(GAIN_TWOTHIRDS);
 	adsAmperage.begin();
-	
+	// Инициализация LCD модуля
 	lcd.init();
 	lcd.backlight();
 	lcd.clear();
 	Serial.println(F("LCD inited!"));
 	
-	button1Callback.attachClick(button1Click);
-	button1Callback.attachLongPressStart(button1LongPressStart);
-	button1Callback.setDebounceTicks(30);
-	button1Callback.setClickTicks(200);
-	button1Callback.setPressTicks(1000);
+	// Инициализая кнопок
+	button1Callback.attachClick(button1Click);								// Установка callback функции на короткий клик
+	button1Callback.attachLongPressStart(button1LongPressStart);			// Установка callback функции на длинный клик
+	button1Callback.setDebounceTicks(30);									// Время до идентификации клика в мс для нивилирования дребезга контактов
+	button1Callback.setClickTicks(200);										// Количество мс нажатия для того чтобы клик был идентифицирован
+	button1Callback.setPressTicks(1000);									// Количество мс нажатия для идентификаци длинного клика
 	Serial.println(F("Button 1 inited!"));
 	
 	button2Callback.attachClick(button2Click);
@@ -247,7 +279,8 @@ void setup() {
 	button2Callback.setPressTicks(1000);
 	Serial.println(F("Button 2 inited!"));
 	
-	if (eeprom_read_byte(&eeprom_first_start) != 103) {
+	// Инициализация старт-пакета данных
+	if (eeprom_read_byte(&eeprom_first_start) != 100) {
 		eeprom_update_byte(&eeprom_connection_type, CONNECTION_TYPE_STAR);
 		eeprom_update_byte(&eeprom_gain_amperage, 0);
 		eeprom_update_byte(&eeprom_gain_voltage, 0);
@@ -260,10 +293,11 @@ void setup() {
 		eeprom_update_float(&eeprom_amperage_mult_ab, 0);
 		eeprom_update_float(&eeprom_amperage_mult_bc, 0);
 		eeprom_update_float(&eeprom_amperage_mult_ac, 0);
-		eeprom_update_byte(&eeprom_first_start, 103);
+		eeprom_update_byte(&eeprom_first_start, 100);
 		Serial.println(F("EEPROM first start writed!"));
 	}
 	
+	// Теперь старт данные получаем из памяти при старте
 	settings.currentAmperageGain = eeprom_read_byte(&eeprom_gain_amperage);
 	settings.currentVoltageGain = eeprom_read_byte(&eeprom_gain_voltage);
 	settings.connectionType = eeprom_read_byte(&eeprom_connection_type);
@@ -297,6 +331,7 @@ void setup() {
 
 	checkIsReadyToWork();
 	
+	// Инициализируем пищалку
 	pinMode(BEEPER, OUTPUT);
 	digitalWrite(BEEPER, LOW);
 	
@@ -308,7 +343,9 @@ void setup() {
 	displayAsMode();
 }
 
-
+/*
+	Проверка на первый старт и необходимость настреок перед стартом работы
+*/
 void checkIsReadyToWork() {
 	bool isReadyToWork = true;
 	for(byte i = 0; i < 3; i++) {
@@ -328,17 +365,24 @@ void checkIsReadyToWork() {
 }
 
 void loop() {
+	// Следим за кнопками
 	button1Callback.tick();
 	button2Callback.tick();
+	// Отображаем данные на экран
 	displayAsMode();
+	// Если в режиме измерений
 	if(settings.isReadyToWork == MM_WORK) {
+		// получаем параметры
 		getAdsParams();
+		// и продолжаем получать пока не накопим 50 измерений
 		if (adsChars.currentMeasurement < adsChars.measurementsCount) {
 			adsChars.currentMeasurement++;
 		} else {
+			// после накопления measurementsCount обновляем экран и смотрим на наличия межветковых замыканий
 			lcdUpdateScreen = true;
 			bool canSerial = millis() - serialUpdateStamp > 1000? true: false;
 			for (byte i = 0; i < 3; i++) {
+				// вычисляем реальные значения напряжения, тока и идеального тока от измеренного напряжения и известного сопротивления
 				adsChars.voltage[i] = adsChars.sumVoltage[i] / adsChars.measurementsCount * ads.voltageStep * settings.multiplierVoltage[i];
 				adsChars.measuredAmperage[i] = adsChars.sumMeasuredAmperage[i] / adsChars.measurementsCount * ads.amperageStep * settings.multiplierAmperage[i];
 				adsChars.perfectAmperage[i] = adsChars.voltage[i] / settings.impedance[i];
@@ -360,14 +404,17 @@ void loop() {
 			}
 			initAvgVars();
 			
+			// проверяем на наличие замыкания
 			bool isHasIC = false;
 			for (byte i = 0; i < 3; i++) {
+				// если мы перешли порог, то проверяем на ассиметрию
 				if (icError.curLvl[i] > 100 - settings.connectionType) {
 					icError.hasAsymmetry = isFullErrorExists(adsChars.measuredAmperage, adsChars.voltage);
 					isHasIC = true;
 					break;
 				}
 			}
+
 			if (!icError.hasAsymmetry) {
 				isHasIC = false;
 			} else {
@@ -386,21 +433,27 @@ void loop() {
  * Получение параметров с АЦП
  */
 void getAdsParams() {
+	// Временные данные по напряжению, току и иделаьному току
 	float measuredVoltage[3] = {0, 0, 0};
 	float measuredAmperage[3] = {0, 0, 0};
 	float perfectAmperage[3] = {0, 0, 0};
 		
+	// получение данных с ацп для кжадой обмотки
 	for (byte i = 0; i < 3; i++) {
 		measuredVoltage[i] = adsVoltage.readADC_SingleEnded(i);
 		measuredAmperage[i] = adsAmperage.readADC_SingleEnded(i);
 	}
+	
 	for (byte i = 0; i < 3; i++) {
+		// увеличиваем данные для усреднения
 		adsChars.sumVoltage[i] += measuredVoltage[i];
 		adsChars.sumMeasuredAmperage[i] += measuredAmperage[i];
+		// вычисляем текущие реальные значения
 		measuredVoltage[i] *= ads.voltageStep * settings.multiplierAmperage[i];
 		measuredAmperage[i] *= ads.amperageStep * settings.multiplierVoltage[i];
 	}
 	
+	// прогоняем для проверки на выходы за пределы допуска и увеличиваем счетчик, ели это случилось
 	for (byte i = 0; i < 3; i++) {
 		if (isFullErrorExists(measuredAmperage, measuredVoltage)) {
 			if (getICLevelByWinding(measuredAmperage[i], i) >= IC_ERROR_CRITICAL && icError.criticalLvlCount[i] < 1000) {
@@ -410,8 +463,9 @@ void getAdsParams() {
 	}
 }
 
-
-
+/*
+	Обнуление переменных - средние значения характеристик и сбрасываем счетчик измерений
+*/
 void initAvgVars() {
 	for (byte i = 0; i < 3; i++) {
 		adsChars.sumVoltage[i] = 0;
@@ -420,6 +474,11 @@ void initAvgVars() {
 	adsChars.currentMeasurement = 1;
 }
 
+/*
+	Получения степени отклонения силы тока идеального от измеренного по обмотке
+	_amperage - измеренное значение тока
+	_num - номер обмотки
+*/
 float getICLevelByWinding(float _amperage, byte _num) {
 	if (adsChars.perfectAmperage[_num] >= _amperage) {
 		return 0;
@@ -430,12 +489,17 @@ float getICLevelByWinding(float _amperage, byte _num) {
 /*
  * Проверка наличия отклоеннеия.
  * Ошибка проверяется только при положительных разностях
+ * _amperage - массив измеренных токов
+ * _voltage - массив измеренных напряжений
 */
 bool isFullErrorExists(float* _amperage, float* _voltage) {
 	float divAmperage[3] = {0, 0, 0};
+	// 100 - магическое число и ничего не значит, прсото для удобства 
 	byte sign = 100;
 	
+	// получаем разницу идеального от измеренного тока и изменяем значения счетчика знака
 	for(byte i = 0; i < 3; i++) {
+		// на ходу вычисляем значения идеального тока
 		adsChars.perfectAmperage[i] = _voltage[i] / settings.impedance[i];
 		divAmperage[i] = adsChars.perfectAmperage[i] - _amperage[i];
 		if (divAmperage[i] > 0) {
@@ -444,16 +508,21 @@ bool isFullErrorExists(float* _amperage, float* _voltage) {
 			sign--;
 		}
 	}
-
+	
+	// если знак = -97, значит все значения измеренных токов меньше идеальных и замыкания нет
 	if (sign == -97) {
 		return false;
 	}
+	// По формуле вычисляем глоабльную ошибку по токам |AB - BC| + |BC - AC| + |AC - AB| 
 	float _error = abs(divAmperage[0] - divAmperage[1]) + abs(divAmperage[1] - divAmperage[2]) + abs(divAmperage[2] - divAmperage[0]);
 
 	// пока дадим 20% допуска отклонения общей величины
 	return !(_error <= _error * 1.20);
 }
 
+/*
+	Оторажаем возможные варианты усиления
+*/
 void showGainInfo() {
 	lcdClearCell(0, 1, 16);
 	switch((int)setDigit.value) {
@@ -478,7 +547,11 @@ void showGainInfo() {
 	}
 }
 
+/*
+	Отображение динамиеских данных в зависимости от режима
+*/
 void displayAsMode() {
+	// Если мы изменили режим отображения, то необходимо обновиь статику и динамику
 	if (modeWork.current != modeWork.prev) {
 		modeWork.prev = modeWork.current;
 		lcdUpdateScreen = true;
@@ -488,7 +561,7 @@ void displayAsMode() {
 		return;
 	} 
 	lcdUpdateScreen = false;
-	
+	// обновляем динамику
 	switch(modeWork.current) {
 		case MW_SETUP_CONNECTION_TYPE:
 			lcdClearCell(0, 1, 8);
@@ -554,6 +627,10 @@ void displayAsMode() {
 	}
 }
 
+/*
+	Отображение округленных значений ошибки в зависимости от обмотки 
+	_num - номер обмотки
+*/
 void lcdPrinRoundedCurErrorLevel(byte _num) {
 	if (icError.curLvl[_num] < 1000) {
 		lcd.print(round(icError.curLvl[_num]));
@@ -563,6 +640,10 @@ void lcdPrinRoundedCurErrorLevel(byte _num) {
 	}
 }
 
+/*
+	Отображение счетчиков выхода за пределы допуска ошибки
+	_num - номер обмотки
+*/
 void lcdPrintCriticalLvl(byte _num) {
 	if (icError.criticalLvlCount[_num] < 1000) {
 		lcd.print(icError.criticalLvlCount[_num]);
@@ -572,6 +653,9 @@ void lcdPrintCriticalLvl(byte _num) {
 	}
 }
 
+/*
+	Отображение статики в ависимости от режима отображения
+*/
 void displayStaticAsMode() {
 	lcd.clear();
 	switch(modeWork.current) {
@@ -666,6 +750,10 @@ void displayStaticAsMode() {
 	}
 }
 
+/*
+	Отображение идеального и измеренного тока
+	_num - номер обмотки
+*/
 void showAmperageChars(byte _num) {
 	lcdClearCell(6, 0, 9);
 	byte roundedSign = 2;
@@ -695,7 +783,9 @@ void showAmperageChars(byte _num) {
 	}
 }
 
-
+/*
+	Отображение дополнительной статики для режима отображения по току
+*/
 void showStaticAmperage() {
 	lcd.setCursor(3, 0);
 	lcd.print(F("P"));
@@ -703,6 +793,10 @@ void showStaticAmperage() {
 	lcd.print(F("M"));
 }
 
+/*
+	Отображение характеристик по обмоткам
+	_num - номер обмотки
+*/
 void showWindingCharsValues(byte _num) {
 	lcdClearCell(6, 0, 10);
 	byte roundedSign = 2;
@@ -737,7 +831,11 @@ void showWindingCharsValues(byte _num) {
 }
 
 
-// CR measured|perfect
+
+/*
+	Отображение статики по обмоткам
+	MP значит measured|perfect
+*/
 void showStaticWindingChars() {
 	lcd.setCursor(4, 0);
 	lcd.print(F("I="));
@@ -747,8 +845,12 @@ void showStaticWindingChars() {
 	lcd.print(F("E="));
 }
 
-//
-// очистка поля значения от старых данных
+/*
+	Очистка определенного блока экрана с установкой на этом месте курсора
+	col - номер колонки
+	row - номер строки
+	rowLength - количество ячеек для очистки в строке
+*/
 void lcdClearCell(byte col, byte row, byte rowLength) {                
 	lcd.setCursor(col, row);                                        
 	for (byte i = 0; i < rowLength; i++) {                             
@@ -757,22 +859,25 @@ void lcdClearCell(byte col, byte row, byte rowLength) {
 	lcd.setCursor(col, row);                                          
 }
 
-
+/*
+	Получение текущего значения сопротивления обмотки от измеренных значений напряжения и силы тока
+*/
 float getCurrentWindingImpedanceValue() {
 	byte _windingIndex = 0;
 	float _voltage = 0;
 	float _amperage = 0;
 	
+	// В зависимости от текущего режима настроек получаем номер обмотки
 	switch(modeWork.current){
 		case MW_SETUP_IMPEDANCE_AB:
-		_windingIndex = 0;
-		break;
+			_windingIndex = 0;
+			break;
 		case MW_SETUP_IMPEDANCE_BC:
-		_windingIndex = 1;
-		break;
+			_windingIndex = 1;
+			break;
 		case MW_SETUP_IMPEDANCE_AC:
-		_windingIndex = 2;
-		break;
+			_windingIndex = 2;
+			break;
 	}
 
 	_voltage = adsVoltage.readADC_SingleEnded(_windingIndex);
@@ -784,17 +889,25 @@ float getCurrentWindingImpedanceValue() {
 	return _amperage == 0? 0: _voltage / _amperage;
 }
 
+/*
+	Обработчика короткого клика первой клавиши
+*/
 void button1Click() {
+	// Если мы в настройках сопротивления то ничего не делать
 	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
 		return;
 	}
+	// Если мы в любых других настройках
 	if (modeWork.current >= MW_SETUP_START && modeWork.current <= MW_SETUP_STOP) {
 		lcdUpdateScreen = true;
 		if (modeWork.current == MW_SETUP_CONNECTION_TYPE) {
+			// Режим выбора подключения обмотки - изменяем его
 			setDigit.value = setDigit.value == CONNECTION_TYPE_STAR? CONNECTION_TYPE_TRIANGLE: CONNECTION_TYPE_STAR;
 		} else if (modeWork.current >= MW_SETUP_GAIN_AMPERAGE && modeWork.current <= MW_SETUP_GAIN_VOLTAGE) {
+			// Режим выбора усиления АЦП - меняем в пределах от 0-5 в большую сторону
 			setDigit.value = setDigit.value == 5? 0: setDigit.value + 1;
 		} else {
+			// Любой другой режим увеличиваем значение на величину curMultiplier
 			setDigit.value = setDigit.value + setDigit.curMultiplier;
 			if (setDigit.value >= 1000) {
 				setDigit.value = 0;
@@ -803,11 +916,13 @@ void button1Click() {
 		return;	
 	}
 	
+	// В режиме отображения данных листаем вперед меню
 	if (modeWork.current >= MW_SHOWING_START && modeWork.current <= MW_SHOWING_STOP) {
 		modeWork.current = modeWork.current == MW_SHOWING_STOP? MW_SHOWING_START: modeWork.current + 1;
 		return;
 	}
 	
+	// Если вопрос о начале измерений, то клик его подтверждает
 	if (modeWork.current == MW_CONTROLL_MEASUREMENT) {
 		modeWork.current = MW_SHOWING_START;
 		settings.isReadyToWork = MM_WORK;
@@ -818,12 +933,18 @@ void button1Click() {
 	}
 }
 
+/*
+	Обработчика короткого клика второй клавиши
+*/
 void button2Click() {
+	// Если мы в настройках сопротивления то обнуляем значения сопротивлений
 	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
 		setDigit.value = 0;
 		lcdUpdateScreen = true;
 		return;
 	}
+	
+	// В режиме предупреждения необходимости настроек - переводим в режим настроек
 	if (modeWork.current == MW_NEED_SETUP) {
 		lcdUpdateScreen = true;
 		modeWork.current = MW_SETUP_START;
@@ -832,13 +953,17 @@ void button2Click() {
 		return;
 	}
 		
+	// Если режим настроек
 	if (modeWork.current >= MW_SETUP_START && modeWork.current <= MW_SETUP_STOP) {
 		lcdUpdateScreen = true;
 		if (modeWork.current == MW_SETUP_CONNECTION_TYPE) {
+			// режим выбора подключения - свапаем режим
 			setDigit.value = setDigit.value == CONNECTION_TYPE_STAR? CONNECTION_TYPE_TRIANGLE: CONNECTION_TYPE_STAR; 
 		} else if (modeWork.current >= MW_SETUP_GAIN_AMPERAGE && modeWork.current <= MW_SETUP_GAIN_VOLTAGE) {
+			// Режим выбора усиления АЦП - меняем в пределах от 0-5 в меньшую сторону
 			setDigit.value = setDigit.value == 0? 5: setDigit.value - 1;
 		}else {
+			// Любой другой режим уменьшаем значение на величину curMultiplier
 			setDigit.value = setDigit.value - setDigit.curMultiplier;
 			if (setDigit.value < 0) {
 				setDigit.value = 999.999f;
@@ -847,11 +972,13 @@ void button2Click() {
 		return;
 	}
 	
+	// В режиме отображения данных листаем назад меню
 	if (modeWork.current >= MW_SHOWING_START && modeWork.current <= MW_SHOWING_STOP) {
 		modeWork.current = modeWork.current == MW_SHOWING_START? MW_SHOWING_STOP: modeWork.current - 1;
 		return;
 	}
 	
+	// Если вопрос о начале измерений, то клик его отклоняет
 	if (modeWork.current == MW_CONTROLL_MEASUREMENT) {
 		modeWork.current = MW_SHOWING_START;
 		settings.isReadyToWork = MM_STOP;
@@ -859,39 +986,53 @@ void button2Click() {
 	}
 }
 
+/*
+	Обработчик длиннкого клика первой клавиши
+*/
 void button1LongPressStart() {
+	// выбор множителя x1x10x100x0.1x0.01x0.001 в режимах установки множителя
 	if (modeWork.current >= MW_SETUP_MULT_VOLTAGE_AB && modeWork.current <= MW_SETUP_MULT_AMPERAGE_AC) {
-		// выбор множителя x1x10x100x0.1x0.01x0.001
 		setDigit.curMultiplier = setDigit.curMultiplier >= 100.0f? 0.001f: setDigit.curMultiplier * 10.0f;
 		lcdUpdateScreen = true;
 		return;
 	}
 	
+	// получение текущих значений сопротивления в режимах установки импеданса
 	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
 		setDigit.value = getCurrentWindingImpedanceValue();
 		lcdUpdateScreen = true;
 		return;
 	}
 	
+	// В режимах просмотра данных, длинный клик переводит в режим вопроса о продолжении измерений
 	if (modeWork.current >= MW_SHOWING_START && modeWork.current <= MW_SHOWING_STOP) {
 		modeWork.current = MW_CONTROLL_MEASUREMENT;
 		return;
 	}
 	
+	// В ржеиме выбора о старте измерений - отклоенние вопроса
 	if (modeWork.current == MW_CONTROLL_MEASUREMENT) {
 		modeWork.current = MW_SHOWING_START;
 	}
 }
 
+/*
+	Обработчик длинного клика второй клавиши
+*/
 void button2LongPressStart() {
+	// При наличии замыкания отключает пищалку
 	if (icError.hasIC) {
 		digitalWrite(BEEPER, LOW);
 		icError.hasIC = false;
 		return;
 	}
+	
+	// В режиме предупреждения о необходимости натсроек ничего не делает
 	if (modeWork.current == MW_NEED_SETUP) {
 		return;
 	}
+	
+	// В режиме отображения количества выхода за пределы измерений обнуляет их и средние значения
 	if (modeWork.current == MW_SHOW_ERRORS_COUNTERS) {
 		for(byte i = 0; i < 3; i++) {
 			icError.criticalLvlCount[i] = 0;
@@ -902,7 +1043,7 @@ void button2LongPressStart() {
 		return;
 	}
 	
-	
+	// Перевод в режим настроек и выход из него
 	if (settings.isSetupMode) {
 		if (modeWork.current == MW_SETUP_STOP) {
 			saveSettings();
@@ -921,6 +1062,9 @@ void button2LongPressStart() {
 	}
 }
 
+/*
+	Получение значений настройки в настроечную переменную для изменения во время настроек
+*/
 void setEditValue() {
 	lcdUpdateScreen = true;
 	switch(modeWork.current) {
@@ -964,7 +1108,9 @@ void setEditValue() {
 	setDigit.curMultiplier = 1.0f;
 }
 
-
+/*
+	Сохранение настроек при сменах режима
+*/
 void saveSettings() {
 	switch(modeWork.current) {
 		case MW_SETUP_CONNECTION_TYPE:
@@ -1022,35 +1168,50 @@ void saveSettings() {
 	
 }
 
+/*
+	Установка степени усиления АЦП
+*/
 void setAdsGainByIndex(Adafruit_ADS1115* _ads, byte _index) {
+	Serial.print(F("ADS: "));
 	switch(_index) {
 		case 1:
+			Serial.println(F("GAIN_ONE"));
 			_ads->setGain(GAIN_ONE);
 			break;
 		case 2:
+			Serial.println(F("GAIN_TWO"));
 			_ads->setGain(GAIN_TWO);
 			break;
 		case 3:
+			Serial.println(F("GAIN_FOUR"));
 			_ads->setGain(GAIN_FOUR);
 			break;
 		case 4:
+			Serial.println(F("GAIN_EIGHT"));
 			_ads->setGain(GAIN_EIGHT);
 			break;
 		case 5:
+			Serial.println(F("GAIN_SIXTEEN"));
 			_ads->setGain(GAIN_SIXTEEN);
 			break;
 		default:
+			Serial.println(F("GAIN_TWOTHIRDS"));
 			_ads->setGain(GAIN_TWOTHIRDS);
 			break;
 	}
 }
 
-
+/*
+	Инициализация усиления АЦП по напряжению
+*/
 void initAdsVoltageGain() {
 	setAdsGainByIndex(&adsVoltage, settings.currentVoltageGain);
 	ads.voltageStep = ads.gainStep[settings.currentVoltageGain] / 1000.0;
 }
 
+/*
+	Инициализация усиления АЦП по току
+*/
 void initAdsAmperageGain() {
 	setAdsGainByIndex(&adsAmperage, settings.currentAmperageGain);
 	ads.amperageStep = ads.gainStep[settings.currentAmperageGain] / 1000.0;
