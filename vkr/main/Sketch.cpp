@@ -4,7 +4,11 @@
 #include <Adafruit_ADS1015.h>
 #include <LiquidCrystal_I2C.h>
 #include <OneButton.h>	
-
+/*
+	todo list
+	
+	формирование сигнала на отключение + завершение диагностики
+*/
 /*
 	Закон Ома по фасту
 	I = V / R
@@ -21,6 +25,8 @@
 #define BUTTON_1 A0						// Алиас пина кнопки 1
 #define BUTTON_2 A1						// Алиас пина кнопки 2
 #define BEEPER A2						// Алиас пина пищалки
+#define RELAY A3						// Алиас пина реле
+#define DEBUG 4							// Алиас пина дебага
 
 #define CONNECTION_TYPE_STAR 0			// Идентификатор подключения по типу звезда
 #define CONNECTION_TYPE_TRIANGLE 1		// Идентификатор подключения по типу треугольник
@@ -54,29 +60,26 @@ float EEMEM eeprom_amperage_mult_ac = 1;					// Значение множите�
 #define MW_SETUP_MULT_AMPERAGE_AB 7							// Установка значения множителя тока для обмотки AB
 #define MW_SETUP_MULT_AMPERAGE_BC 8							// Установка значения множителя тока для обмотки BC
 #define MW_SETUP_MULT_AMPERAGE_AC 9							// Установка значения множителя тока для обмотки AC
-#define MW_SETUP_IMPEDANCE_AB 10							// Установка значения сопротивления для обмотки AB
-#define MW_SETUP_IMPEDANCE_BC 11							// Установка значения сопротивления для обмотки BC  
-#define MW_SETUP_IMPEDANCE_AC 12							// Установка значения сопротивления для обмотки AC 
+#define MW_SETUP_IMPEDANCE 10							// Установка значения сопротивления для обмотки AB
 
 #define MW_SETUP_START MW_SETUP_CONNECTION_TYPE				// Алиас для стартового пункта меню настроек
-#define MW_SETUP_STOP MW_SETUP_IMPEDANCE_AC					// Алиас для последнего пункта меню настроек
+#define MW_SETUP_STOP MW_SETUP_IMPEDANCE					// Алиас для последнего пункта меню настроек
 
 // Showing characteristics
 #define MW_SHOW_ERRORS_COUNTERS 13				// Отображения количества выхода за предел критического значениия { счетчик ошибок по току AB | счетчик ошибок по току BC | счетчик ошибок по току AC }
 #define MW_SHOW_ERRORS 14						// Оторажения в процентах степени отклоенения текущего тока от иделаьного { ошибка по току AB | ошибка по току BC | ошибка по току AC }
-#define MW_SHOW_AMPERAGE_AB 15					// Отображение силы тока обмотки AB { M - измеренный | P - идеальный}
-#define MW_SHOW_AMPERAGE_BC 16					// Отображение силы тока обмотки  BC { M - измеренный | P - идеальный}
-#define MW_SHOW_AMPERAGE_AC 17					// Отображение силы тока обмотки  AC { M - измеренный | P - идеальный}
-#define MW_SHOW_WINDING_CHARS_AB 18				// Отображение характеристик обмотки AB { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
-#define MW_SHOW_WINDING_CHARS_BC 19				// Отображение характеристик обмотки BC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
-#define MW_SHOW_WINDING_CHARS_AC 20				// Отображение характеристик обмотки AC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
+#define MW_SHOW_AMPERAGE 15					// Отображение всех токов
+#define MW_SHOW_AMPERAGE_AB 16					// Отображение силы тока обмотки AB { M - измеренный | P - идеальный}
+#define MW_SHOW_AMPERAGE_BC 17					// Отображение силы тока обмотки  BC { M - измеренный | P - идеальный}
+#define MW_SHOW_AMPERAGE_AC 18					// Отображение силы тока обмотки  AC { M - измеренный | P - идеальный}
+#define MW_SHOW_WINDING_CHARS_AB 19				// Отображение характеристик обмотки AB { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
+#define MW_SHOW_WINDING_CHARS_BC 20				// Отображение характеристик обмотки BC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
+#define MW_SHOW_WINDING_CHARS_AC 21				// Отображение характеристик обмотки AC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
 
 #define MW_SHOWING_START MW_SHOW_ERRORS_COUNTERS	// Алиас для стартового пункта отображения данных
 #define MW_SHOWING_STOP MW_SHOW_WINDING_CHARS_AC 	// Алиас для последнего пункта отображения данных
 
-#define MW_CONTROLL_MEASUREMENT	21					// Дополнительный пункт меню, выбор о старте измерений
-
-#define IC_ERROR_CRITICAL 20					// Процент на которое допустимо отклоенение силы тока
+#define MW_CONTROLL_MEASUREMENT	30					// Дополнительный пункт меню, выбор о старте измерений
 
 
 /*	
@@ -125,7 +128,7 @@ struct AdsChars {
 	float perfectAmperage[3] = {0, 0, 0};
 	float sumVoltage[3] = {0, 0, 0};
 	float sumMeasuredAmperage[3] = {0, 0, 0};
-	byte measurementsCount = 50;
+	byte measurementsCount = 60;
 	byte currentMeasurement = 1;
 };	
 
@@ -152,20 +155,24 @@ struct Settings {
 	byte currentVoltageGain = 0;
 	float multiplierVoltage[3] = {1, 1, 1};
 	float multiplierAmperage[3] = {1, 1, 1};
+	bool isDebugMode = false;
 };
 
 /*
 	Структура отклоения релаьного от иделаьного значения 
 	curLvl - Уровень ошибки текущий за определенное количество измерений
 	criticalLvlCount - Количество выходов за пределы допуска
-	hasAsymmetry - флаг, наличие асиметрии 
 	hasIC - флаг, наличие межвиткового замыкания
+	criticalSingle - отклонение на этой величины единичной обмотки критично
+	criticalFull - отклонение общей ошибки более чем на это число критично
 */
 struct Error {
 	float curLvl[3] = {0, 0, 0};
-	unsigned long criticalLvlCount[3] = {0, 0, 0};
-	bool hasAsymmetry = false;
+	int criticalLvlCount[3] = {0, 0, 0};
 	bool hasIC = false;
+	unsigned long detectStamp = 0;
+	float criticalSingle = 0.85;
+	float criticalFull = 1;
 };
 
 /*
@@ -239,7 +246,7 @@ void fillComparedAmperage();
 void button1LongPressStart();
 void button2LongPressStart();
 void showStaticWindingChars();
-float getICLevelByWinding(float, byte);
+float getICLevelByWinding(byte);
 void calculateRealAdsParams();
 bool isFullErrorExists(float*,float*);
 void lcdPrintCriticalLvl(byte _num);
@@ -247,7 +254,8 @@ void showWindingCharsValues(byte _num);
 void lcdPrinRoundedCurErrorLevel(byte _num);
 void setAdsGainByIndex(Adafruit_ADS1115*, byte);
 void lcdClearCell(byte col, byte row, byte rowLength);
-
+void setupImpedance();
+bool isSingleErrorExists(float, float, byte);
 
 void setup() {
 	Serial.begin(9600);
@@ -332,8 +340,18 @@ void setup() {
 	checkIsReadyToWork();
 	
 	// Инициализируем пищалку
+	pinMode(RELAY, OUTPUT);
 	pinMode(BEEPER, OUTPUT);
+	pinMode(DEBUG, INPUT);
+	digitalWrite(RELAY, LOW);
 	digitalWrite(BEEPER, LOW);
+	
+	if (digitalRead(DEBUG) == HIGH) {
+		settings.isDebugMode = true;
+		lcd.clear();
+		lcd.print(F("Debug mode"));
+		delay(1000);
+	}
 	
 	modeWork.prev = modeWork.current;
 	initAvgVars();
@@ -371,6 +389,7 @@ void loop() {
 	// Отображаем данные на экран
 	displayAsMode();
 	// Если в режиме измерений
+	
 	if(settings.isReadyToWork == MM_WORK) {
 		// получаем параметры
 		getAdsParams();
@@ -382,16 +401,18 @@ void loop() {
 			lcdUpdateScreen = true;
 			bool canSerial = millis() - serialUpdateStamp > 1000? true: false;
 			for (byte i = 0; i < 3; i++) {
+				
 				// вычисляем реальные значения напряжения, тока и идеального тока от измеренного напряжения и известного сопротивления
 				adsChars.voltage[i] = adsChars.sumVoltage[i] / adsChars.measurementsCount * ads.voltageStep * settings.multiplierVoltage[i];
 				adsChars.measuredAmperage[i] = adsChars.sumMeasuredAmperage[i] / adsChars.measurementsCount * ads.amperageStep * settings.multiplierAmperage[i];
 				adsChars.perfectAmperage[i] = adsChars.voltage[i] / settings.impedance[i];
-				icError.curLvl[i] = getICLevelByWinding(adsChars.measuredAmperage[i], i);
+				icError.curLvl[i] = getICLevelByWinding(i);
+
 				if (canSerial) {
 					Serial.print(F("Winding |")); Serial.print((i + 1)); Serial.println(F("|"));
-					Serial.print(F("measured voltage = "));  Serial.println(adsChars.voltage[i], 10);
-					Serial.print(F("measured amperage = "));  Serial.println(adsChars.measuredAmperage[i], 10);
-					Serial.print(F("perfect amperage = ")); Serial.println(adsChars.perfectAmperage[i], 10);
+					Serial.print(F("measured voltage = "));  Serial.println(adsChars.voltage[i], 6);
+					Serial.print(F("measured amperage = "));  Serial.println(adsChars.measuredAmperage[i], 6);
+					Serial.print(F("perfect amperage = ")); Serial.println(adsChars.perfectAmperage[i], 6);
 					Serial.print(F("error = ")); Serial.println(icError.curLvl[i]);
 					if (i != 2) {
 						Serial.println(F("---"));
@@ -403,27 +424,28 @@ void loop() {
 				serialUpdateStamp = millis();
 			}
 			initAvgVars();
+	
 			
-			// проверяем на наличие замыкания
-			bool isHasIC = false;
-			for (byte i = 0; i < 3; i++) {
-				// если мы перешли порог, то проверяем на ассиметрию
-				if (icError.curLvl[i] > 100 - settings.connectionType) {
-					icError.hasAsymmetry = isFullErrorExists(adsChars.measuredAmperage, adsChars.voltage);
-					isHasIC = true;
-					break;
+			if (isFullErrorExists(adsChars.measuredAmperage, adsChars.voltage)) {
+				if (icError.detectStamp == 0) {
+					Serial.println(F("Probably error exists"));
+					icError.detectStamp = millis();
 				}
-			}
-
-			if (!icError.hasAsymmetry) {
-				isHasIC = false;
+				if (millis() - icError.detectStamp >= 10000) {
+					if (!settings.isDebugMode) {
+						settings.isReadyToWork = MM_STOP;
+						digitalWrite(RELAY, HIGH);
+					}
+					
+					Serial.println(F("WARNING!!! Measurement Stoped IC EXISTS!"));
+					digitalWrite(BEEPER, HIGH);
+					icError.hasIC = true;
+				}
 			} else {
-				settings.isReadyToWork = MM_STOP;
-				
-				Serial.println(F("WARNING!!! Measurement Stoped IC EXISTS!"));
-				modeWork.current = MW_SHOW_ERRORS_COUNTERS;
-				digitalWrite(BEEPER, HIGH);
-				icError.hasIC = true;
+				if (icError.detectStamp != 0) {
+					Serial.println(F("ha-ha, it's joke. There are not exists critical error"));
+				}
+				icError.detectStamp = 0;
 			}
 		}
 	} 
@@ -443,22 +465,19 @@ void getAdsParams() {
 		measuredVoltage[i] = adsVoltage.readADC_SingleEnded(i);
 		measuredAmperage[i] = adsAmperage.readADC_SingleEnded(i);
 	}
+
 	
 	for (byte i = 0; i < 3; i++) {
 		// увеличиваем данные для усреднения
 		adsChars.sumVoltage[i] += measuredVoltage[i];
 		adsChars.sumMeasuredAmperage[i] += measuredAmperage[i];
 		// вычисляем текущие реальные значения
-		measuredVoltage[i] *= ads.voltageStep * settings.multiplierAmperage[i];
-		measuredAmperage[i] *= ads.amperageStep * settings.multiplierVoltage[i];
-	}
-	
-	// прогоняем для проверки на выходы за пределы допуска и увеличиваем счетчик, ели это случилось
-	for (byte i = 0; i < 3; i++) {
-		if (isFullErrorExists(measuredAmperage, measuredVoltage)) {
-			if (getICLevelByWinding(measuredAmperage[i], i) >= IC_ERROR_CRITICAL && icError.criticalLvlCount[i] < 1000) {
-				icError.criticalLvlCount[i]++;
-			}
+		measuredVoltage[i] *= ads.voltageStep * settings.multiplierVoltage[i];
+		measuredAmperage[i] *= ads.amperageStep * settings.multiplierAmperage[i];
+		
+		// прогоняем для проверки на выходы за пределы допуска и увеличиваем счетчик, ели это случилось
+		if (icError.criticalLvlCount[i] < 1000 && isSingleErrorExists(measuredAmperage[i], measuredVoltage[i], i)) {
+			icError.criticalLvlCount[i]++;
 		}
 	}
 }
@@ -479,11 +498,27 @@ void initAvgVars() {
 	_amperage - измеренное значение тока
 	_num - номер обмотки
 */
-float getICLevelByWinding(float _amperage, byte _num) {
-	if (adsChars.perfectAmperage[_num] >= _amperage) {
+float getICLevelByWinding(byte _num) {
+	if (adsChars.perfectAmperage[_num] >= adsChars.measuredAmperage[_num]) {
 		return 0;
 	}
-	return abs(_amperage - adsChars.perfectAmperage[_num]) * 100.0 / (adsChars.perfectAmperage[_num] * 0.20);
+	return abs(adsChars.measuredAmperage[_num] - adsChars.perfectAmperage[_num]) * 100.0 / ( adsChars.perfectAmperage[_num] + icError.criticalSingle);
+}
+
+/*
+ * Проверка наличия локального отклоеннеия.
+ * Ошибка проверяется только при положительных разностях
+ * _amperage - массив измеренных токов
+ * _voltage - массив измеренных напряжений
+ * index - индекс
+*/
+bool isSingleErrorExists(float _amperage, float _voltage, byte index) {
+	// высчитываем идеальный ток и отнимаем измеренный
+	float divAmperage = _amperage - (_voltage / settings.impedance[index]);
+	if (divAmperage <= 0) {
+		return false;
+	}
+	return divAmperage >= icError.criticalSingle;
 }
 
 /*
@@ -516,8 +551,8 @@ bool isFullErrorExists(float* _amperage, float* _voltage) {
 	// По формуле вычисляем глоабльную ошибку по токам |AB - BC| + |BC - AC| + |AC - AB| 
 	float _error = abs(divAmperage[0] - divAmperage[1]) + abs(divAmperage[1] - divAmperage[2]) + abs(divAmperage[2] - divAmperage[0]);
 
-	// пока дадим 20% допуска отклонения общей величины
-	return !(_error <= _error * 1.20);
+	// Крит общей ошибки отклонение в 1
+	return _error >= icError.criticalFull;
 }
 
 /*
@@ -575,9 +610,18 @@ void displayAsMode() {
 		case MW_SETUP_GAIN_VOLTAGE:
 			showGainInfo();
 			break;
-		case MW_SETUP_IMPEDANCE_AB:
-		case MW_SETUP_IMPEDANCE_BC:
-		case MW_SETUP_IMPEDANCE_AC:
+		case MW_SETUP_IMPEDANCE:
+			lcd.print(F("R1="));
+			lcd.print(settings.impedance[0], 1);
+			lcd.setCursor(8, 0);
+			lcd.print(F("R2="));
+			lcdClearCell(11, 0, 5);
+			lcd.print(settings.impedance[1], 1);
+			lcd.setCursor(0, 1);
+			lcd.print(F("R3="));
+			lcdClearCell(3, 1, 5);
+			lcd.print(settings.impedance[2], 1);
+			break;
 		case MW_SETUP_MULT_VOLTAGE_AB:
 		case MW_SETUP_MULT_VOLTAGE_BC:
 		case MW_SETUP_MULT_VOLTAGE_AC:
@@ -605,6 +649,23 @@ void displayAsMode() {
 			lcdPrinRoundedCurErrorLevel(1);
 			lcdClearCell(3, 1, 5);
 			lcdPrinRoundedCurErrorLevel(2);
+			break;
+		case MW_SHOW_AMPERAGE:
+			lcd.clear();
+			lcd.print(F("P "));
+			lcd.print(adsChars.perfectAmperage[0], 2);
+			lcd.print(F("#"));
+			lcd.print(adsChars.perfectAmperage[1], 2);
+			lcd.print(F("#"));
+			lcd.print(adsChars.perfectAmperage[2], 2);
+	
+			lcd.setCursor(0, 1);
+			lcd.print(F("M "));
+			lcd.print(adsChars.measuredAmperage[0], 2);
+			lcd.print(F("#"));
+			lcd.print(adsChars.measuredAmperage[1], 2);
+			lcd.print(F("#"));
+			lcd.print(adsChars.measuredAmperage[2], 2);
 			break;
 		case MW_SHOW_AMPERAGE_AB:
 			showAmperageChars(0);
@@ -668,15 +729,6 @@ void displayStaticAsMode() {
 		case MW_SETUP_GAIN_VOLTAGE:
 			lcd.print(F("V gain maxV/step"));
 			break;
-		case MW_SETUP_IMPEDANCE_AB:
-			lcd.print(F("R1 AB"));
-			break;
-		case MW_SETUP_IMPEDANCE_BC:
-			lcd.print(F("R2 BC"));
-			break;
-		case MW_SETUP_IMPEDANCE_AC:
-			lcd.print(F("R3 AC"));
-			break;
 		case MW_SETUP_MULT_VOLTAGE_AB:
 			lcd.print(F("Vm AB"));
 			break;
@@ -714,15 +766,15 @@ void displayStaticAsMode() {
 			lcd.print(F("e%"));
 			break;
 		case MW_SHOW_AMPERAGE_AB:
-			lcd.print(F("AB"));
+			lcd.print(F("AB D"));
 			showStaticAmperage();
 			break;
 		case MW_SHOW_AMPERAGE_BC:
-			lcd.print(F("BC"));
+			lcd.print(F("BC D"));
 			showStaticAmperage();
 			break;
 		case MW_SHOW_AMPERAGE_AC:
-			lcd.print(F("AC"));
+			lcd.print(F("AC D"));
 			showStaticAmperage();
 			break;
 		case MW_SHOW_WINDING_CHARS_AB:
@@ -755,41 +807,24 @@ void displayStaticAsMode() {
 	_num - номер обмотки
 */
 void showAmperageChars(byte _num) {
-	lcdClearCell(6, 0, 9);
-	byte roundedSign = 2;
-	if (adsChars.measuredAmperage[_num] < 10) {
-		roundedSign = 9;
-	} else if (adsChars.perfectAmperage[_num] < 100) {
-		roundedSign = 8;
-	} else {
-		roundedSign = 5;
-	}
-	lcd.print(adsChars.perfectAmperage[_num], roundedSign);
+	lcdClearCell(9, 0, 7);
+	lcd.print(adsChars.perfectAmperage[_num], 5);
 	
+	lcdClearCell(0, 1, 6);
+	float _diff = abs(adsChars.measuredAmperage[_num] - adsChars.perfectAmperage[_num]);
+	lcd.print(_diff, 4);
 	
-	lcdClearCell(5, 1, 9);
-	if (adsChars.measuredAmperage[_num] < 10) {
-		roundedSign = 9;
-	} else if (adsChars.measuredAmperage[_num] < 100) {
-		roundedSign = 8;
-	} else {
-		roundedSign = 5;
-	}
-	if (roundedSign > 0) {
-		lcd.print(adsChars.measuredAmperage[_num], roundedSign);
-		} else {
-		lcd.print(999);
-		lcd.print(F("+"));
-	}
+	lcdClearCell(9, 1, 7);
+	lcd.print(adsChars.measuredAmperage[_num], 5);
 }
 
 /*
 	Отображение дополнительной статики для режима отображения по току
 */
 void showStaticAmperage() {
-	lcd.setCursor(3, 0);
+	lcd.setCursor(7, 0);
 	lcd.print(F("P"));
-	lcd.setCursor(0, 1);
+	lcd.setCursor(7, 1);
 	lcd.print(F("M"));
 }
 
@@ -798,17 +833,9 @@ void showStaticAmperage() {
 	_num - номер обмотки
 */
 void showWindingCharsValues(byte _num) {
-	lcdClearCell(6, 0, 10);
+	lcdClearCell(5, 0, 7);
 	byte roundedSign = 2;
-	if (adsChars.measuredAmperage[_num] < 10) {
-		roundedSign = 8;
-	} else if (adsChars.measuredAmperage[_num] < 100) {
-		roundedSign = 7;
-	} else {
-		roundedSign = 4;
-	}
-	lcd.print(adsChars.measuredAmperage[_num], roundedSign);
-	
+	lcd.print(adsChars.measuredAmperage[_num], 5);
 	
 	lcdClearCell(2, 1, 8);
 	if (adsChars.voltage[_num] < 100) {
@@ -837,7 +864,7 @@ void showWindingCharsValues(byte _num) {
 	MP значит measured|perfect
 */
 void showStaticWindingChars() {
-	lcd.setCursor(4, 0);
+	lcd.setCursor(3, 0);
 	lcd.print(F("I="));
 	lcd.setCursor(0, 1);
 	lcd.print(F("V="));
@@ -862,31 +889,43 @@ void lcdClearCell(byte col, byte row, byte rowLength) {
 /*
 	Получение текущего значения сопротивления обмотки от измеренных значений напряжения и силы тока
 */
-float getCurrentWindingImpedanceValue() {
-	byte _windingIndex = 0;
-	float _voltage = 0;
-	float _amperage = 0;
+void setupImpedance() {
+	float _voltage[3] = {0, 0, 0};
+	float _amperage[3] = {0, 0, 0};
+	float _sumImpedance[3] = {0, 0, 0};
+	float _sumVoltage[3] = {0, 0, 0};
+	float _sumAamperage[3] = {0, 0, 0};
+	byte index = 1;
 	
-	// В зависимости от текущего режима настроек получаем номер обмотки
-	switch(modeWork.current){
-		case MW_SETUP_IMPEDANCE_AB:
-			_windingIndex = 0;
-			break;
-		case MW_SETUP_IMPEDANCE_BC:
-			_windingIndex = 1;
-			break;
-		case MW_SETUP_IMPEDANCE_AC:
-			_windingIndex = 2;
-			break;
+	while(index < adsChars.measurementsCount) {
+		for(byte i = 0; i < 3; i++) {
+			_voltage[i] = adsVoltage.readADC_SingleEnded(i);
+			_amperage[i] = adsAmperage.readADC_SingleEnded(i);
+		}
+		
+		for(byte i = 0; i < 3; i++) {
+			_sumVoltage[i] += _voltage[i];
+			_sumAamperage[i] += _amperage[i];
+		}
+		index++;
 	}
-
-	_voltage = adsVoltage.readADC_SingleEnded(_windingIndex);
-	_amperage = adsAmperage.readADC_SingleEnded(_windingIndex);
-
-	_voltage *= ads.voltageStep * settings.multiplierVoltage[_windingIndex];
-	_amperage *= ads.amperageStep * settings.multiplierAmperage[_windingIndex];;
 	
-	return _amperage == 0? 0: _voltage / _amperage;
+	Serial.println(F("Impedance setup"));
+				
+	for(byte i = 0; i < 3; i++) {
+		Serial.println(i);
+		_voltage[i] = _sumVoltage[i] / adsChars.measurementsCount * ads.voltageStep * settings.multiplierVoltage[i];
+		_amperage[i] = _sumAamperage[i] / adsChars.measurementsCount * ads.amperageStep * settings.multiplierAmperage[i];
+		settings.impedance[i] = _voltage[i] / _amperage[i];
+		Serial.print(F("V=")); Serial.println(_voltage[i], 5);
+		Serial.print(F("A=")); Serial.println(_amperage[i], 5);
+		Serial.print(F("R=")); Serial.println(settings.impedance[i], 5);
+		if (i == 2) {
+			Serial.println(F("---end---"));
+		} else {
+			Serial.println(F("------"));
+		}
+	}
 }
 
 /*
@@ -894,7 +933,7 @@ float getCurrentWindingImpedanceValue() {
 */
 void button1Click() {
 	// Если мы в настройках сопротивления то ничего не делать
-	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
+	if (modeWork.current == MW_SETUP_IMPEDANCE) {
 		return;
 	}
 	// Если мы в любых других настройках
@@ -926,6 +965,8 @@ void button1Click() {
 	if (modeWork.current == MW_CONTROLL_MEASUREMENT) {
 		modeWork.current = MW_SHOWING_START;
 		settings.isReadyToWork = MM_WORK;
+		icError.hasIC = false;
+		digitalWrite(RELAY, LOW);
 		
 		Serial.println(F("**Measurement Started!"));
 		initAvgVars();
@@ -938,8 +979,10 @@ void button1Click() {
 */
 void button2Click() {
 	// Если мы в настройках сопротивления то обнуляем значения сопротивлений
-	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
-		setDigit.value = 0;
+	if (modeWork.current == MW_SETUP_IMPEDANCE) {
+		settings.impedance[0] = 0;
+		settings.impedance[1] = 0;
+		settings.impedance[2] = 0;
 		lcdUpdateScreen = true;
 		return;
 	}
@@ -961,7 +1004,7 @@ void button2Click() {
 			setDigit.value = setDigit.value == CONNECTION_TYPE_STAR? CONNECTION_TYPE_TRIANGLE: CONNECTION_TYPE_STAR; 
 		} else if (modeWork.current >= MW_SETUP_GAIN_AMPERAGE && modeWork.current <= MW_SETUP_GAIN_VOLTAGE) {
 			// Режим выбора усиления АЦП - меняем в пределах от 0-5 в меньшую сторону
-			setDigit.value = setDigit.value == 0? 5: setDigit.value - 1;
+			setDigit.value = setDigit.value > 0?  setDigit.value - 1: 0;
 		}else {
 			// Любой другой режим уменьшаем значение на величину curMultiplier
 			setDigit.value = setDigit.value - setDigit.curMultiplier;
@@ -998,9 +1041,12 @@ void button1LongPressStart() {
 	}
 	
 	// получение текущих значений сопротивления в режимах установки импеданса
-	if (modeWork.current >= MW_SETUP_IMPEDANCE_AB && modeWork.current <= MW_SETUP_IMPEDANCE_AC) {
-		setDigit.value = getCurrentWindingImpedanceValue();
-		lcdUpdateScreen = true;
+	if (modeWork.current == MW_SETUP_IMPEDANCE) {
+		lcd.clear();
+		lcd.print(F("Impedance setup"));
+		setupImpedance();
+		lcd.clear();
+		modeWork.prev = 0;
 		return;
 	}
 	
@@ -1024,6 +1070,7 @@ void button2LongPressStart() {
 	if (icError.hasIC) {
 		digitalWrite(BEEPER, LOW);
 		icError.hasIC = false;
+		icError.detectStamp = false;
 		return;
 	}
 	
@@ -1077,15 +1124,6 @@ void setEditValue() {
 		case MW_SETUP_GAIN_VOLTAGE:
 			setDigit.value = settings.currentVoltageGain;
 			break;			
-		case MW_SETUP_IMPEDANCE_AB:
-			setDigit.value = settings.impedance[0];
-			break;
-		case MW_SETUP_IMPEDANCE_BC:
-			setDigit.value = settings.impedance[1];
-			break;
-		case MW_SETUP_IMPEDANCE_AC:
-			setDigit.value = settings.impedance[2];
-			break;
 		case MW_SETUP_MULT_VOLTAGE_AB:
 			setDigit.value = settings.multiplierVoltage[0];
 			break;
@@ -1128,16 +1166,9 @@ void saveSettings() {
 			initAdsVoltageGain();
 			eeprom_update_byte(&eeprom_gain_voltage, settings.currentVoltageGain);
 			break;
-		case MW_SETUP_IMPEDANCE_AB:
-			settings.impedance[0] = setDigit.value;
+		case MW_SETUP_IMPEDANCE:
 			eeprom_update_float(&eeprom_impedance_ab, settings.impedance[0]);
-			break;
-		case MW_SETUP_IMPEDANCE_BC:
-			settings.impedance[1] = setDigit.value;
 			eeprom_update_float(&eeprom_impedance_bc, settings.impedance[1]);
-			break;
-		case MW_SETUP_IMPEDANCE_AC:
-			settings.impedance[2] = setDigit.value;
 			eeprom_update_float(&eeprom_impedance_ac, settings.impedance[2]);
 			break;
 		case MW_SETUP_MULT_VOLTAGE_AB:
