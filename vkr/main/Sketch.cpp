@@ -68,13 +68,14 @@ float EEMEM eeprom_amperage_mult_ac = 1;					// Значение множите�
 // Showing characteristics
 #define MW_SHOW_ERRORS_COUNTERS 13				// Отображения количества выхода за предел критического значениия { счетчик ошибок по току AB | счетчик ошибок по току BC | счетчик ошибок по току AC }
 #define MW_SHOW_ERRORS 14						// Оторажения в процентах степени отклоенения текущего тока от иделаьного { ошибка по току AB | ошибка по току BC | ошибка по току AC }
-#define MW_SHOW_AMPERAGE 15					// Отображение всех токов
-#define MW_SHOW_AMPERAGE_AB 16					// Отображение силы тока обмотки AB { M - измеренный | P - идеальный}
-#define MW_SHOW_AMPERAGE_BC 17					// Отображение силы тока обмотки  BC { M - измеренный | P - идеальный}
-#define MW_SHOW_AMPERAGE_AC 18					// Отображение силы тока обмотки  AC { M - измеренный | P - идеальный}
-#define MW_SHOW_WINDING_CHARS_AB 19				// Отображение характеристик обмотки AB { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
-#define MW_SHOW_WINDING_CHARS_BC 20				// Отображение характеристик обмотки BC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
-#define MW_SHOW_WINDING_CHARS_AC 21				// Отображение характеристик обмотки AC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
+#define MW_SHOW_ERRORS_DIFF 15					// Оторажения разности токов идеального от измеренного + глобальная ошибка
+#define MW_SHOW_AMPERAGE 16						// Отображение всех токов
+#define MW_SHOW_AMPERAGE_AB 17					// Отображение силы тока обмотки AB { M - измеренный | P - идеальный}
+#define MW_SHOW_AMPERAGE_BC 18					// Отображение силы тока обмотки  BC { M - измеренный | P - идеальный}
+#define MW_SHOW_AMPERAGE_AC 19					// Отображение силы тока обмотки  AC { M - измеренный | P - идеальный}
+#define MW_SHOW_WINDING_CHARS_AB 20				// Отображение характеристик обмотки AB { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
+#define MW_SHOW_WINDING_CHARS_BC 21				// Отображение характеристик обмотки BC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
+#define MW_SHOW_WINDING_CHARS_AC 22				// Отображение характеристик обмотки AC { напряжение | степень огшибки по току | среднее значение силы тока за N измерений }
 
 #define MW_SHOWING_START MW_SHOW_ERRORS_COUNTERS	// Алиас для стартового пункта отображения данных
 #define MW_SHOWING_STOP MW_SHOW_WINDING_CHARS_AC 	// Алиас для последнего пункта отображения данных
@@ -167,12 +168,14 @@ struct Settings {
 	criticalFull - отклонение общей ошибки более чем на это число критично
 */
 struct Error {
+	float fullError = 0;
 	float curLvl[3] = {0, 0, 0};
 	int criticalLvlCount[3] = {0, 0, 0};
 	bool hasIC = false;
 	unsigned long detectStamp = 0;
 	float criticalSingle = 0.85;
 	float criticalFull = 1;
+	float diff[3] = {0, 0, 0};
 };
 
 /*
@@ -256,6 +259,7 @@ void setAdsGainByIndex(Adafruit_ADS1115*, byte);
 void lcdClearCell(byte col, byte row, byte rowLength);
 void setupImpedance();
 bool isSingleErrorExists(float, float, byte);
+void lcdPrintAmperageDiff(byte);
 
 void setup() {
 	Serial.begin(9600);
@@ -410,16 +414,18 @@ void loop() {
 
 				if (canSerial) {
 					Serial.print(F("Winding |")); Serial.print((i + 1)); Serial.println(F("|"));
-					Serial.print(F("measured voltage = "));  Serial.println(adsChars.voltage[i], 6);
+					Serial.print(F("measured voltage  = "));  Serial.println(adsChars.voltage[i], 6);
 					Serial.print(F("measured amperage = "));  Serial.println(adsChars.measuredAmperage[i], 6);
-					Serial.print(F("perfect amperage = ")); Serial.println(adsChars.perfectAmperage[i], 6);
-					Serial.print(F("error = ")); Serial.println(icError.curLvl[i]);
+					Serial.print(F("perfect amperage  = ")); Serial.println(adsChars.perfectAmperage[i], 6);
+					Serial.print(F("error percent     = ")); Serial.println(icError.curLvl[i],2);
+					Serial.print(F("error diff        = ")); Serial.println(icError.diff[i],6);
 					if (i != 2) {
 						Serial.println(F("---"));
 					}
 				}
 			}
 			if (canSerial) {
+				Serial.print(F("error full        = ")); Serial.println(icError.fullError, 5);
 				Serial.println(F("---end---"));
 				serialUpdateStamp = millis();
 			}
@@ -549,10 +555,10 @@ bool isFullErrorExists(float* _amperage, float* _voltage) {
 		return false;
 	}
 	// По формуле вычисляем глоабльную ошибку по токам |AB - BC| + |BC - AC| + |AC - AB| 
-	float _error = abs(divAmperage[0] - divAmperage[1]) + abs(divAmperage[1] - divAmperage[2]) + abs(divAmperage[2] - divAmperage[0]);
+	icError.fullError = abs(divAmperage[0] - divAmperage[1]) + abs(divAmperage[1] - divAmperage[2]) + abs(divAmperage[2] - divAmperage[0]);
 
 	// Крит общей ошибки отклонение в 1
-	return _error >= icError.criticalFull;
+	return icError.fullError >= icError.criticalFull;
 }
 
 /*
@@ -650,6 +656,16 @@ void displayAsMode() {
 			lcdClearCell(3, 1, 5);
 			lcdPrinRoundedCurErrorLevel(2);
 			break;
+		case MW_SHOW_ERRORS_DIFF:
+			lcdClearCell(1, 0, 6);
+			lcdPrintAmperageDiff(0);
+			lcdClearCell(9, 0, 6);
+			lcdPrintAmperageDiff(1);
+			lcdClearCell(1, 1, 6);
+			lcdPrintAmperageDiff(2);
+			lcdClearCell(9, 1, 6);
+			lcd.print(icError.fullError, 4);
+			break;
 		case MW_SHOW_AMPERAGE:
 			lcd.clear();
 			lcd.print(F("P "));
@@ -688,6 +704,15 @@ void displayAsMode() {
 	}
 }
 
+void lcdPrintAmperageDiff(byte index) {
+	icError.diff[index] =  adsChars.measuredAmperage[index] - adsChars.perfectAmperage[index];
+	// Если у нас измеренное число больше чем идеальное - значит мы получили отклонение в + иначе в -
+	if (icError.diff[index] >= 0) {
+		lcd.print(F("+"));
+	} 
+	lcd.print(icError.diff[index], 3);
+}
+
 /*
 	Отображение округленных значений ошибки в зависимости от обмотки 
 	_num - номер обмотки
@@ -706,8 +731,10 @@ void lcdPrinRoundedCurErrorLevel(byte _num) {
 	_num - номер обмотки
 */
 void lcdPrintCriticalLvl(byte _num) {
-	if (icError.criticalLvlCount[_num] < 1000) {
-		lcd.print(icError.criticalLvlCount[_num]);
+	if (icError.criticalLvlCount[_num] < 100) {
+		lcd.print(icError.criticalLvlCount[_num], 2);
+	} else if (icError.criticalLvlCount[_num] < 1000) {
+		lcd.print(icError.criticalLvlCount[_num], 1);
 	} else {
 		lcd.print(999);
 		lcd.print(F("+"));
@@ -764,6 +791,15 @@ void displayStaticAsMode() {
 			lcd.print(F("I3="));
 			lcd.setCursor(14, 1);
 			lcd.print(F("e%"));
+			break;
+		case MW_SHOW_ERRORS_DIFF:
+			lcd.print(1);
+			lcd.setCursor(8, 0);
+			lcd.print(2);
+			lcd.setCursor(0, 1);
+			lcd.print(3);
+			lcd.setCursor(8, 1);
+			lcd.print(F("F"));
 			break;
 		case MW_SHOW_AMPERAGE_AB:
 			lcd.print(F("AB D"));
