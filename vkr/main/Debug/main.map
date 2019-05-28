@@ -330,9 +330,13 @@ Discarded input sections
                 0x00000000       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
  .text._ZN5Print7printlnERK9Printable
                 0x00000000       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+ .text._ZN5Print7printlnEhi
+                0x00000000       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
  .text._ZN5Print7printlnEji
                 0x00000000       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
  .text._ZN5Print7printlnEmi
+                0x00000000       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+ .text._ZN5Print7printlnEii
                 0x00000000       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
  .text._ZN5Print7printlnEli
                 0x00000000       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
@@ -612,7 +616,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x4850
+.text           0x00000000     0x4924
  *(.vectors)
  .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -651,777 +655,838 @@ END GROUP
  .progmem.data._ZZ17setAdsGainByIndexP16Adafruit_ADS1115hE3__c
                 0x0000013b        0x6 Sketch.o
  .progmem.data._ZZ21button2LongPressStartvE3__c
-                0x00000141       0x16 Sketch.o
+                0x00000141        0x9 Sketch.o
  .progmem.data._ZZ21button1LongPressStartvE3__c
-                0x00000157       0x10 Sketch.o
+                0x0000014a       0x10 Sketch.o
  .progmem.data._ZZ12button1ClickvE3__c
-                0x00000167       0x17 Sketch.o
+                0x0000015a        0x9 Sketch.o
+ .progmem.data._ZZ14setupImpedancevE3__c_8
+                0x00000163        0xa Sketch.o
+ .progmem.data._ZZ14setupImpedancevE3__c_7
+                0x0000016d        0x3 Sketch.o
+ .progmem.data._ZZ14setupImpedancevE3__c_6
+                0x00000170        0x2 Sketch.o
+ .progmem.data._ZZ14setupImpedancevE3__c_5
+                0x00000172        0x5 Sketch.o
  .progmem.data._ZZ14setupImpedancevE3__c_4
-                0x0000017e        0x7 Sketch.o
+                0x00000177        0x3 Sketch.o
  .progmem.data._ZZ14setupImpedancevE3__c_3
-                0x00000185        0xa Sketch.o
+                0x0000017a        0x2 Sketch.o
  .progmem.data._ZZ14setupImpedancevE3__c_2
-                0x0000018f        0x3 Sketch.o
+                0x0000017c        0x5 Sketch.o
  .progmem.data._ZZ14setupImpedancevE3__c_1
-                0x00000192        0x3 Sketch.o
+                0x00000181        0x3 Sketch.o
  .progmem.data._ZZ14setupImpedancevE3__c_0
-                0x00000195        0x3 Sketch.o
+                0x00000184        0x2 Sketch.o
  .progmem.data._ZZ14setupImpedancevE3__c
-                0x00000198       0x10 Sketch.o
+                0x00000186        0x5 Sketch.o
  .progmem.data._ZZ12lcdClearCellhhhE3__c
-                0x000001a8        0x2 Sketch.o
+                0x0000018b        0x2 Sketch.o
  .progmem.data._ZZ22showStaticWindingCharsvE3__c_1
-                0x000001aa        0x3 Sketch.o
+                0x0000018d        0x3 Sketch.o
  .progmem.data._ZZ22showStaticWindingCharsvE3__c_0
-                0x000001ad        0x3 Sketch.o
+                0x00000190        0x3 Sketch.o
  .progmem.data._ZZ22showStaticWindingCharsvE3__c
-                0x000001b0        0x3 Sketch.o
+                0x00000193        0x3 Sketch.o
  .progmem.data._ZZ22showWindingCharsValueshE3__c_0
-                0x000001b3        0x2 Sketch.o
+                0x00000196        0x2 Sketch.o
  .progmem.data._ZZ22showWindingCharsValueshE3__c
-                0x000001b5        0x2 Sketch.o
+                0x00000198        0x2 Sketch.o
  .progmem.data._ZZ18showStaticAmperagevE3__c_0
-                0x000001b7        0x2 Sketch.o
+                0x0000019a        0x2 Sketch.o
  .progmem.data._ZZ18showStaticAmperagevE3__c
-                0x000001b9        0x2 Sketch.o
+                0x0000019c        0x2 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_26
-                0x000001bb        0xf Sketch.o
+                0x0000019e        0xf Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_25
-                0x000001ca        0x8 Sketch.o
+                0x000001ad        0x8 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_24
-                0x000001d2       0x11 Sketch.o
+                0x000001b5       0x11 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_23
-                0x000001e3        0xc Sketch.o
+                0x000001c6        0xc Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_22
-                0x000001ef        0x3 Sketch.o
+                0x000001d2        0x3 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_21
-                0x000001f2        0x3 Sketch.o
+                0x000001d5        0x3 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_20
-                0x000001f5        0x3 Sketch.o
+                0x000001d8        0x3 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_19
-                0x000001f8        0x5 Sketch.o
+                0x000001db        0x5 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_18
-                0x000001fd        0x5 Sketch.o
+                0x000001e0        0x5 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_17
-                0x00000202        0x5 Sketch.o
+                0x000001e5        0x5 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_16
-                0x00000207        0x2 Sketch.o
+                0x000001ea        0x2 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_15
-                0x00000209        0x3 Sketch.o
+                0x000001ec        0x3 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_14
-                0x0000020c        0x4 Sketch.o
+                0x000001ef        0x4 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_13
-                0x00000210        0x4 Sketch.o
+                0x000001f3        0x4 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_12
-                0x00000214        0x4 Sketch.o
+                0x000001f7        0x4 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_11
-                0x00000218        0x4 Sketch.o
+                0x000001fb        0x4 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_10
-                0x0000021c        0x4 Sketch.o
+                0x000001ff        0x4 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_9
-                0x00000220        0x4 Sketch.o
+                0x00000203        0x4 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_8
-                0x00000224        0x7 Sketch.o
+                0x00000207        0x7 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_7
-                0x0000022b        0x6 Sketch.o
+                0x0000020e        0x6 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_6
-                0x00000231        0x6 Sketch.o
+                0x00000214        0x6 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_5
-                0x00000237        0x6 Sketch.o
+                0x0000021a        0x6 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_4
-                0x0000023d        0x6 Sketch.o
+                0x00000220        0x6 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_3
-                0x00000243        0x6 Sketch.o
+                0x00000226        0x6 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_2
-                0x00000249        0x6 Sketch.o
+                0x0000022c        0x6 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_1
-                0x0000024f       0x11 Sketch.o
+                0x00000232       0x11 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c_0
-                0x00000260       0x11 Sketch.o
+                0x00000243       0x11 Sketch.o
  .progmem.data._ZZ19displayStaticAsModevE3__c
-                0x00000271       0x10 Sketch.o
+                0x00000254       0x10 Sketch.o
  .progmem.data._ZZ19lcdPrintCriticalLvlhE3__c
-                0x00000281        0x2 Sketch.o
+                0x00000264        0x2 Sketch.o
  .progmem.data._ZZ27lcdPrinRoundedCurErrorLevelhE3__c
-                0x00000283        0x2 Sketch.o
+                0x00000266        0x2 Sketch.o
  .progmem.data._ZZ20lcdPrintAmperageDiffhE3__c
-                0x00000285        0x2 Sketch.o
+                0x00000268        0x2 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_10
-                0x00000287        0x2 Sketch.o
+                0x0000026a        0x2 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_9
-                0x00000289        0x2 Sketch.o
+                0x0000026c        0x2 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_8
-                0x0000028b        0x3 Sketch.o
+                0x0000026e        0x3 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_7
-                0x0000028e        0x2 Sketch.o
+                0x00000271        0x2 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_6
-                0x00000290        0x2 Sketch.o
+                0x00000273        0x2 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_5
-                0x00000292        0x3 Sketch.o
+                0x00000275        0x3 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_4
-                0x00000295        0x2 Sketch.o
+                0x00000278        0x2 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_3
-                0x00000297        0x4 Sketch.o
+                0x0000027a        0x4 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_2
-                0x0000029b        0x4 Sketch.o
+                0x0000027e        0x4 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_1
-                0x0000029f        0x4 Sketch.o
+                0x00000282        0x4 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c_0
-                0x000002a3        0x9 Sketch.o
+                0x00000286        0x3 Sketch.o
  .progmem.data._ZZ13displayAsModevE3__c
-                0x000002ac        0x5 Sketch.o
+                0x00000289        0x4 Sketch.o
  .progmem.data._ZZ12showGainInfovE3__c_4
-                0x000002b1       0x10 Sketch.o
+                0x0000028d       0x10 Sketch.o
  .progmem.data._ZZ12showGainInfovE3__c_3
-                0x000002c1        0xf Sketch.o
+                0x0000029d        0xf Sketch.o
  .progmem.data._ZZ12showGainInfovE3__c_2
-                0x000002d0        0xe Sketch.o
+                0x000002ac        0xe Sketch.o
  .progmem.data._ZZ12showGainInfovE3__c_1
-                0x000002de        0xd Sketch.o
+                0x000002ba        0xd Sketch.o
  .progmem.data._ZZ12showGainInfovE3__c_0
-                0x000002eb        0xc Sketch.o
+                0x000002c7        0xc Sketch.o
  .progmem.data._ZZ12showGainInfovE3__c
-                0x000002f7        0xd Sketch.o
+                0x000002d3        0xd Sketch.o
+ .progmem.data._ZZ4loopE3__c_28
+                0x000002e0        0x9 Sketch.o
+ .progmem.data._ZZ4loopE3__c_27
+                0x000002e9        0x9 Sketch.o
+ .progmem.data._ZZ4loopE3__c_26
+                0x000002f2        0x9 Sketch.o
+ .progmem.data._ZZ4loopE3__c_25
+                0x000002fb        0xa Sketch.o
+ .progmem.data._ZZ4loopE3__c_24
+                0x00000305        0x3 Sketch.o
+ .progmem.data._ZZ4loopE3__c_23
+                0x00000308        0x6 Sketch.o
+ .progmem.data._ZZ4loopE3__c_22
+                0x0000030e        0x3 Sketch.o
+ .progmem.data._ZZ4loopE3__c_21
+                0x00000311        0x2 Sketch.o
+ .progmem.data._ZZ4loopE3__c_20
+                0x00000313        0x3 Sketch.o
+ .progmem.data._ZZ4loopE3__c_19
+                0x00000316        0x4 Sketch.o
+ .progmem.data._ZZ4loopE3__c_18
+                0x0000031a        0x3 Sketch.o
+ .progmem.data._ZZ4loopE3__c_17
+                0x0000031d        0x2 Sketch.o
+ .progmem.data._ZZ4loopE3__c_16
+                0x0000031f        0x3 Sketch.o
+ .progmem.data._ZZ4loopE3__c_15
+                0x00000322        0x4 Sketch.o
+ .progmem.data._ZZ4loopE3__c_14
+                0x00000326        0x3 Sketch.o
+ .progmem.data._ZZ4loopE3__c_13
+                0x00000329        0x2 Sketch.o
+ .progmem.data._ZZ4loopE3__c_12
+                0x0000032b        0x3 Sketch.o
  .progmem.data._ZZ4loopE3__c_11
-                0x00000304       0x36 Sketch.o
+                0x0000032e        0x4 Sketch.o
  .progmem.data._ZZ4loopE3__c_10
-                0x0000033a       0x29 Sketch.o
+                0x00000332        0x3 Sketch.o
  .progmem.data._ZZ4loopE3__c_9
-                0x00000363       0x16 Sketch.o
+                0x00000335        0x2 Sketch.o
  .progmem.data._ZZ4loopE3__c_8
-                0x00000379        0xa Sketch.o
+                0x00000337        0x3 Sketch.o
  .progmem.data._ZZ4loopE3__c_7
-                0x00000383       0x15 Sketch.o
+                0x0000033a        0x4 Sketch.o
  .progmem.data._ZZ4loopE3__c_6
-                0x00000398        0x4 Sketch.o
+                0x0000033e        0x3 Sketch.o
  .progmem.data._ZZ4loopE3__c_5
-                0x0000039c       0x15 Sketch.o
+                0x00000341        0x2 Sketch.o
  .progmem.data._ZZ4loopE3__c_4
-                0x000003b1       0x15 Sketch.o
+                0x00000343        0x3 Sketch.o
  .progmem.data._ZZ4loopE3__c_3
-                0x000003c6       0x15 Sketch.o
+                0x00000346        0x4 Sketch.o
  .progmem.data._ZZ4loopE3__c_2
-                0x000003db       0x15 Sketch.o
+                0x0000034a        0x3 Sketch.o
  .progmem.data._ZZ4loopE3__c_1
-                0x000003f0       0x15 Sketch.o
+                0x0000034d        0x2 Sketch.o
  .progmem.data._ZZ4loopE3__c_0
-                0x00000405        0x2 Sketch.o
+                0x0000034f        0x3 Sketch.o
  .progmem.data._ZZ4loopE3__c
-                0x00000407        0xa Sketch.o
+                0x00000352        0x4 Sketch.o
  .progmem.data._ZZ18checkIsReadyToWorkvE3__c
-                0x00000411       0x12 Sketch.o
+                0x00000356       0x16 Sketch.o
+ .progmem.data._ZZ5setupE3__c_31
+                0x0000036c        0xc Sketch.o
+ .progmem.data._ZZ5setupE3__c_30
+                0x00000378        0xb Sketch.o
+ .progmem.data._ZZ5setupE3__c_29
+                0x00000383        0xf Sketch.o
+ .progmem.data._ZZ5setupE3__c_28
+                0x00000392        0x3 Sketch.o
+ .progmem.data._ZZ5setupE3__c_27
+                0x00000395        0x7 Sketch.o
+ .progmem.data._ZZ5setupE3__c_26
+                0x0000039c        0x3 Sketch.o
+ .progmem.data._ZZ5setupE3__c_25
+                0x0000039f        0x7 Sketch.o
+ .progmem.data._ZZ5setupE3__c_24
+                0x000003a6        0x3 Sketch.o
+ .progmem.data._ZZ5setupE3__c_23
+                0x000003a9        0x7 Sketch.o
+ .progmem.data._ZZ5setupE3__c_22
+                0x000003b0        0x3 Sketch.o
+ .progmem.data._ZZ5setupE3__c_21
+                0x000003b3        0x7 Sketch.o
+ .progmem.data._ZZ5setupE3__c_20
+                0x000003ba        0x3 Sketch.o
  .progmem.data._ZZ5setupE3__c_19
-                0x00000423        0xc Sketch.o
+                0x000003bd        0x7 Sketch.o
  .progmem.data._ZZ5setupE3__c_18
-                0x0000042f        0xb Sketch.o
+                0x000003c4        0x3 Sketch.o
  .progmem.data._ZZ5setupE3__c_17
-                0x0000043a        0xb Sketch.o
+                0x000003c7        0x7 Sketch.o
  .progmem.data._ZZ5setupE3__c_16
-                0x00000445       0x13 Sketch.o
+                0x000003ce        0x3 Sketch.o
  .progmem.data._ZZ5setupE3__c_15
-                0x00000458       0x13 Sketch.o
+                0x000003d1        0x6 Sketch.o
  .progmem.data._ZZ5setupE3__c_14
-                0x0000046b       0x13 Sketch.o
+                0x000003d7        0x3 Sketch.o
  .progmem.data._ZZ5setupE3__c_13
-                0x0000047e       0x12 Sketch.o
+                0x000003da        0x6 Sketch.o
  .progmem.data._ZZ5setupE3__c_12
-                0x00000490       0x12 Sketch.o
+                0x000003e0        0x3 Sketch.o
  .progmem.data._ZZ5setupE3__c_11
-                0x000004a2       0x12 Sketch.o
+                0x000003e3        0x6 Sketch.o
  .progmem.data._ZZ5setupE3__c_10
-                0x000004b4        0xf Sketch.o
+                0x000003e9        0x3 Sketch.o
  .progmem.data._ZZ5setupE3__c_9
-                0x000004c3        0xf Sketch.o
+                0x000003ec        0x7 Sketch.o
  .progmem.data._ZZ5setupE3__c_8
-                0x000004d2        0xf Sketch.o
+                0x000003f3        0x3 Sketch.o
  .progmem.data._ZZ5setupE3__c_7
-                0x000004e1       0x12 Sketch.o
+                0x000003f6        0x7 Sketch.o
  .progmem.data._ZZ5setupE3__c_6
-                0x000004f3        0xf Sketch.o
+                0x000003fd        0x3 Sketch.o
  .progmem.data._ZZ5setupE3__c_5
-                0x00000502       0x10 Sketch.o
+                0x00000400        0x7 Sketch.o
  .progmem.data._ZZ5setupE3__c_4
-                0x00000512        0xf Sketch.o
+                0x00000407        0xf Sketch.o
  .progmem.data._ZZ5setupE3__c_3
-                0x00000521       0x1b Sketch.o
+                0x00000416       0x1b Sketch.o
  .progmem.data._ZZ5setupE3__c_2
-                0x0000053c       0x11 Sketch.o
+                0x00000431       0x11 Sketch.o
  .progmem.data._ZZ5setupE3__c_1
-                0x0000054d       0x11 Sketch.o
+                0x00000442       0x11 Sketch.o
  .progmem.data._ZZ5setupE3__c_0
-                0x0000055e        0xc Sketch.o
+                0x00000453        0xc Sketch.o
  .progmem.data._ZZ5setupE3__c
-                0x0000056a       0x12 Sketch.o
+                0x0000045f       0x12 Sketch.o
  .progmem.data.digital_pin_to_timer_PGM
-                0x0000057c       0x14 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x0000057c                digital_pin_to_timer_PGM
+                0x00000471       0x14 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x00000471                digital_pin_to_timer_PGM
  .progmem.data.digital_pin_to_bit_mask_PGM
-                0x00000590       0x14 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x00000590                digital_pin_to_bit_mask_PGM
+                0x00000485       0x14 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x00000485                digital_pin_to_bit_mask_PGM
  .progmem.data.digital_pin_to_port_PGM
-                0x000005a4       0x14 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x000005a4                digital_pin_to_port_PGM
+                0x00000499       0x14 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x00000499                digital_pin_to_port_PGM
  .progmem.data.port_to_input_PGM
-                0x000005b8        0xa D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x000005b8                port_to_input_PGM
+                0x000004ad        0xa D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x000004ad                port_to_input_PGM
  .progmem.data.port_to_output_PGM
-                0x000005c2        0xa D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x000005c2                port_to_output_PGM
+                0x000004b7        0xa D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x000004b7                port_to_output_PGM
  .progmem.data.port_to_mode_PGM
-                0x000005cc        0xa D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x000005cc                port_to_mode_PGM
-                0x000005d6                . = ALIGN (0x2)
+                0x000004c1        0xa D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x000004c1                port_to_mode_PGM
+                0x000004cc                . = ALIGN (0x2)
+ *fill*         0x000004cb        0x1 
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x000005d6                __ctors_start = .
+                0x000004cc                __ctors_start = .
  *(.ctors)
- .ctors         0x000005d6        0x2 Sketch.o
- .ctors         0x000005d8        0x2 src/libraries/Wire/src/Wire.o
- .ctors         0x000005da        0x2 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
-                0x000005dc                __ctors_end = .
-                0x000005dc                __dtors_start = .
+ .ctors         0x000004cc        0x2 Sketch.o
+ .ctors         0x000004ce        0x2 src/libraries/Wire/src/Wire.o
+ .ctors         0x000004d0        0x2 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+                0x000004d2                __ctors_end = .
+                0x000004d2                __dtors_start = .
  *(.dtors)
-                0x000005dc                __dtors_end = .
+                0x000004d2                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x000005dc        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
-                0x000005dc                __init
+ .init0         0x000004d2        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
+                0x000004d2                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x000005dc        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .init2         0x000004d2        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x000005e8       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_copy_data.o)
-                0x000005e8                __do_copy_data
- .init4         0x000005fe       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_clear_bss.o)
-                0x000005fe                __do_clear_bss
+ .init4         0x000004de       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_copy_data.o)
+                0x000004de                __do_copy_data
+ .init4         0x000004f4       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_clear_bss.o)
+                0x000004f4                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
  *(.init6)
- .init6         0x0000060e       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_ctors.o)
-                0x0000060e                __do_global_ctors
+ .init6         0x00000504       0x16 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_ctors.o)
+                0x00000504                __do_global_ctors
  *(.init6)
  *(.init7)
  *(.init7)
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x00000624        0x8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
+ .init9         0x0000051a        0x8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
  *(.init9)
  *(.text)
- .text          0x0000062c        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
-                0x0000062c                __vector_22
-                0x0000062c                __vector_1
-                0x0000062c                __vector_12
-                0x0000062c                __bad_interrupt
-                0x0000062c                __vector_6
-                0x0000062c                __vector_3
-                0x0000062c                __vector_23
-                0x0000062c                __vector_25
-                0x0000062c                __vector_11
-                0x0000062c                __vector_13
-                0x0000062c                __vector_17
-                0x0000062c                __vector_7
-                0x0000062c                __vector_5
-                0x0000062c                __vector_4
-                0x0000062c                __vector_9
-                0x0000062c                __vector_2
-                0x0000062c                __vector_21
-                0x0000062c                __vector_15
-                0x0000062c                __vector_8
-                0x0000062c                __vector_14
-                0x0000062c                __vector_10
-                0x0000062c                __vector_20
-                0x00000630                . = ALIGN (0x2)
+ .text          0x00000522        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
+                0x00000522                __vector_22
+                0x00000522                __vector_1
+                0x00000522                __vector_12
+                0x00000522                __bad_interrupt
+                0x00000522                __vector_6
+                0x00000522                __vector_3
+                0x00000522                __vector_23
+                0x00000522                __vector_25
+                0x00000522                __vector_11
+                0x00000522                __vector_13
+                0x00000522                __vector_17
+                0x00000522                __vector_7
+                0x00000522                __vector_5
+                0x00000522                __vector_4
+                0x00000522                __vector_9
+                0x00000522                __vector_2
+                0x00000522                __vector_21
+                0x00000522                __vector_15
+                0x00000522                __vector_8
+                0x00000522                __vector_14
+                0x00000522                __vector_10
+                0x00000522                __vector_20
+                0x00000526                . = ALIGN (0x2)
  *(.text.*)
  .text._Z18checkIsReadyToWorkv
-                0x00000630       0x80 Sketch.o
-                0x00000630                _Z18checkIsReadyToWorkv
+                0x00000526       0x80 Sketch.o
+                0x00000526                _Z18checkIsReadyToWorkv
  .text._Z11initAvgVarsv
-                0x000006b0       0x24 Sketch.o
-                0x000006b0                _Z11initAvgVarsv
+                0x000005a6       0x24 Sketch.o
+                0x000005a6                _Z11initAvgVarsv
  .text._Z12button1Clickv
-                0x000006d4      0x118 Sketch.o
-                0x000006d4                _Z12button1Clickv
+                0x000005ca      0x12a Sketch.o
+                0x000005ca                _Z12button1Clickv
  .text._Z19getICLevelByWindingh
-                0x000007ec       0xce Sketch.o
-                0x000007ec                _Z19getICLevelByWindingh
+                0x000006f4       0xce Sketch.o
+                0x000006f4                _Z19getICLevelByWindingh
  .text._Z19isSingleErrorExistsffh
-                0x000008ba       0x74 Sketch.o
-                0x000008ba                _Z19isSingleErrorExistsffh
+                0x000007c2       0x74 Sketch.o
+                0x000007c2                _Z19isSingleErrorExistsffh
  .text._Z12getAdsParamsv
-                0x0000092e      0x252 Sketch.o
-                0x0000092e                _Z12getAdsParamsv
+                0x00000836      0x252 Sketch.o
+                0x00000836                _Z12getAdsParamsv
  .text._Z17isFullErrorExistsPfS_
-                0x00000b80      0x1c0 Sketch.o
-                0x00000b80                _Z17isFullErrorExistsPfS_
+                0x00000a88      0x1c0 Sketch.o
+                0x00000a88                _Z17isFullErrorExistsPfS_
  .text._Z20lcdPrintAmperageDiffh
-                0x00000d40       0x84 Sketch.o
-                0x00000d40                _Z20lcdPrintAmperageDiffh
+                0x00000c48       0x84 Sketch.o
+                0x00000c48                _Z20lcdPrintAmperageDiffh
  .text._Z27lcdPrinRoundedCurErrorLevelh
-                0x00000dc4       0x9e Sketch.o
-                0x00000dc4                _Z27lcdPrinRoundedCurErrorLevelh
+                0x00000ccc       0x9e Sketch.o
+                0x00000ccc                _Z27lcdPrinRoundedCurErrorLevelh
  .text._Z19lcdPrintCriticalLvlh
-                0x00000e62       0x4c Sketch.o
-                0x00000e62                _Z19lcdPrintCriticalLvlh
+                0x00000d6a       0x4c Sketch.o
+                0x00000d6a                _Z19lcdPrintCriticalLvlh
  .text._Z18showStaticAmperagev
-                0x00000eae       0x30 Sketch.o
-                0x00000eae                _Z18showStaticAmperagev
+                0x00000db6       0x30 Sketch.o
+                0x00000db6                _Z18showStaticAmperagev
  .text._Z22showStaticWindingCharsv
-                0x00000ede       0x48 Sketch.o
-                0x00000ede                _Z22showStaticWindingCharsv
+                0x00000de6       0x48 Sketch.o
+                0x00000de6                _Z22showStaticWindingCharsv
  .text._Z19displayStaticAsModev
-                0x00000f26      0x1ca Sketch.o
-                0x00000f26                _Z19displayStaticAsModev
+                0x00000e2e      0x1ca Sketch.o
+                0x00000e2e                _Z19displayStaticAsModev
  .text._Z12lcdClearCellhhh
-                0x000010f0       0x44 Sketch.o
-                0x000010f0                _Z12lcdClearCellhhh
+                0x00000ff8       0x44 Sketch.o
+                0x00000ff8                _Z12lcdClearCellhhh
  .text._Z12showGainInfov
-                0x00001134       0x6e Sketch.o
-                0x00001134                _Z12showGainInfov
+                0x0000103c       0x6e Sketch.o
+                0x0000103c                _Z12showGainInfov
  .text._Z17showAmperageCharsh
-                0x000011a2       0xd6 Sketch.o
-                0x000011a2                _Z17showAmperageCharsh
+                0x000010aa       0xd6 Sketch.o
+                0x000010aa                _Z17showAmperageCharsh
  .text._Z22showWindingCharsValuesh
-                0x00001278       0xf8 Sketch.o
-                0x00001278                _Z22showWindingCharsValuesh
+                0x00001180       0xf8 Sketch.o
+                0x00001180                _Z22showWindingCharsValuesh
  .text._Z13displayAsModev
-                0x00001370      0x344 Sketch.o
-                0x00001370                _Z13displayAsModev
- .text.loop     0x000016b4      0x402 Sketch.o
-                0x000016b4                loop
+                0x00001278      0x346 Sketch.o
+                0x00001278                _Z13displayAsModev
+ .text.loop     0x000015be      0x5a6 Sketch.o
+                0x000015be                loop
  .text._Z14setupImpedancev
-                0x00001ab6      0x2e6 Sketch.o
-                0x00001ab6                _Z14setupImpedancev
+                0x00001b64      0x33c Sketch.o
+                0x00001b64                _Z14setupImpedancev
  .text._Z21button1LongPressStartv
-                0x00001d9c       0xb4 Sketch.o
-                0x00001d9c                _Z21button1LongPressStartv
+                0x00001ea0       0xb4 Sketch.o
+                0x00001ea0                _Z21button1LongPressStartv
  .text._Z12setEditValuev
-                0x00001e50       0xe2 Sketch.o
-                0x00001e50                _Z12setEditValuev
+                0x00001f54       0xe2 Sketch.o
+                0x00001f54                _Z12setEditValuev
  .text._Z12button2Clickv
-                0x00001f32      0x136 Sketch.o
-                0x00001f32                _Z12button2Clickv
+                0x00002036      0x150 Sketch.o
+                0x00002036                _Z12button2Clickv
  .text._Z17setAdsGainByIndexP16Adafruit_ADS1115h
-                0x00002068       0xa2 Sketch.o
-                0x00002068                _Z17setAdsGainByIndexP16Adafruit_ADS1115h
+                0x00002186       0xa2 Sketch.o
+                0x00002186                _Z17setAdsGainByIndexP16Adafruit_ADS1115h
  .text._Z18initAdsVoltageGainv
-                0x0000210a       0x4a Sketch.o
-                0x0000210a                _Z18initAdsVoltageGainv
+                0x00002228       0x4a Sketch.o
+                0x00002228                _Z18initAdsVoltageGainv
  .text._Z19initAdsAmperageGainv
-                0x00002154       0x4a Sketch.o
-                0x00002154                _Z19initAdsAmperageGainv
- .text.setup    0x0000219e      0x542 Sketch.o
-                0x0000219e                setup
+                0x00002272       0x4a Sketch.o
+                0x00002272                _Z19initAdsAmperageGainv
+ .text.setup    0x000022bc      0x5a8 Sketch.o
+                0x000022bc                setup
  .text._Z12saveSettingsv
-                0x000026e0      0x226 Sketch.o
-                0x000026e0                _Z12saveSettingsv
+                0x00002864      0x1ce Sketch.o
+                0x00002864                _Z12saveSettingsv
  .text._Z21button2LongPressStartv
-                0x00002906       0xa8 Sketch.o
-                0x00002906                _Z21button2LongPressStartv
+                0x00002a32       0xa8 Sketch.o
+                0x00002a32                _Z21button2LongPressStartv
  .text.startup._GLOBAL__sub_I_eeprom_first_start
-                0x000029ae       0xa8 Sketch.o
+                0x00002ada       0x98 Sketch.o
  .text._ZN16Adafruit_ADS1115C2Eh
-                0x00002a56       0x10 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
-                0x00002a56                _ZN16Adafruit_ADS1115C2Eh
-                0x00002a56                _ZN16Adafruit_ADS1115C1Eh
+                0x00002b72       0x10 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+                0x00002b72                _ZN16Adafruit_ADS1115C2Eh
+                0x00002b72                _ZN16Adafruit_ADS1115C1Eh
  .text._ZN16Adafruit_ADS10155beginEv
-                0x00002a66        0x8 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
-                0x00002a66                _ZN16Adafruit_ADS10155beginEv
+                0x00002b82        0x8 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+                0x00002b82                _ZN16Adafruit_ADS10155beginEv
  .text._ZN16Adafruit_ADS10157setGainE9adsGain_t
-                0x00002a6e        0x8 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
-                0x00002a6e                _ZN16Adafruit_ADS10157setGainE9adsGain_t
+                0x00002b8a        0x8 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+                0x00002b8a                _ZN16Adafruit_ADS10157setGainE9adsGain_t
  .text._ZL13writeRegisterhhj
-                0x00002a76       0x40 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+                0x00002b92       0x40 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
  .text._ZL12readRegisterhh.isra.0
-                0x00002ab6       0x56 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+                0x00002bd2       0x56 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
  .text._ZN16Adafruit_ADS101519readADC_SingleEndedEh
-                0x00002b0c       0x66 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
-                0x00002b0c                _ZN16Adafruit_ADS101519readADC_SingleEndedEh
+                0x00002c28       0x66 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+                0x00002c28                _ZN16Adafruit_ADS101519readADC_SingleEndedEh
  .text._ZN5Print17availableForWriteEv
-                0x00002b72        0x6 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002b72                _ZN5Print17availableForWriteEv
+                0x00002c8e        0x6 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002c8e                _ZN5Print17availableForWriteEv
  .text._ZN5Print5flushEv
-                0x00002b78        0x2 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002b78                _ZN5Print5flushEv
+                0x00002c94        0x2 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002c94                _ZN5Print5flushEv
  .text._ZN17LiquidCrystal_I2CC2Ehhh
-                0x00002b7a       0x18 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002b7a                _ZN17LiquidCrystal_I2CC1Ehhh
-                0x00002b7a                _ZN17LiquidCrystal_I2CC2Ehhh
+                0x00002c96       0x18 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002c96                _ZN17LiquidCrystal_I2CC1Ehhh
+                0x00002c96                _ZN17LiquidCrystal_I2CC2Ehhh
  .text._ZN17LiquidCrystal_I2C13expanderWriteEh
-                0x00002b92       0x2e src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002b92                _ZN17LiquidCrystal_I2C13expanderWriteEh
+                0x00002cae       0x2e src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002cae                _ZN17LiquidCrystal_I2C13expanderWriteEh
  .text._ZN17LiquidCrystal_I2C9backlightEv
-                0x00002bc0        0xc src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002bc0                _ZN17LiquidCrystal_I2C9backlightEv
+                0x00002cdc        0xc src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002cdc                _ZN17LiquidCrystal_I2C9backlightEv
  .text._ZN17LiquidCrystal_I2C11pulseEnableEh
-                0x00002bcc       0x30 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002bcc                _ZN17LiquidCrystal_I2C11pulseEnableEh
+                0x00002ce8       0x30 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002ce8                _ZN17LiquidCrystal_I2C11pulseEnableEh
  .text._ZN17LiquidCrystal_I2C10write4bitsEh
-                0x00002bfc       0x1c src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002bfc                _ZN17LiquidCrystal_I2C10write4bitsEh
+                0x00002d18       0x1c src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002d18                _ZN17LiquidCrystal_I2C10write4bitsEh
  .text._ZN17LiquidCrystal_I2C4sendEhh
-                0x00002c18       0x2e src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002c18                _ZN17LiquidCrystal_I2C4sendEhh
+                0x00002d34       0x2e src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002d34                _ZN17LiquidCrystal_I2C4sendEhh
  .text._ZN17LiquidCrystal_I2C7commandEh
-                0x00002c46        0x6 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002c46                _ZN17LiquidCrystal_I2C7commandEh
+                0x00002d62        0x6 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002d62                _ZN17LiquidCrystal_I2C7commandEh
  .text._ZN17LiquidCrystal_I2C5clearEv
-                0x00002c4c        0xe src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002c4c                _ZN17LiquidCrystal_I2C5clearEv
+                0x00002d68        0xe src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002d68                _ZN17LiquidCrystal_I2C5clearEv
  .text._ZN17LiquidCrystal_I2C4homeEv
-                0x00002c5a        0xe src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002c5a                _ZN17LiquidCrystal_I2C4homeEv
+                0x00002d76        0xe src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002d76                _ZN17LiquidCrystal_I2C4homeEv
  .text._ZN17LiquidCrystal_I2C9setCursorEhh
-                0x00002c68       0x5c src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002c68                _ZN17LiquidCrystal_I2C9setCursorEhh
+                0x00002d84       0x5c src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002d84                _ZN17LiquidCrystal_I2C9setCursorEhh
  .text._ZN17LiquidCrystal_I2C7displayEv
-                0x00002cc4       0x10 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002cc4                _ZN17LiquidCrystal_I2C7displayEv
+                0x00002de0       0x10 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002de0                _ZN17LiquidCrystal_I2C7displayEv
  .text._ZN17LiquidCrystal_I2C5writeEh
-                0x00002cd4        0xc src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002cd4                _ZN17LiquidCrystal_I2C5writeEh
+                0x00002df0        0xc src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002df0                _ZN17LiquidCrystal_I2C5writeEh
  .text._ZN17LiquidCrystal_I2C5beginEhhh
-                0x00002ce0       0xa8 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002ce0                _ZN17LiquidCrystal_I2C5beginEhhh
+                0x00002dfc       0xa8 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002dfc                _ZN17LiquidCrystal_I2C5beginEhhh
  .text._ZN17LiquidCrystal_I2C9init_privEv
-                0x00002d88       0x20 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002d88                _ZN17LiquidCrystal_I2C9init_privEv
+                0x00002ea4       0x20 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002ea4                _ZN17LiquidCrystal_I2C9init_privEv
  .text._ZN17LiquidCrystal_I2C4initEv
-                0x00002da8        0x4 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
-                0x00002da8                _ZN17LiquidCrystal_I2C4initEv
+                0x00002ec4        0x4 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+                0x00002ec4                _ZN17LiquidCrystal_I2C4initEv
  .text._ZN9OneButtonC2Eiib
-                0x00002dac       0x5e src/libraries/OneButton/src/OneButton.o
-                0x00002dac                _ZN9OneButtonC1Eiib
-                0x00002dac                _ZN9OneButtonC2Eiib
+                0x00002ec8       0x5e src/libraries/OneButton/src/OneButton.o
+                0x00002ec8                _ZN9OneButtonC1Eiib
+                0x00002ec8                _ZN9OneButtonC2Eiib
  .text._ZN9OneButton16setDebounceTicksEi
-                0x00002e0a        0x8 src/libraries/OneButton/src/OneButton.o
-                0x00002e0a                _ZN9OneButton16setDebounceTicksEi
+                0x00002f26        0x8 src/libraries/OneButton/src/OneButton.o
+                0x00002f26                _ZN9OneButton16setDebounceTicksEi
  .text._ZN9OneButton13setClickTicksEi
-                0x00002e12        0x8 src/libraries/OneButton/src/OneButton.o
-                0x00002e12                _ZN9OneButton13setClickTicksEi
+                0x00002f2e        0x8 src/libraries/OneButton/src/OneButton.o
+                0x00002f2e                _ZN9OneButton13setClickTicksEi
  .text._ZN9OneButton13setPressTicksEi
-                0x00002e1a        0x8 src/libraries/OneButton/src/OneButton.o
-                0x00002e1a                _ZN9OneButton13setPressTicksEi
+                0x00002f36        0x8 src/libraries/OneButton/src/OneButton.o
+                0x00002f36                _ZN9OneButton13setPressTicksEi
  .text._ZN9OneButton11attachClickEPFvvE
-                0x00002e22        0x8 src/libraries/OneButton/src/OneButton.o
-                0x00002e22                _ZN9OneButton11attachClickEPFvvE
+                0x00002f3e        0x8 src/libraries/OneButton/src/OneButton.o
+                0x00002f3e                _ZN9OneButton11attachClickEPFvvE
  .text._ZN9OneButton20attachLongPressStartEPFvvE
-                0x00002e2a        0x8 src/libraries/OneButton/src/OneButton.o
-                0x00002e2a                _ZN9OneButton20attachLongPressStartEPFvvE
+                0x00002f46        0x8 src/libraries/OneButton/src/OneButton.o
+                0x00002f46                _ZN9OneButton20attachLongPressStartEPFvvE
  .text._ZN9OneButton4tickEb
-                0x00002e32      0x1b0 src/libraries/OneButton/src/OneButton.o
-                0x00002e32                _ZN9OneButton4tickEb
+                0x00002f4e      0x1b0 src/libraries/OneButton/src/OneButton.o
+                0x00002f4e                _ZN9OneButton4tickEb
  .text._ZN9OneButton4tickEv
-                0x00002fe2       0x30 src/libraries/OneButton/src/OneButton.o
-                0x00002fe2                _ZN9OneButton4tickEv
+                0x000030fe       0x30 src/libraries/OneButton/src/OneButton.o
+                0x000030fe                _ZN9OneButton4tickEv
  .text.twi_init
-                0x00003012       0x3c src/libraries/Wire/src/utility/twi.o
-                0x00003012                twi_init
+                0x0000312e       0x3c src/libraries/Wire/src/utility/twi.o
+                0x0000312e                twi_init
  .text.twi_readFrom
-                0x0000304e       0x90 src/libraries/Wire/src/utility/twi.o
-                0x0000304e                twi_readFrom
+                0x0000316a       0x90 src/libraries/Wire/src/utility/twi.o
+                0x0000316a                twi_readFrom
  .text.twi_writeTo
-                0x000030de       0xac src/libraries/Wire/src/utility/twi.o
-                0x000030de                twi_writeTo
+                0x000031fa       0xac src/libraries/Wire/src/utility/twi.o
+                0x000031fa                twi_writeTo
  .text.twi_transmit
-                0x0000318a       0x50 src/libraries/Wire/src/utility/twi.o
-                0x0000318a                twi_transmit
+                0x000032a6       0x50 src/libraries/Wire/src/utility/twi.o
+                0x000032a6                twi_transmit
  .text.twi_attachSlaveRxEvent
-                0x000031da        0xa src/libraries/Wire/src/utility/twi.o
-                0x000031da                twi_attachSlaveRxEvent
+                0x000032f6        0xa src/libraries/Wire/src/utility/twi.o
+                0x000032f6                twi_attachSlaveRxEvent
  .text.twi_attachSlaveTxEvent
-                0x000031e4        0xa src/libraries/Wire/src/utility/twi.o
-                0x000031e4                twi_attachSlaveTxEvent
+                0x00003300        0xa src/libraries/Wire/src/utility/twi.o
+                0x00003300                twi_attachSlaveTxEvent
  .text.twi_stop
-                0x000031ee       0x14 src/libraries/Wire/src/utility/twi.o
-                0x000031ee                twi_stop
+                0x0000330a       0x14 src/libraries/Wire/src/utility/twi.o
+                0x0000330a                twi_stop
  .text.twi_releaseBus
-                0x00003202        0xc src/libraries/Wire/src/utility/twi.o
-                0x00003202                twi_releaseBus
+                0x0000331e        0xc src/libraries/Wire/src/utility/twi.o
+                0x0000331e                twi_releaseBus
  .text.__vector_24
-                0x0000320e      0x25a src/libraries/Wire/src/utility/twi.o
-                0x0000320e                __vector_24
+                0x0000332a      0x25a src/libraries/Wire/src/utility/twi.o
+                0x0000332a                __vector_24
  .text._ZN7TwoWire9availableEv
-                0x00003468       0x10 src/libraries/Wire/src/Wire.o
-                0x00003468                _ZN7TwoWire9availableEv
+                0x00003584       0x10 src/libraries/Wire/src/Wire.o
+                0x00003584                _ZN7TwoWire9availableEv
  .text._ZN7TwoWire4readEv
-                0x00003478       0x28 src/libraries/Wire/src/Wire.o
-                0x00003478                _ZN7TwoWire4readEv
+                0x00003594       0x28 src/libraries/Wire/src/Wire.o
+                0x00003594                _ZN7TwoWire4readEv
  .text._ZN7TwoWire4peekEv
-                0x000034a0       0x1e src/libraries/Wire/src/Wire.o
-                0x000034a0                _ZN7TwoWire4peekEv
+                0x000035bc       0x1e src/libraries/Wire/src/Wire.o
+                0x000035bc                _ZN7TwoWire4peekEv
  .text._ZN7TwoWire5flushEv
-                0x000034be        0x2 src/libraries/Wire/src/Wire.o
-                0x000034be                _ZN7TwoWire5flushEv
+                0x000035da        0x2 src/libraries/Wire/src/Wire.o
+                0x000035da                _ZN7TwoWire5flushEv
  .text._ZN7TwoWire16onReceiveServiceEPhi
-                0x000034c0       0x54 src/libraries/Wire/src/Wire.o
-                0x000034c0                _ZN7TwoWire16onReceiveServiceEPhi
+                0x000035dc       0x54 src/libraries/Wire/src/Wire.o
+                0x000035dc                _ZN7TwoWire16onReceiveServiceEPhi
  .text._ZN7TwoWire16onRequestServiceEv
-                0x00003514       0x18 src/libraries/Wire/src/Wire.o
-                0x00003514                _ZN7TwoWire16onRequestServiceEv
+                0x00003630       0x18 src/libraries/Wire/src/Wire.o
+                0x00003630                _ZN7TwoWire16onRequestServiceEv
  .text._ZN7TwoWire5writeEPKhj
-                0x0000352c       0x5a src/libraries/Wire/src/Wire.o
-                0x0000352c                _ZN7TwoWire5writeEPKhj
+                0x00003648       0x5a src/libraries/Wire/src/Wire.o
+                0x00003648                _ZN7TwoWire5writeEPKhj
  .text._ZN7TwoWire5writeEh
-                0x00003586       0x5e src/libraries/Wire/src/Wire.o
-                0x00003586                _ZN7TwoWire5writeEh
+                0x000036a2       0x5e src/libraries/Wire/src/Wire.o
+                0x000036a2                _ZN7TwoWire5writeEh
  .text._ZN7TwoWireC2Ev
-                0x000035e4       0x20 src/libraries/Wire/src/Wire.o
-                0x000035e4                _ZN7TwoWireC1Ev
-                0x000035e4                _ZN7TwoWireC2Ev
+                0x00003700       0x20 src/libraries/Wire/src/Wire.o
+                0x00003700                _ZN7TwoWireC1Ev
+                0x00003700                _ZN7TwoWireC2Ev
  .text._ZN7TwoWire5beginEv
-                0x00003604       0x24 src/libraries/Wire/src/Wire.o
-                0x00003604                _ZN7TwoWire5beginEv
+                0x00003720       0x24 src/libraries/Wire/src/Wire.o
+                0x00003720                _ZN7TwoWire5beginEv
  .text._ZN7TwoWire17beginTransmissionEh
-                0x00003628       0x14 src/libraries/Wire/src/Wire.o
-                0x00003628                _ZN7TwoWire17beginTransmissionEh
+                0x00003744       0x14 src/libraries/Wire/src/Wire.o
+                0x00003744                _ZN7TwoWire17beginTransmissionEh
  .text._ZN7TwoWire15endTransmissionEh
-                0x0000363c       0x26 src/libraries/Wire/src/Wire.o
-                0x0000363c                _ZN7TwoWire15endTransmissionEh
+                0x00003758       0x26 src/libraries/Wire/src/Wire.o
+                0x00003758                _ZN7TwoWire15endTransmissionEh
  .text._ZN7TwoWire11requestFromEhhmhh
-                0x00003662       0xa8 src/libraries/Wire/src/Wire.o
-                0x00003662                _ZN7TwoWire11requestFromEhhmhh
+                0x0000377e       0xa8 src/libraries/Wire/src/Wire.o
+                0x0000377e                _ZN7TwoWire11requestFromEhhmhh
  .text._ZN7TwoWire11requestFromEhhh
-                0x0000370a       0x20 src/libraries/Wire/src/Wire.o
-                0x0000370a                _ZN7TwoWire11requestFromEhhh
+                0x00003826       0x20 src/libraries/Wire/src/Wire.o
+                0x00003826                _ZN7TwoWire11requestFromEhhh
  .text._ZN7TwoWire11requestFromEhh
-                0x0000372a        0x6 src/libraries/Wire/src/Wire.o
-                0x0000372a                _ZN7TwoWire11requestFromEhh
+                0x00003846        0x6 src/libraries/Wire/src/Wire.o
+                0x00003846                _ZN7TwoWire11requestFromEhh
  .text._ZN7TwoWire15endTransmissionEv
-                0x00003730        0x6 src/libraries/Wire/src/Wire.o
-                0x00003730                _ZN7TwoWire15endTransmissionEv
+                0x0000384c        0x6 src/libraries/Wire/src/Wire.o
+                0x0000384c                _ZN7TwoWire15endTransmissionEv
  .text.startup._GLOBAL__sub_I__ZN7TwoWire8rxBufferE
-                0x00003736        0x8 src/libraries/Wire/src/Wire.o
+                0x00003852        0x8 src/libraries/Wire/src/Wire.o
  .text.avr-libc.fplib
-                0x0000373e        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(addsf3.o)
-                0x0000373e                __subsf3
-                0x00003740                __addsf3
+                0x0000385a        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(addsf3.o)
+                0x0000385a                __subsf3
+                0x0000385c                __addsf3
  .text.avr-libc.fplib
-                0x0000374c       0xcc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(addsf3x.o)
-                0x0000376e                __addsf3x
+                0x00003868       0xcc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(addsf3x.o)
+                0x0000388a                __addsf3x
  .text.avr-libc.fplib
-                0x00003818        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(cmpsf2.o)
-                0x00003818                __nesf2
-                0x00003818                __eqsf2
-                0x00003818                __cmpsf2
-                0x00003818                __ltsf2
-                0x00003818                __lesf2
+                0x00003934        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(cmpsf2.o)
+                0x00003934                __nesf2
+                0x00003934                __eqsf2
+                0x00003934                __cmpsf2
+                0x00003934                __ltsf2
+                0x00003934                __lesf2
  .text.avr-libc.fplib
-                0x00003822        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(divsf3.o)
-                0x00003822                __divsf3
+                0x0000393e        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(divsf3.o)
+                0x0000393e                __divsf3
  .text.avr-libc.fplib
-                0x0000382a       0xdc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(divsf3x.o)
-                0x0000384a                __divsf3x
-                0x00003850                __divsf3_pse
+                0x00003946       0xdc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(divsf3x.o)
+                0x00003966                __divsf3x
+                0x0000396c                __divsf3_pse
  .text.avr-libc.fplib
-                0x00003906        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fixsfsi.o)
-                0x00003906                __fixsfsi
+                0x00003a22        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fixsfsi.o)
+                0x00003a22                __fixsfsi
  .text.avr-libc.fplib
-                0x00003914       0x5e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fixunssfsi.o)
-                0x00003914                __fixunssfsi
+                0x00003a30       0x5e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fixunssfsi.o)
+                0x00003a30                __fixunssfsi
  .text.avr-libc.fplib
-                0x00003972       0x7a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(floatsisf.o)
-                0x00003972                __floatunsisf
-                0x00003976                __floatsisf
+                0x00003a8e       0x7a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(floatsisf.o)
+                0x00003a8e                __floatunsisf
+                0x00003a92                __floatsisf
  .text.avr-libc.fplib
-                0x000039ec       0x48 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_cmp.o)
-                0x000039ec                __fp_cmp
+                0x00003b08       0x48 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_cmp.o)
+                0x00003b08                __fp_cmp
  .text.avr-libc.fplib
-                0x00003a34        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_inf.o)
-                0x00003a34                __fp_inf
+                0x00003b50        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_inf.o)
+                0x00003b50                __fp_inf
  .text.avr-libc.fplib
-                0x00003a40        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_nan.o)
-                0x00003a40                __fp_nan
+                0x00003b5c        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_nan.o)
+                0x00003b5c                __fp_nan
  .text.avr-libc.fplib
-                0x00003a46        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_pscA.o)
-                0x00003a46                __fp_pscA
+                0x00003b62        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_pscA.o)
+                0x00003b62                __fp_pscA
  .text.avr-libc.fplib
-                0x00003a54        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_pscB.o)
-                0x00003a54                __fp_pscB
+                0x00003b70        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_pscB.o)
+                0x00003b70                __fp_pscB
  .text.avr-libc.fplib
-                0x00003a62       0x22 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_round.o)
-                0x00003a62                __fp_round
+                0x00003b7e       0x22 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_round.o)
+                0x00003b7e                __fp_round
  .text.avr-libc.fplib
-                0x00003a84       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_split3.o)
-                0x00003a84                __fp_split3
-                0x00003a94                __fp_splitA
+                0x00003ba0       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_split3.o)
+                0x00003ba0                __fp_split3
+                0x00003bb0                __fp_splitA
  .text.avr-libc.fplib
-                0x00003ac8        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_zero.o)
-                0x00003ac8                __fp_zero
-                0x00003aca                __fp_szero
+                0x00003be4        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(fp_zero.o)
+                0x00003be4                __fp_zero
+                0x00003be6                __fp_szero
  .text.avr-libc.fplib
-                0x00003ad6        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(gesf2.o)
-                0x00003ad6                __gesf2
-                0x00003ad6                __gtsf2
+                0x00003bf2        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(gesf2.o)
+                0x00003bf2                __gesf2
+                0x00003bf2                __gtsf2
  .text.avr-libc.fplib
-                0x00003ae0        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(mulsf3.o)
-                0x00003ae0                __mulsf3
+                0x00003bfc        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(mulsf3.o)
+                0x00003bfc                __mulsf3
  .text.avr-libc.fplib
-                0x00003ae8       0xd2 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(mulsf3x.o)
-                0x00003b06                __mulsf3x
-                0x00003b0c                __mulsf3_pse
+                0x00003c04       0xd2 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(mulsf3x.o)
+                0x00003c22                __mulsf3x
+                0x00003c28                __mulsf3_pse
  .text._ZN14HardwareSerial9availableEv
-                0x00003bba       0x18 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003bba                _ZN14HardwareSerial9availableEv
+                0x00003cd6       0x18 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003cd6                _ZN14HardwareSerial9availableEv
  .text._ZN14HardwareSerial4peekEv
-                0x00003bd2       0x1c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003bd2                _ZN14HardwareSerial4peekEv
+                0x00003cee       0x1c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003cee                _ZN14HardwareSerial4peekEv
  .text._ZN14HardwareSerial4readEv
-                0x00003bee       0x28 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003bee                _ZN14HardwareSerial4readEv
+                0x00003d0a       0x28 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003d0a                _ZN14HardwareSerial4readEv
  .text._ZN14HardwareSerial17availableForWriteEv
-                0x00003c16       0x1e D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003c16                _ZN14HardwareSerial17availableForWriteEv
+                0x00003d32       0x1e D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003d32                _ZN14HardwareSerial17availableForWriteEv
  .text._Z14serialEventRunv
-                0x00003c34       0x1c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003c34                _Z14serialEventRunv
+                0x00003d50       0x1c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003d50                _Z14serialEventRunv
  .text._ZN14HardwareSerial17_tx_udr_empty_irqEv
-                0x00003c50       0x44 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003c50                _ZN14HardwareSerial17_tx_udr_empty_irqEv
+                0x00003d6c       0x44 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003d6c                _ZN14HardwareSerial17_tx_udr_empty_irqEv
  .text._ZN14HardwareSerial5writeEh
-                0x00003c94       0x9a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003c94                _ZN14HardwareSerial5writeEh
+                0x00003db0       0x9a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003db0                _ZN14HardwareSerial5writeEh
  .text._ZN14HardwareSerial5flushEv
-                0x00003d2e       0x44 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003d2e                _ZN14HardwareSerial5flushEv
+                0x00003e4a       0x44 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003e4a                _ZN14HardwareSerial5flushEv
  .text._ZN14HardwareSerial5beginEmh
-                0x00003d72       0xca D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
-                0x00003d72                _ZN14HardwareSerial5beginEmh
+                0x00003e8e       0xca D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+                0x00003e8e                _ZN14HardwareSerial5beginEmh
  .text.__vector_18
-                0x00003e3c       0x64 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
-                0x00003e3c                __vector_18
+                0x00003f58       0x64 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+                0x00003f58                __vector_18
  .text.__vector_19
-                0x00003ea0       0x4c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
-                0x00003ea0                __vector_19
+                0x00003fbc       0x4c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+                0x00003fbc                __vector_19
  .text._Z17Serial0_availablev
-                0x00003eec       0x14 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
-                0x00003eec                _Z17Serial0_availablev
+                0x00004008       0x14 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+                0x00004008                _Z17Serial0_availablev
  .text.startup._GLOBAL__sub_I___vector_18
-                0x00003f00       0x5a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+                0x0000401c       0x5a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
  .text.initVariant
-                0x00003f5a        0x2 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
-                0x00003f5a                initVariant
+                0x00004076        0x2 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
+                0x00004076                initVariant
  .text.startup.main
-                0x00003f5c       0x1e D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
-                0x00003f5c                main
+                0x00004078       0x1e D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
+                0x00004078                main
  .text._ZN5Print5writeEPKhj
-                0x00003f7a       0x54 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00003f7a                _ZN5Print5writeEPKhj
+                0x00004096       0x54 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x00004096                _ZN5Print5writeEPKhj
  .text._ZN5Print5writeEPKc
-                0x00003fce       0x2a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00003fce                _ZN5Print5writeEPKc
+                0x000040ea       0x2a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x000040ea                _ZN5Print5writeEPKc
  .text._ZN5Print5printEPK19__FlashStringHelper
-                0x00003ff8       0x48 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00003ff8                _ZN5Print5printEPK19__FlashStringHelper
+                0x00004114       0x48 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x00004114                _ZN5Print5printEPK19__FlashStringHelper
  .text._ZN5Print5printEc
-                0x00004040        0xe D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00004040                _ZN5Print5printEc
+                0x0000415c        0xe D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x0000415c                _ZN5Print5printEc
  .text._ZN5Print7printlnEv
-                0x0000404e        0x8 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x0000404e                _ZN5Print7printlnEv
+                0x0000416a        0x8 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x0000416a                _ZN5Print7printlnEv
  .text._ZN5Print7printlnEPK19__FlashStringHelper
-                0x00004056       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00004056                _ZN5Print7printlnEPK19__FlashStringHelper
+                0x00004172       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x00004172                _ZN5Print7printlnEPK19__FlashStringHelper
  .text._ZN5Print11printNumberEmh
-                0x0000407a       0x92 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x0000407a                _ZN5Print11printNumberEmh
+                0x00004196       0x92 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x00004196                _ZN5Print11printNumberEmh
  .text._ZN5Print5printEmi
-                0x0000410c       0x1a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x0000410c                _ZN5Print5printEmi
+                0x00004228       0x1a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x00004228                _ZN5Print5printEmi
  .text._ZN5Print5printEhi
-                0x00004126        0xe D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00004126                _ZN5Print5printEhi
- .text._ZN5Print7printlnEhi
-                0x00004134       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00004134                _ZN5Print7printlnEhi
+                0x00004242        0xe D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x00004242                _ZN5Print5printEhi
  .text._ZN5Print5printEji
-                0x00004158        0xc D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00004158                _ZN5Print5printEji
+                0x00004250        0xc D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x00004250                _ZN5Print5printEji
  .text._ZN5Print5printEli
-                0x00004164       0x90 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00004164                _ZN5Print5printEli
+                0x0000425c       0x90 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x0000425c                _ZN5Print5printEli
  .text._ZN5Print5printEii
-                0x000041f4        0xe D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x000041f4                _ZN5Print5printEii
- .text._ZN5Print7printlnEii
-                0x00004202       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00004202                _ZN5Print7printlnEii
+                0x000042ec        0xe D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x000042ec                _ZN5Print5printEii
  .text._ZN5Print10printFloatEdh
-                0x00004226      0x1b6 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x00004226                _ZN5Print10printFloatEdh
+                0x000042fa      0x1b6 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x000042fa                _ZN5Print10printFloatEdh
  .text._ZN5Print5printEdi
-                0x000043dc        0x4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x000043dc                _ZN5Print5printEdi
+                0x000044b0        0x4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x000044b0                _ZN5Print5printEdi
  .text._ZN5Print7printlnEdi
-                0x000043e0       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
-                0x000043e0                _ZN5Print7printlnEdi
+                0x000044b4       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+                0x000044b4                _ZN5Print7printlnEdi
  .text.__vector_16
-                0x00004404       0x94 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
-                0x00004404                __vector_16
- .text.millis   0x00004498       0x18 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
-                0x00004498                millis
- .text.micros   0x000044b0       0x4a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
-                0x000044b0                micros
- .text.delay    0x000044fa       0x78 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
-                0x000044fa                delay
+                0x000044d8       0x94 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x000044d8                __vector_16
+ .text.millis   0x0000456c       0x18 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x0000456c                millis
+ .text.micros   0x00004584       0x4a D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x00004584                micros
+ .text.delay    0x000045ce       0x78 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x000045ce                delay
  .text.delayMicroseconds
-                0x00004572       0x16 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
-                0x00004572                delayMicroseconds
- .text.init     0x00004588       0x76 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
-                0x00004588                init
+                0x00004646       0x16 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x00004646                delayMicroseconds
+ .text.init     0x0000465c       0x76 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x0000465c                init
  .text.turnOffPWM
-                0x000045fe       0x52 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
- .text.pinMode  0x00004650       0x78 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x00004650                pinMode
+                0x000046d2       0x52 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+ .text.pinMode  0x00004724       0x78 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x00004724                pinMode
  .text.digitalWrite
-                0x000046c8       0x5e D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x000046c8                digitalWrite
+                0x0000479c       0x5e D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x0000479c                digitalWrite
  .text.digitalRead
-                0x00004726       0x52 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
-                0x00004726                digitalRead
- .text.__empty  0x00004778        0x2 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
-                0x00004778                yield
+                0x000047fa       0x52 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+                0x000047fa                digitalRead
+ .text.__empty  0x0000484c        0x2 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
+                0x0000484c                yield
  .text.avr-libc.fplib
-                0x0000477a        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(unordsf2.o)
-                0x0000477a                __unordsf2
+                0x0000484e        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a(unordsf2.o)
+                0x0000484e                __unordsf2
  .text.libgcc.div
-                0x00004784       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
-                0x00004784                __udivmodsi4
- .text.libgcc   0x000047c8        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_tablejump2.o)
-                0x000047c8                __tablejump2__
+                0x00004858       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
+                0x00004858                __udivmodsi4
+ .text.libgcc   0x0000489c        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_tablejump2.o)
+                0x0000489c                __tablejump2__
  .text.avr-libc
-                0x000047d4       0x10 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_byte.o)
-                0x000047d4                eeprom_read_byte
+                0x000048a8       0x10 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_byte.o)
+                0x000048a8                eeprom_read_byte
  .text.avr-libc
-                0x000047e4        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_dword.o)
-                0x000047e4                eeprom_read_float
-                0x000047e4                eeprom_read_dword
+                0x000048b8        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_dword.o)
+                0x000048b8                eeprom_read_float
+                0x000048b8                eeprom_read_dword
  .text.avr-libc
-                0x000047f0       0x24 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_byte.o)
-                0x000047f0                eeprom_update_byte
-                0x000047f2                eeprom_update_r18
+                0x000048c4       0x24 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_byte.o)
+                0x000048c4                eeprom_update_byte
+                0x000048c6                eeprom_update_r18
  .text.avr-libc
-                0x00004814       0x18 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_dword.o)
-                0x00004814                eeprom_update_float
-                0x00004814                eeprom_update_dword
+                0x000048e8       0x18 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_dword.o)
+                0x000048e8                eeprom_update_float
+                0x000048e8                eeprom_update_dword
  .text.avr-libc
-                0x0000482c       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_block.o)
-                0x0000482c                eeprom_read_block
-                0x00004830                eeprom_read_blraw
-                0x0000484c                . = ALIGN (0x2)
+                0x00004900       0x20 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_block.o)
+                0x00004900                eeprom_read_block
+                0x00004904                eeprom_read_blraw
+                0x00004920                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000484c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000484c                _exit
-                0x0000484c                exit
+ .fini9         0x00004920        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00004920                _exit
+                0x00004920                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -1440,11 +1505,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000484c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00004920        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00004850                _etext = .
+                0x00004924                _etext = .
 
-.data           0x00800100       0xe0 load address 0x00004850
+.data           0x00800100       0xe0 load address 0x00004924
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -1476,7 +1541,7 @@ END GROUP
                 0x008001e0                _edata = .
                 0x008001e0                PROVIDE (__data_end, .)
 
-.bss            0x008001e0      0x1ff
+.bss            0x008001e0      0x1fb
                 0x008001e0                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -1492,102 +1557,102 @@ END GROUP
                 0x008001e7                lcd
  .bss.setDigit  0x008001f3        0x8 Sketch.o
                 0x008001f3                setDigit
- .bss.settings  0x008001fb       0x2e Sketch.o
+ .bss.settings  0x008001fb       0x2a Sketch.o
                 0x008001fb                settings
  .bss.button2Callback
-                0x00800229       0x21 Sketch.o
-                0x00800229                button2Callback
+                0x00800225       0x21 Sketch.o
+                0x00800225                button2Callback
  .bss.button1Callback
-                0x0080024a       0x21 Sketch.o
-                0x0080024a                button1Callback
+                0x00800246       0x21 Sketch.o
+                0x00800246                button1Callback
  .bss.adsAmperage
-                0x0080026b        0x5 Sketch.o
-                0x0080026b                adsAmperage
+                0x00800267        0x5 Sketch.o
+                0x00800267                adsAmperage
  .bss.adsVoltage
-                0x00800270        0x5 Sketch.o
-                0x00800270                adsVoltage
+                0x0080026c        0x5 Sketch.o
+                0x0080026c                adsVoltage
  .bss.twi_error
-                0x00800275        0x1 src/libraries/Wire/src/utility/twi.o
+                0x00800271        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_rxBufferIndex
-                0x00800276        0x1 src/libraries/Wire/src/utility/twi.o
+                0x00800272        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_rxBuffer
-                0x00800277       0x20 src/libraries/Wire/src/utility/twi.o
+                0x00800273       0x20 src/libraries/Wire/src/utility/twi.o
  .bss.twi_txBufferLength
-                0x00800297        0x1 src/libraries/Wire/src/utility/twi.o
+                0x00800293        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_txBufferIndex
-                0x00800298        0x1 src/libraries/Wire/src/utility/twi.o
+                0x00800294        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_txBuffer
-                0x00800299       0x20 src/libraries/Wire/src/utility/twi.o
+                0x00800295       0x20 src/libraries/Wire/src/utility/twi.o
  .bss.twi_masterBufferLength
-                0x008002b9        0x1 src/libraries/Wire/src/utility/twi.o
+                0x008002b5        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_masterBufferIndex
-                0x008002ba        0x1 src/libraries/Wire/src/utility/twi.o
+                0x008002b6        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_masterBuffer
-                0x008002bb       0x20 src/libraries/Wire/src/utility/twi.o
+                0x008002b7       0x20 src/libraries/Wire/src/utility/twi.o
  .bss.twi_onSlaveReceive
-                0x008002db        0x2 src/libraries/Wire/src/utility/twi.o
+                0x008002d7        0x2 src/libraries/Wire/src/utility/twi.o
  .bss.twi_onSlaveTransmit
-                0x008002dd        0x2 src/libraries/Wire/src/utility/twi.o
+                0x008002d9        0x2 src/libraries/Wire/src/utility/twi.o
  .bss.twi_inRepStart
-                0x008002df        0x1 src/libraries/Wire/src/utility/twi.o
+                0x008002db        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_sendStop
-                0x008002e0        0x1 src/libraries/Wire/src/utility/twi.o
+                0x008002dc        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_slarw
-                0x008002e1        0x1 src/libraries/Wire/src/utility/twi.o
+                0x008002dd        0x1 src/libraries/Wire/src/utility/twi.o
  .bss.twi_state
-                0x008002e2        0x1 src/libraries/Wire/src/utility/twi.o
- .bss.Wire      0x008002e3        0xc src/libraries/Wire/src/Wire.o
-                0x008002e3                Wire
+                0x008002de        0x1 src/libraries/Wire/src/utility/twi.o
+ .bss.Wire      0x008002df        0xc src/libraries/Wire/src/Wire.o
+                0x008002df                Wire
  .bss._ZN7TwoWire14user_onReceiveE
-                0x008002ef        0x2 src/libraries/Wire/src/Wire.o
-                0x008002ef                _ZN7TwoWire14user_onReceiveE
+                0x008002eb        0x2 src/libraries/Wire/src/Wire.o
+                0x008002eb                _ZN7TwoWire14user_onReceiveE
  .bss._ZN7TwoWire14user_onRequestE
-                0x008002f1        0x2 src/libraries/Wire/src/Wire.o
-                0x008002f1                _ZN7TwoWire14user_onRequestE
+                0x008002ed        0x2 src/libraries/Wire/src/Wire.o
+                0x008002ed                _ZN7TwoWire14user_onRequestE
  .bss._ZN7TwoWire12transmittingE
-                0x008002f3        0x1 src/libraries/Wire/src/Wire.o
-                0x008002f3                _ZN7TwoWire12transmittingE
+                0x008002ef        0x1 src/libraries/Wire/src/Wire.o
+                0x008002ef                _ZN7TwoWire12transmittingE
  .bss._ZN7TwoWire14txBufferLengthE
-                0x008002f4        0x1 src/libraries/Wire/src/Wire.o
-                0x008002f4                _ZN7TwoWire14txBufferLengthE
+                0x008002f0        0x1 src/libraries/Wire/src/Wire.o
+                0x008002f0                _ZN7TwoWire14txBufferLengthE
  .bss._ZN7TwoWire13txBufferIndexE
-                0x008002f5        0x1 src/libraries/Wire/src/Wire.o
-                0x008002f5                _ZN7TwoWire13txBufferIndexE
+                0x008002f1        0x1 src/libraries/Wire/src/Wire.o
+                0x008002f1                _ZN7TwoWire13txBufferIndexE
  .bss._ZN7TwoWire8txBufferE
-                0x008002f6       0x20 src/libraries/Wire/src/Wire.o
-                0x008002f6                _ZN7TwoWire8txBufferE
+                0x008002f2       0x20 src/libraries/Wire/src/Wire.o
+                0x008002f2                _ZN7TwoWire8txBufferE
  .bss._ZN7TwoWire9txAddressE
-                0x00800316        0x1 src/libraries/Wire/src/Wire.o
-                0x00800316                _ZN7TwoWire9txAddressE
+                0x00800312        0x1 src/libraries/Wire/src/Wire.o
+                0x00800312                _ZN7TwoWire9txAddressE
  .bss._ZN7TwoWire14rxBufferLengthE
-                0x00800317        0x1 src/libraries/Wire/src/Wire.o
-                0x00800317                _ZN7TwoWire14rxBufferLengthE
+                0x00800313        0x1 src/libraries/Wire/src/Wire.o
+                0x00800313                _ZN7TwoWire14rxBufferLengthE
  .bss._ZN7TwoWire13rxBufferIndexE
-                0x00800318        0x1 src/libraries/Wire/src/Wire.o
-                0x00800318                _ZN7TwoWire13rxBufferIndexE
+                0x00800314        0x1 src/libraries/Wire/src/Wire.o
+                0x00800314                _ZN7TwoWire13rxBufferIndexE
  .bss._ZN7TwoWire8rxBufferE
-                0x00800319       0x20 src/libraries/Wire/src/Wire.o
-                0x00800319                _ZN7TwoWire8rxBufferE
- .bss.Serial    0x00800339       0x9d D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
-                0x00800339                Serial
+                0x00800315       0x20 src/libraries/Wire/src/Wire.o
+                0x00800315                _ZN7TwoWire8rxBufferE
+ .bss.Serial    0x00800335       0x9d D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+                0x00800335                Serial
  .bss.timer0_fract
-                0x008003d6        0x1 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x008003d2        0x1 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
  .bss.timer0_millis
-                0x008003d7        0x4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
-                0x008003d7                timer0_millis
+                0x008003d3        0x4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x008003d3                timer0_millis
  .bss.timer0_overflow_count
-                0x008003db        0x4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
-                0x008003db                timer0_overflow_count
+                0x008003d7        0x4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+                0x008003d7                timer0_overflow_count
  *(COMMON)
-                0x008003df                PROVIDE (__bss_end, .)
-                0x00004850                __data_load_start = LOADADDR (.data)
-                0x00004930                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x008003db                PROVIDE (__bss_end, .)
+                0x00004924                __data_load_start = LOADADDR (.data)
+                0x00004a04                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x008003df        0x0
+.noinit         0x008003db        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x008003df                _end = .
+                0x008003db                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000       0x28
@@ -1604,7 +1669,7 @@ END GROUP
                 0x00810020                eeprom_impedance_ab
                 0x00810024                eeprom_gain_voltage
                 0x00810025                eeprom_gain_amperage
-                0x00810026                eeprom_connection_type
+                0x00810026                eeprom_manipulate_relay
                 0x00810027                eeprom_first_start
                 0x00810028                __eeprom_end = .
 
@@ -1720,27 +1785,27 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x10db1
+.debug_info     0x00000000    0x1133d
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_info    0x000005f4     0x3b44 Sketch.o
- .debug_info    0x00004138      0x9fa src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
- .debug_info    0x00004b32     0x19d1 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
- .debug_info    0x00006503      0x8e2 src/libraries/OneButton/src/OneButton.o
- .debug_info    0x00006de5      0x604 src/libraries/Wire/src/utility/twi.o
- .debug_info    0x000073e9     0x27b0 src/libraries/Wire/src/Wire.o
- .debug_info    0x00009b99     0x1f64 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
- .debug_info    0x0000bafd     0x1b16 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
- .debug_info    0x0000d613      0x237 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
- .debug_info    0x0000d84a     0x28ff D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
- .debug_info    0x00010149      0x2cb D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
- .debug_info    0x00010414      0x5fe D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
- .debug_info    0x00010a12       0x3e D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
- .debug_info    0x00010a50       0xac C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_byte.o)
- .debug_info    0x00010afc       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_dword.o)
- .debug_info    0x00010ba9       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_byte.o)
- .debug_info    0x00010c56       0xae C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_dword.o)
- .debug_info    0x00010d04       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_block.o)
+ .debug_info    0x000005f4     0x40d0 Sketch.o
+ .debug_info    0x000046c4      0x9fa src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+ .debug_info    0x000050be     0x19d1 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+ .debug_info    0x00006a8f      0x8e2 src/libraries/OneButton/src/OneButton.o
+ .debug_info    0x00007371      0x604 src/libraries/Wire/src/utility/twi.o
+ .debug_info    0x00007975     0x27b0 src/libraries/Wire/src/Wire.o
+ .debug_info    0x0000a125     0x1f64 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+ .debug_info    0x0000c089     0x1b16 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+ .debug_info    0x0000db9f      0x237 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
+ .debug_info    0x0000ddd6     0x28ff D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+ .debug_info    0x000106d5      0x2cb D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+ .debug_info    0x000109a0      0x5fe D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+ .debug_info    0x00010f9e       0x3e D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
+ .debug_info    0x00010fdc       0xac C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_byte.o)
+ .debug_info    0x00011088       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_dword.o)
+ .debug_info    0x00011135       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_byte.o)
+ .debug_info    0x000111e2       0xae C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_dword.o)
+ .debug_info    0x00011290       0xad C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_block.o)
 
 .debug_abbrev   0x00000000     0x2d7a
  *(.debug_abbrev)
@@ -1764,87 +1829,87 @@ END GROUP
  .debug_abbrev  0x00002d52       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_dword.o)
  .debug_abbrev  0x00002d66       0x14 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_block.o)
 
-.debug_line     0x00000000     0x4783
+.debug_line     0x00000000     0x4745
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_line    0x00000133     0x1347 Sketch.o
- .debug_line    0x0000147a      0x488 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
- .debug_line    0x00001902      0x801 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
- .debug_line    0x00002103      0x43b src/libraries/OneButton/src/OneButton.o
- .debug_line    0x0000253e      0x519 src/libraries/Wire/src/utility/twi.o
- .debug_line    0x00002a57      0x608 src/libraries/Wire/src/Wire.o
- .debug_line    0x0000305f      0x4c4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
- .debug_line    0x00003523      0x28c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
- .debug_line    0x000037af      0x165 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
- .debug_line    0x00003914      0x685 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
- .debug_line    0x00003f99      0x299 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
- .debug_line    0x00004232      0x252 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
- .debug_line    0x00004484       0x41 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
- .debug_line    0x000044c5       0x7a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_byte.o)
- .debug_line    0x0000453f       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_dword.o)
- .debug_line    0x000045a7       0xb6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_byte.o)
- .debug_line    0x0000465d       0x7b C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_dword.o)
- .debug_line    0x000046d8       0xab C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_block.o)
+ .debug_line    0x00000133     0x1309 Sketch.o
+ .debug_line    0x0000143c      0x488 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+ .debug_line    0x000018c4      0x801 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+ .debug_line    0x000020c5      0x43b src/libraries/OneButton/src/OneButton.o
+ .debug_line    0x00002500      0x519 src/libraries/Wire/src/utility/twi.o
+ .debug_line    0x00002a19      0x608 src/libraries/Wire/src/Wire.o
+ .debug_line    0x00003021      0x4c4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+ .debug_line    0x000034e5      0x28c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+ .debug_line    0x00003771      0x165 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
+ .debug_line    0x000038d6      0x685 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+ .debug_line    0x00003f5b      0x299 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+ .debug_line    0x000041f4      0x252 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+ .debug_line    0x00004446       0x41 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
+ .debug_line    0x00004487       0x7a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_byte.o)
+ .debug_line    0x00004501       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_dword.o)
+ .debug_line    0x00004569       0xb6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_byte.o)
+ .debug_line    0x0000461f       0x7b C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eeupd_dword.o)
+ .debug_line    0x0000469a       0xab C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5\libatmega328p.a(eerd_block.o)
 
-.debug_frame    0x00000000     0x15d4
+.debug_frame    0x00000000     0x15d0
  *(.debug_frame)
- .debug_frame   0x00000000      0x4d0 Sketch.o
- .debug_frame   0x000004d0      0x138 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
- .debug_frame   0x00000608      0x380 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
- .debug_frame   0x00000988      0x144 src/libraries/OneButton/src/OneButton.o
- .debug_frame   0x00000acc      0x134 src/libraries/Wire/src/utility/twi.o
- .debug_frame   0x00000c00      0x280 src/libraries/Wire/src/Wire.o
- .debug_frame   0x00000e80      0x110 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
- .debug_frame   0x00000f90       0xe0 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
- .debug_frame   0x00001070       0x54 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
- .debug_frame   0x000010c4      0x3ac D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
- .debug_frame   0x00001470       0xc4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
- .debug_frame   0x00001534       0x7c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
- .debug_frame   0x000015b0       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
+ .debug_frame   0x00000000      0x4cc Sketch.o
+ .debug_frame   0x000004cc      0x138 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+ .debug_frame   0x00000604      0x380 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+ .debug_frame   0x00000984      0x144 src/libraries/OneButton/src/OneButton.o
+ .debug_frame   0x00000ac8      0x134 src/libraries/Wire/src/utility/twi.o
+ .debug_frame   0x00000bfc      0x280 src/libraries/Wire/src/Wire.o
+ .debug_frame   0x00000e7c      0x110 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+ .debug_frame   0x00000f8c       0xe0 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+ .debug_frame   0x0000106c       0x54 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
+ .debug_frame   0x000010c0      0x3ac D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+ .debug_frame   0x0000146c       0xc4 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+ .debug_frame   0x00001530       0x7c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+ .debug_frame   0x000015ac       0x24 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
 
-.debug_str      0x00000000     0x40c1
+.debug_str      0x00000000     0x4093
  *(.debug_str)
  .debug_str     0x00000000      0x208 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_str     0x00000208     0x1429 Sketch.o
-                               0x153c (size before relaxing)
- .debug_str     0x00001631      0x175 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+ .debug_str     0x00000208     0x13e4 Sketch.o
+                               0x14f7 (size before relaxing)
+ .debug_str     0x000015ec      0x175 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
                                 0x6cb (size before relaxing)
- .debug_str     0x000017a6      0xa0b src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+ .debug_str     0x00001761      0xa0b src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
                                 0xde6 (size before relaxing)
- .debug_str     0x000021b1       0x88 src/libraries/OneButton/src/OneButton.o
+ .debug_str     0x0000216c       0x88 src/libraries/OneButton/src/OneButton.o
                                 0x67b (size before relaxing)
- .debug_str     0x00002239      0x2c2 src/libraries/Wire/src/utility/twi.o
+ .debug_str     0x000021f4      0x2c2 src/libraries/Wire/src/utility/twi.o
                                 0x39e (size before relaxing)
- .debug_str     0x000024fb     0x1369 src/libraries/Wire/src/Wire.o
+ .debug_str     0x000024b6     0x1369 src/libraries/Wire/src/Wire.o
                                0x1895 (size before relaxing)
- .debug_str     0x00003864      0x3cf D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+ .debug_str     0x0000381f      0x3cf D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
                                0x15ec (size before relaxing)
- .debug_str     0x00003c33       0x47 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+ .debug_str     0x00003bee       0x47 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
                                0x13df (size before relaxing)
- .debug_str     0x00003c7a       0x37 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
+ .debug_str     0x00003c35       0x37 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(main.o)
                                 0x28b (size before relaxing)
- .debug_str     0x00003cb1      0x2d7 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+ .debug_str     0x00003c6c      0x2ee D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
                                0x1219 (size before relaxing)
- .debug_str     0x00003f88       0x67 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+ .debug_str     0x00003f5a       0x67 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
                                 0x221 (size before relaxing)
- .debug_str     0x00003fef       0xb6 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+ .debug_str     0x00003fc1       0xb6 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
                                 0x286 (size before relaxing)
- .debug_str     0x000040a5       0x1c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
+ .debug_str     0x00004077       0x1c D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(hooks.o)
                                 0x116 (size before relaxing)
 
-.debug_loc      0x00000000     0x603e
+.debug_loc      0x00000000     0x6058
  *(.debug_loc)
- .debug_loc     0x00000000      0xe51 Sketch.o
- .debug_loc     0x00000e51      0x6e4 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
- .debug_loc     0x00001535      0xc82 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
- .debug_loc     0x000021b7      0x31f src/libraries/OneButton/src/OneButton.o
- .debug_loc     0x000024d6      0x3e6 src/libraries/Wire/src/utility/twi.o
- .debug_loc     0x000028bc      0xbe6 src/libraries/Wire/src/Wire.o
- .debug_loc     0x000034a2      0x4dc D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
- .debug_loc     0x0000397e      0x1b0 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
- .debug_loc     0x00003b2e     0x1c87 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
- .debug_loc     0x000057b5      0x28d D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
- .debug_loc     0x00005a42      0x5fc D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
+ .debug_loc     0x00000000      0xe6b Sketch.o
+ .debug_loc     0x00000e6b      0x6e4 src/libraries/Adafruit_ADS1X15/Adafruit_ADS1015.o
+ .debug_loc     0x0000154f      0xc82 src/libraries/LiquidCrystal_I2C_V112/LiquidCrystal_I2C.o
+ .debug_loc     0x000021d1      0x31f src/libraries/OneButton/src/OneButton.o
+ .debug_loc     0x000024f0      0x3e6 src/libraries/Wire/src/utility/twi.o
+ .debug_loc     0x000028d6      0xbe6 src/libraries/Wire/src/Wire.o
+ .debug_loc     0x000034bc      0x4dc D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial.o)
+ .debug_loc     0x00003998      0x1b0 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(HardwareSerial0.o)
+ .debug_loc     0x00003b48     0x1c87 D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(Print.o)
+ .debug_loc     0x000057cf      0x28d D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring.o)
+ .debug_loc     0x00005a5c      0x5fc D:\Project Badger\vkr\vkr\ArduinoCore\Debug\libArduinoCore.a(wiring_digital.o)
 
 .debug_macinfo
  *(.debug_macinfo)

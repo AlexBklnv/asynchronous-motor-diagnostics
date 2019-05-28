@@ -28,11 +28,8 @@
 #define RELAY A3						// Алиас пина реле
 #define DEBUG 4							// Алиас пина дебага
 
-#define CONNECTION_TYPE_STAR 0			// Идентификатор подключения по типу звезда
-#define CONNECTION_TYPE_TRIANGLE 1		// Идентификатор подключения по типу треугольник
-
 byte EEMEM eeprom_first_start = 0;							// AVRdude не заливает eeprom, потому идентификатор первого запуска для инициализации значений
-byte EEMEM eeprom_connection_type = CONNECTION_TYPE_STAR;	// Тип подключени
+byte EEMEM eeprom_manipulate_relay = 0;	// Тип подключени
 byte EEMEM eeprom_gain_amperage = 0;						// Индекс усиления ацп по току
 byte EEMEM eeprom_gain_voltage = 0;							// Индекс усиления ацп по напряжению
 float EEMEM eeprom_impedance_ab = 0;						// Значение сопротивления обмотки AB
@@ -51,7 +48,7 @@ float EEMEM eeprom_amperage_mult_ac = 1;					// Значение множите�
 // Режимы работы
 // Режим настроек
 #define MW_NEED_SETUP 0										// Первый запуск
-#define MW_SETUP_CONNECTION_TYPE 1							// Установка типа соединения обмоток
+#define MW_SETUP_MANIPULATE_RELAY 1							// Установка разрешения манипуляцией реле
 #define MW_SETUP_GAIN_VOLTAGE 2								// Установка степени усиления АЦП по напряжению
 #define MW_SETUP_GAIN_AMPERAGE 3							// Установка степени усиления АЦП по току
 #define MW_SETUP_MULT_VOLTAGE_AB 4							// Установка значения множителя напряжения для обмотки AB
@@ -62,7 +59,7 @@ float EEMEM eeprom_amperage_mult_ac = 1;					// Значение множите�
 #define MW_SETUP_MULT_AMPERAGE_AC 9							// Установка значения множителя тока для обмотки AC
 #define MW_SETUP_IMPEDANCE 10							// Установка значения сопротивления для обмотки AB
 
-#define MW_SETUP_START MW_SETUP_CONNECTION_TYPE				// Алиас для стартового пункта меню настроек
+#define MW_SETUP_START MW_SETUP_MANIPULATE_RELAY				// Алиас для стартового пункта меню настроек
 #define MW_SETUP_STOP MW_SETUP_IMPEDANCE					// Алиас для последнего пункта меню настроек
 
 // Showing characteristics
@@ -137,7 +134,6 @@ struct AdsChars {
 	Настройки
 	isReadyToWork - флаг, готовность к работе комплекса
 	connectionType - тип подключения
-	criticleError - остаток от сравнения по сопротивлениям, сейчас не используется
 	impedance - значение сопротивлений
 	isSetupMode - флаг, нахождение в режиме настроек
 	currentAmperageGain - индекс усиления АЦП по току
@@ -147,8 +143,6 @@ struct AdsChars {
 */
 struct Settings {
 	bool isReadyToWork = false;
-	bool connectionType = CONNECTION_TYPE_STAR;
-	float criticleError = 2.5;
 	float impedance[3] = {0, 0, 0};
 	// true - settings | false - characteristics
 	bool isSetupMode;
@@ -157,6 +151,7 @@ struct Settings {
 	float multiplierVoltage[3] = {1, 1, 1};
 	float multiplierAmperage[3] = {1, 1, 1};
 	bool isDebugMode = false;
+	bool canManipulateRelay = false;
 };
 
 /*
@@ -261,6 +256,7 @@ void setupImpedance();
 bool isSingleErrorExists(float, float, byte);
 void lcdPrintAmperageDiff(byte);
 
+
 void setup() {
 	Serial.begin(9600);
 	Serial.println(F("Initialization..."));
@@ -292,8 +288,8 @@ void setup() {
 	Serial.println(F("Button 2 inited!"));
 	
 	// Инициализация старт-пакета данных
-	if (eeprom_read_byte(&eeprom_first_start) != 100) {
-		eeprom_update_byte(&eeprom_connection_type, CONNECTION_TYPE_STAR);
+	if (eeprom_read_byte(&eeprom_first_start) != 101) {
+		eeprom_update_byte(&eeprom_manipulate_relay, 0);
 		eeprom_update_byte(&eeprom_gain_amperage, 0);
 		eeprom_update_byte(&eeprom_gain_voltage, 0);
 		eeprom_update_float(&eeprom_impedance_ab, 0);
@@ -305,14 +301,14 @@ void setup() {
 		eeprom_update_float(&eeprom_amperage_mult_ab, 0);
 		eeprom_update_float(&eeprom_amperage_mult_bc, 0);
 		eeprom_update_float(&eeprom_amperage_mult_ac, 0);
-		eeprom_update_byte(&eeprom_first_start, 100);
+		eeprom_update_byte(&eeprom_first_start, 101);
 		Serial.println(F("EEPROM first start writed!"));
 	}
 	
 	// Теперь старт данные получаем из памяти при старте
 	settings.currentAmperageGain = eeprom_read_byte(&eeprom_gain_amperage);
 	settings.currentVoltageGain = eeprom_read_byte(&eeprom_gain_voltage);
-	settings.connectionType = eeprom_read_byte(&eeprom_connection_type);
+	settings.canManipulateRelay = eeprom_read_byte(&eeprom_manipulate_relay);
 	settings.impedance[0] = eeprom_read_float(&eeprom_impedance_ab);
 	settings.impedance[1] = eeprom_read_float(&eeprom_impedance_bc);
 	settings.impedance[2] = eeprom_read_float(&eeprom_impedance_ac);
@@ -323,23 +319,21 @@ void setup() {
 	settings.multiplierAmperage[1] = eeprom_read_float(&eeprom_amperage_mult_bc);
 	settings.multiplierAmperage[2] = eeprom_read_float(&eeprom_amperage_mult_ac);
 	Serial.println(F("EEPROM values:"));
-	Serial.print(F("gain_amperage: ")); Serial.println(settings.currentAmperageGain);
-	Serial.print(F("gain_voltage: ")); Serial.println(settings.currentVoltageGain);
-	Serial.print(F("connection_type: ")); Serial.println(settings.connectionType);
-	Serial.print(F("impedance_ab: ")); Serial.println(settings.impedance[0], 10);
-	Serial.print(F("impedance_bc: ")); Serial.println(settings.impedance[1], 10);
-	Serial.print(F("impedance_ac: ")); Serial.println(settings.impedance[2], 10);
-	Serial.print(F("voltage_mult_ab: ")); Serial.println(settings.multiplierVoltage[0], 3);
-	Serial.print(F("voltage_mult_bc: ")); Serial.println(settings.multiplierVoltage[1], 3);
-	Serial.print(F("voltage_mult_ac: ")); Serial.println(settings.multiplierVoltage[2], 3);
-	Serial.print(F("amperage_mult_ab: ")); Serial.println(settings.multiplierAmperage[0], 3);
-	Serial.print(F("amperage_mult_bc: ")); Serial.println(settings.multiplierAmperage[1], 3);
-	Serial.print(F("amperage_mult_ac: ")); Serial.println(settings.multiplierAmperage[2], 3);
+	Serial.print(F("|-sga=")); Serial.print(settings.currentAmperageGain); Serial.println(F("-|"));
+	Serial.print(F("|-sgv=")); Serial.print(settings.currentVoltageGain); Serial.println(F("-|"));
+	Serial.print(F("|-smr ")); Serial.print(settings.canManipulateRelay); Serial.println(F("-|"));
+	Serial.print(F("|-sia")); Serial.print(settings.impedance[0], 10); Serial.println(F("-|"));
+	Serial.print(F("|-sib")); Serial.print(settings.impedance[1], 10); Serial.println(F("-|"));
+	Serial.print(F("|-sic")); Serial.print(settings.impedance[2], 10); Serial.println(F("-|"));
+	Serial.print(F("|-svma")); Serial.print(settings.multiplierVoltage[0], 3); Serial.println(F("-|"));
+	Serial.print(F("|-svmb")); Serial.print(settings.multiplierVoltage[1], 3); Serial.println(F("-|"));
+	Serial.print(F("|-svmc")); Serial.print(settings.multiplierVoltage[2], 3); Serial.println(F("-|"));
+	Serial.print(F("|-sama")); Serial.print(settings.multiplierAmperage[0], 3); Serial.println(F("-|"));
+	Serial.print(F("|-samb")); Serial.print(settings.multiplierAmperage[1], 3); Serial.println(F("-|"));
+	Serial.print(F("|-samc")); Serial.print(settings.multiplierAmperage[2], 3); Serial.println(F("-|"));
 	
 	initAdsVoltageGain();
 	initAdsAmperageGain();
-	
-	settings.criticleError = settings.connectionType == CONNECTION_TYPE_STAR? 2.5f: 5.0f;
 
 	checkIsReadyToWork();
 	
@@ -353,9 +347,10 @@ void setup() {
 	if (digitalRead(DEBUG) == HIGH) {
 		settings.isDebugMode = true;
 		lcd.clear();
-		lcd.print(F("Debug mode"));
+		lcd.print(F("|-Debug mode-|"));
 		delay(1000);
 	}
+
 	
 	modeWork.prev = modeWork.current;
 	initAvgVars();
@@ -382,7 +377,7 @@ void checkIsReadyToWork() {
 		modeWork.current = MW_CONTROLL_MEASUREMENT;
 	} else {
 		modeWork.current = MW_NEED_SETUP;
-		Serial.println(F("Need setup params"));
+		Serial.println(F("|-Need setup params-|"));
 	}
 }
 
@@ -413,43 +408,41 @@ void loop() {
 				icError.curLvl[i] = getICLevelByWinding(i);
 
 				if (canSerial) {
-					Serial.print(F("Winding |")); Serial.print((i + 1)); Serial.println(F("|"));
-					Serial.print(F("measured voltage  = "));  Serial.println(adsChars.voltage[i], 6);
-					Serial.print(F("measured amperage = "));  Serial.println(adsChars.measuredAmperage[i], 6);
-					Serial.print(F("perfect amperage  = ")); Serial.println(adsChars.perfectAmperage[i], 6);
-					Serial.print(F("error percent     = ")); Serial.println(icError.curLvl[i],2);
-					Serial.print(F("error diff        = ")); Serial.println(icError.diff[i],6);
-					if (i != 2) {
-						Serial.println(F("---"));
-					}
+					Serial.print(F("|-w")); Serial.print((i + 1)); Serial.print(F("mv")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(adsChars.voltage[i], 5); Serial.println(F("-|"));
+					Serial.print(F("|-w")); Serial.print((i + 1)); Serial.print(F("ma")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(adsChars.measuredAmperage[i], 5);  Serial.println(F("-|"));
+					Serial.print(F("|-w")); Serial.print((i + 1)); Serial.print(F("pa")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(adsChars.perfectAmperage[i], 5);  Serial.println(F("-|"));
+					Serial.print(F("|-w")); Serial.print((i + 1)); Serial.print(F("el")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(icError.curLvl[i], 2);  Serial.println(F("-|"));
+					Serial.print(F("|-w")); Serial.print((i + 1)); Serial.print(F("ed")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(icError.diff[i]);  Serial.println(F("-|"));
 				}
 			}
 			if (canSerial) {
-				Serial.print(F("error full        = ")); Serial.println(icError.fullError, 5);
+				for (byte i = 0; i < 3; i++) {
+					Serial.print(F("|-w")); Serial.print((i + 1)); Serial.print(F("ec")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(icError.criticalLvlCount[i]);  Serial.println(F("-|"));
+				}
+				Serial.print(F("|-fe="));Serial.println(icError.fullError, 5);  Serial.println(F("-|"));
 				Serial.println(F("---end---"));
 				serialUpdateStamp = millis();
 			}
 			initAvgVars();
 	
-			
 			if (isFullErrorExists(adsChars.measuredAmperage, adsChars.voltage)) {
 				if (icError.detectStamp == 0) {
-					Serial.println(F("Probably error exists"));
+					Serial.println(F("|-ic=1-|"));
 					icError.detectStamp = millis();
 				}
 				if (millis() - icError.detectStamp >= 10000) {
-					if (!settings.isDebugMode) {
+					if (!settings.isDebugMode || settings.canManipulateRelay) {
 						settings.isReadyToWork = MM_STOP;
 						digitalWrite(RELAY, HIGH);
 					}
 					
-					Serial.println(F("WARNING!!! Measurement Stoped IC EXISTS!"));
+					Serial.println(F("|-ic=2-|"));
 					digitalWrite(BEEPER, HIGH);
 					icError.hasIC = true;
 				}
 			} else {
 				if (icError.detectStamp != 0) {
-					Serial.println(F("ha-ha, it's joke. There are not exists critical error"));
+					Serial.println(F("|-ic=0-|"));
 				}
 				icError.detectStamp = 0;
 			}
@@ -604,12 +597,12 @@ void displayAsMode() {
 	lcdUpdateScreen = false;
 	// обновляем динамику
 	switch(modeWork.current) {
-		case MW_SETUP_CONNECTION_TYPE:
-			lcdClearCell(0, 1, 8);
-			if (setDigit.value == CONNECTION_TYPE_STAR) {
-				lcd.print(F("Star"));
+		case MW_SETUP_MANIPULATE_RELAY:
+			lcdClearCell(0, 1, 3);
+			if (setDigit.value == 1) {
+				lcd.print(F("Yes"));
 			} else {
-				lcd.print(F("Triangle"));
+				lcd.print(F("No"));
 			}
 			break;
 		case MW_SETUP_GAIN_AMPERAGE:
@@ -747,8 +740,8 @@ void lcdPrintCriticalLvl(byte _num) {
 void displayStaticAsMode() {
 	lcd.clear();
 	switch(modeWork.current) {
-		case MW_SETUP_CONNECTION_TYPE:
-			lcd.print(F("Connection type"));
+		case MW_SETUP_MANIPULATE_RELAY:
+			lcd.print(F("Control engine?"));
 		break;
 		case MW_SETUP_GAIN_AMPERAGE:
 			lcd.print(F("A gain maxV/step"));
@@ -946,22 +939,16 @@ void setupImpedance() {
 		index++;
 	}
 	
-	Serial.println(F("Impedance setup"));
-				
 	for(byte i = 0; i < 3; i++) {
-		Serial.println(i);
 		_voltage[i] = _sumVoltage[i] / adsChars.measurementsCount * ads.voltageStep * settings.multiplierVoltage[i];
 		_amperage[i] = _sumAamperage[i] / adsChars.measurementsCount * ads.amperageStep * settings.multiplierAmperage[i];
 		settings.impedance[i] = _voltage[i] / _amperage[i];
-		Serial.print(F("V=")); Serial.println(_voltage[i], 5);
-		Serial.print(F("A=")); Serial.println(_amperage[i], 5);
-		Serial.print(F("R=")); Serial.println(settings.impedance[i], 5);
-		if (i == 2) {
-			Serial.println(F("---end---"));
-		} else {
-			Serial.println(F("------"));
-		}
+		
+		Serial.print(F("|=iv")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(_voltage[i], 5); Serial.println(F("-|"));
+		Serial.print(F("|=ia")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(_amperage[i], 5);  Serial.println(F("-|"));
+		Serial.print(F("|=ii")); Serial.print((i + 1)); Serial.print(F("=")); Serial.print(settings.impedance[i], 5);  Serial.println(F("-|"));
 	}
+	Serial.println(F("---end---"));
 }
 
 /*
@@ -975,9 +962,9 @@ void button1Click() {
 	// Если мы в любых других настройках
 	if (modeWork.current >= MW_SETUP_START && modeWork.current <= MW_SETUP_STOP) {
 		lcdUpdateScreen = true;
-		if (modeWork.current == MW_SETUP_CONNECTION_TYPE) {
+		if (modeWork.current == MW_SETUP_MANIPULATE_RELAY) {
 			// Режим выбора подключения обмотки - изменяем его
-			setDigit.value = setDigit.value == CONNECTION_TYPE_STAR? CONNECTION_TYPE_TRIANGLE: CONNECTION_TYPE_STAR;
+			setDigit.value = setDigit.value == 1? 0: 1;
 		} else if (modeWork.current >= MW_SETUP_GAIN_AMPERAGE && modeWork.current <= MW_SETUP_GAIN_VOLTAGE) {
 			// Режим выбора усиления АЦП - меняем в пределах от 0-5 в большую сторону
 			setDigit.value = setDigit.value == 5? 0: setDigit.value + 1;
@@ -1004,7 +991,7 @@ void button1Click() {
 		icError.hasIC = false;
 		digitalWrite(RELAY, LOW);
 		
-		Serial.println(F("**Measurement Started!"));
+		Serial.println(F("|-ms=1-|"));
 		initAvgVars();
 		return;
 	}
@@ -1035,9 +1022,9 @@ void button2Click() {
 	// Если режим настроек
 	if (modeWork.current >= MW_SETUP_START && modeWork.current <= MW_SETUP_STOP) {
 		lcdUpdateScreen = true;
-		if (modeWork.current == MW_SETUP_CONNECTION_TYPE) {
+		if (modeWork.current == MW_SETUP_MANIPULATE_RELAY) {
 			// режим выбора подключения - свапаем режим
-			setDigit.value = setDigit.value == CONNECTION_TYPE_STAR? CONNECTION_TYPE_TRIANGLE: CONNECTION_TYPE_STAR; 
+			setDigit.value = setDigit.value == 1? 0: 1; 
 		} else if (modeWork.current >= MW_SETUP_GAIN_AMPERAGE && modeWork.current <= MW_SETUP_GAIN_VOLTAGE) {
 			// Режим выбора усиления АЦП - меняем в пределах от 0-5 в меньшую сторону
 			setDigit.value = setDigit.value > 0?  setDigit.value - 1: 0;
@@ -1137,7 +1124,7 @@ void button2LongPressStart() {
 			setEditValue();
 		}
 	} else {
-		Serial.println(F("**Measurement Stoped!"));
+		Serial.println(F("|-ms=0-|"));
 		settings.isReadyToWork = MM_STOP;
 		modeWork.current = MW_SETUP_START;
 		setEditValue();
@@ -1151,8 +1138,8 @@ void button2LongPressStart() {
 void setEditValue() {
 	lcdUpdateScreen = true;
 	switch(modeWork.current) {
-		case MW_SETUP_CONNECTION_TYPE:
-			setDigit.value = settings.connectionType;
+		case MW_SETUP_MANIPULATE_RELAY:
+			setDigit.value = settings.canManipulateRelay;
 			break;
 		case MW_SETUP_GAIN_AMPERAGE:
 			setDigit.value = settings.currentAmperageGain;
@@ -1187,10 +1174,9 @@ void setEditValue() {
 */
 void saveSettings() {
 	switch(modeWork.current) {
-		case MW_SETUP_CONNECTION_TYPE:
-			settings.connectionType = setDigit.value;
-			settings.criticleError = settings.connectionType == CONNECTION_TYPE_STAR? 2.5f: 5.0f;
-			eeprom_update_byte(&eeprom_connection_type, settings.connectionType);
+		case MW_SETUP_MANIPULATE_RELAY:
+			settings.canManipulateRelay = setDigit.value;
+			eeprom_update_byte(&eeprom_manipulate_relay, settings.canManipulateRelay);
 			break;
 		case MW_SETUP_GAIN_AMPERAGE:
 			settings.currentAmperageGain = setDigit.value;
